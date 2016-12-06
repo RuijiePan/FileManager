@@ -1,11 +1,68 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--toolbar背景颜色:应用的主要色调，actionBar默认使用该颜色-->
         <item name="colorPrimary">@color/colorPrimary</item>
+        <!--状态栏背景颜色:应用的主要暗色调，statusBarColor默认使用该颜色-->
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!--Checkbox、Edittext、Toggle、Seekbar颜色:一般控件的选种效果默认采用该颜色-->
         <item name="colorAccent">@color/colorAccent</item>
+        <!--字体颜色-->
+        <item name="android:textColorPrimary">@color/green</item>
+        <!--背景色-->
+        <!--<item name="android:windowBackground">@color/white</item>
+        <item name="android:windowIsTranslucent">false</item>-->
+        <!--android:colorPrimaryDark 应用的主要暗色调，statusBarColor默认使用该颜色
+        android:statusBarColor 状态栏颜色，默认使用colorPrimaryDark
+        android:colorPrimary 应用的主要色调，actionBar默认使用该颜色
+        android:windowBackground 窗口背景颜色
+        android:navigationBarColor 底部栏颜色
+        android:colorForeground 应用的前景色，ListView的分割线，switch滑动区默认使用该颜色
+        android:colorBackground 应用的背景色，popMenu的背景默认使用该颜色
+        android:colorAccent 一般控件的选种效果默认采用该颜色
+        android:colorControlNormal 控件的默认色调　
+        android:colorControlHighlight 控件按压时的色调
+        android:colorControlActivated 控件选中时的颜色，默认使用colorAccent
+        android:colorButtonNormal 默认按钮的背景颜色
+        android:textColor Button，textView的文字颜色
+        android:textColorPrimaryDisableOnly RadioButton checkbox等控件的文字
+        android:textColorPrimary 应用的主要文字颜色，actionBar的标题文字默认使用该颜色-->
     </style>
 
+    <style name="toolbar_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <!--通用工具栏-->
+    <declare-styleable name="BaseToolBar">
+        <!--左侧文字-->
+        <attr name="leftText" format="string" />
+        <!--中间文字-->
+        <attr name="centerText" format="string" />
+        <!--右侧文字-->
+        <attr name="rightText" format="string" />
+        <!--左侧文字大小-->
+        <attr name="leftTextSize" format="integer" />
+        <!--中间文字大小-->
+        <attr name="rightTextSize" format="integer" />
+        <!--右侧文字大小-->
+        <attr name="centerTextSize" format="integer" />
+        <!--左侧图标-->
+        <attr name="leftIcon" format="reference" />
+        <!--右侧图标-->
+        <attr name="rightIcon" format="reference" />
+        <!--右侧第一个图标-->
+        <attr name="leftrightIcon" format="reference" />
+        <!--右侧图标背景-->
+        <attr name="leftIconBackground" format="reference" />
+        <!--右侧图标背景-->
+        <attr name="rightIconBackground" format="reference" />
+    </declare-styleable>
 </resources>

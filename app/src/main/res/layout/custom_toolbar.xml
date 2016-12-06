@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.jiepier.filemanager.base.BaseToolBar
+        app:centerText="哈哈"
+        app:centerTextSize="24"
+        android:background="#383838"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/baseToolBar"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+    </com.jiepier.filemanager.base.BaseToolBar>
+
+</android.support.design.widget.AppBarLayout>
