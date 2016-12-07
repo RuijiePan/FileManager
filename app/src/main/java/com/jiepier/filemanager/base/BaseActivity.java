@@ -1,6 +1,7 @@
 package com.jiepier.filemanager.base;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,9 +10,12 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.util.AppManager;
 import com.jiepier.filemanager.util.ResourceUtil;
+import com.jiepier.filemanager.util.SettingPrefUtil;
 import com.jiepier.filemanager.util.StatusBarUtil;
+import com.jiepier.filemanager.util.ThemeUtil;
 
 import butterknife.ButterKnife;
 
@@ -25,12 +29,27 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initTheme();
         setContentView(initContentView());
         ButterKnife.bind(this);
         setTranslucentStatus(isApplyStatusBarTranslucency());
         setStatusBarColor(isApplyStatusBarColor());
         initUiAndListener();
         AppManager.getAppManager().addActivity(this);
+    }
+
+    private void initTheme(){
+        int theme;
+        try {
+            theme = getPackageManager().getActivityInfo(getComponentName(), 0).theme;
+        } catch (PackageManager.NameNotFoundException e) {
+            return;
+        }
+        if (theme != R.style.AppThemeLaunch) {
+            theme = ThemeUtil.themeArr[SettingPrefUtil.getThemeIndex(this)][
+                    SettingPrefUtil.getNightModel(this) ? 1 : 0];
+        }
+        setTheme(theme);
     }
 
     /**

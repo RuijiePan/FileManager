@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <attr format="color|reference" name="themeColor"/>
+  <attr format="color|reference" name="themeAccentColor"/>
+
+  <attr format="color|reference" name="widgetBackground"/>
+  <attr format="color|reference" name="widgetBackgroundDark"/>
+  <attr format="color|reference" name="widgetBackgroundTitle"/>
+
+</resources>
