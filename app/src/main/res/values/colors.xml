@@ -312,7 +312,8 @@
     <!-- 海军色 -->
     <color name="black">#000000</color>
     <!-- 海军色 -->
-
+    <color name="light_grey">#EEEEEE</color>
+    <color name="white_transparent">#99FFFFFF</color>
 
     <color name="window_background_light">#ffeeeeee</color>
     <color name="window_background_dark">#ff303030</color>

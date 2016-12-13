@@ -1,4 +1,4 @@
-package com.jiepier.filemanager.ui.category;
+package com.jiepier.filemanager.ui.root;
 
 import android.os.Bundle;
 import android.view.View;
@@ -10,11 +10,11 @@ import com.jiepier.filemanager.base.BaseFragment;
  * Created by JiePier on 16/12/7.
  */
 
-public class CategoryFragment extends BaseFragment{
+public class RootFragment extends BaseFragment {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_category;
+        return R.layout.fragment_file_manager;
     }
 
     @Override

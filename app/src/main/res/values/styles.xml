@@ -65,4 +65,19 @@
         <!--右侧图标背景-->
         <attr name="rightIconBackground" format="reference" />
     </declare-styleable>
+
+    <style name="MenuColorStyle">
+        <item name="fab_size">mini</item>
+        <item name="fab_colorNormal">?attr/colorPrimary</item>
+        <item name="fab_colorPressed">?attr/colorAccent</item>
+        <item name="fab_colorRipple">@color/white_transparent</item>
+    </style>
+
+    <style name="MenuLabelsStyle">
+        <item name="android:background">@drawable/fab_label_background</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
 </resources>

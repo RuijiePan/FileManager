@@ -1,23 +1,14 @@
 package com.jiepier.filemanager.ui.main;
 
-import android.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-
-import com.jiepier.filemanager.R;
-import com.jiepier.filemanager.base.BaseActivity;
 import com.jiepier.filemanager.base.BaseDrawerActivity;
 import com.jiepier.filemanager.base.BaseFragment;
-import com.jiepier.filemanager.ui.category.CategoryFragment;
-import com.jiepier.filemanager.util.SnackbarUtil;
-import com.jiepier.filemanager.util.ToastUtils;
+import com.jiepier.filemanager.ui.sdcard.SDCardFragment;
 
 public class MainActivity extends BaseDrawerActivity {
 
     @Override
     protected BaseFragment setFragment() {
-        return new CategoryFragment();
+        return new SDCardFragment();
     }
 
     @Override

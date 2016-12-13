@@ -1,39 +1,25 @@
 package com.jiepier.filemanager.base;
 
-import android.app.Fragment;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SwitchCompat;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import com.jiepier.filemanager.R;
-import com.jiepier.filemanager.base.BaseActivity;
 import com.jiepier.filemanager.ui.about.AboutFragment;
-import com.jiepier.filemanager.ui.category.CategoryFragment;
-import com.jiepier.filemanager.ui.manager.FileManagerFragment;
+import com.jiepier.filemanager.ui.sdcard.SDCardFragment;
+import com.jiepier.filemanager.ui.root.RootFragment;
 import com.jiepier.filemanager.ui.setting.SettingFragment;
 import com.jiepier.filemanager.util.ResourceUtil;
 import com.jiepier.filemanager.util.SettingPrefUtil;
 import com.jiepier.filemanager.util.StatusBarUtil;
 
-import java.util.HashMap;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by JiePier on 16/12/6.
@@ -93,7 +79,7 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
     }
 
     private void transformFragment(BaseFragment fragment){
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .replace(R.id.flContentRoot, fragment)
                 .commit();
     }
@@ -107,15 +93,15 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
                 switch (item.getItemId()) {
                     case R.id.menu_sdcard:
                         mListener.onClickSDCard();
-                        transformFragment(new CategoryFragment());
+                        transformFragment(new SDCardFragment());
                         break;
                     case R.id.menu_root:
                         mListener.onClickRoot();
-                        transformFragment(new FileManagerFragment());
+                        transformFragment(new RootFragment());
                         break;
                     case R.id.menu_system:
                         mListener.onClickSystem();
-                        transformFragment(new FileManagerFragment());
+                        transformFragment(new RootFragment());
                         break;
                     case R.id.menu_setting:
                         mListener.onClickSetting();

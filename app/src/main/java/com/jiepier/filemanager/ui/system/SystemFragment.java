@@ -1,4 +1,4 @@
-package com.jiepier.filemanager.ui.manager;
+package com.jiepier.filemanager.ui.system;
 
 import android.os.Bundle;
 import android.view.View;
@@ -10,11 +10,11 @@ import com.jiepier.filemanager.base.BaseFragment;
  * Created by JiePier on 16/12/7.
  */
 
-public class FileManagerFragment extends BaseFragment {
+public class SystemFragment extends BaseFragment{
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_file_manager;
+        return R.layout.fragment_setting;
     }
 
     @Override

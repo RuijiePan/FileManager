@@ -24,15 +24,17 @@
 
 package com.jiepier.filemanager.base;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.jiepier.filemanager.util.ToastUtils;
+
+import butterknife.ButterKnife;
 
 
 /**
@@ -60,12 +62,12 @@ public abstract class BaseFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         if (this.self == null) {
             this.self = inflater.inflate(this.getLayoutId(), container, false);
+            ButterKnife.bind(this, this.self);
         }
         if (this.self.getParent() != null) {
             ViewGroup parent = (ViewGroup) this.self.getParent();
             parent.removeView(this.self);
         }
-
         this.initViews(this.self, savedInstanceState);
         this.initData();
         this.initListeners();
