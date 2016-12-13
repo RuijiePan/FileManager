@@ -1,18 +1,22 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group android:id="@+id/menu_group_1">
         <item
-            android:id="@+id/menu_local"
+            android:id="@+id/menu_sdcard"
             android:icon="@drawable/ic_phone_android_white_24dp"
-            android:title="Local" />
+            android:title="SDCard" />
 
         <item
-            android:id="@+id/menu_star"
-            android:icon="@drawable/ic_stars_white_24dp"
-            android:title="Star" />
-    </group>
+            android:id="@+id/menu_root"
+            android:icon="@drawable/ic_android_white_24dp"
+            android:title="Root" />
 
-    <group android:id="@+id/menu_group_2">
+        <item
+            android:id="@+id/menu_system"
+            android:icon="@drawable/ic_stars_white_24dp"
+            android:title="System" />
+
         <item
             android:id="@+id/menu_setting"
             android:icon="@drawable/ic_settings_white_24dp"
@@ -21,5 +25,15 @@
             android:id="@+id/menu_about"
             android:icon="@drawable/ic_face_white_24dp"
             android:title="About" />
+    </group>
+
+
+    <group android:id="@+id/menu_group_2">
+        <item
+            android:id="@+id/light_model"
+            android:title="LightModel"
+            android:icon="@drawable/ic_lightbulb_outline_black_24dp"
+            app:actionLayout="@layout/switch_layout"
+            />
     </group>
 </menu>

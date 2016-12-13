@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true">
 
     <ImageView
-        android:id="@+id/ivMenuUserProfilePhoto"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
         android:src="@drawable/headview" />
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/ivTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:adjustViewBounds="true"
+        android:padding="10dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_brightness_3_white_24dp"
+        />
+</RelativeLayout>

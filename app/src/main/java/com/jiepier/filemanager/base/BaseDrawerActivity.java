@@ -10,12 +10,14 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SwitchCompat;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import com.jiepier.filemanager.R;
@@ -24,6 +26,9 @@ import com.jiepier.filemanager.ui.about.AboutFragment;
 import com.jiepier.filemanager.ui.category.CategoryFragment;
 import com.jiepier.filemanager.ui.manager.FileManagerFragment;
 import com.jiepier.filemanager.ui.setting.SettingFragment;
+import com.jiepier.filemanager.util.ResourceUtil;
+import com.jiepier.filemanager.util.SettingPrefUtil;
+import com.jiepier.filemanager.util.StatusBarUtil;
 
 import java.util.HashMap;
 
@@ -34,12 +39,15 @@ import butterknife.ButterKnife;
  * Created by JiePier on 16/12/6.
  */
 
-public abstract class BaseDrawerActivity extends BaseActivity{
+public abstract class BaseDrawerActivity extends BaseToolbarActivity{
 
     @BindView(R.id.drawerLayout)
     protected DrawerLayout drawerLayout;
     @BindView(R.id.vNavigation)
     protected NavigationView mNavigation;
+    private ImageView mIvtheme;
+    private SwitchCompat mSwitch;
+    private boolean isReload;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationClickListener mListener;
 
@@ -52,13 +60,36 @@ public abstract class BaseDrawerActivity extends BaseActivity{
     public void initUiAndListener() {
         transformFragment(setFragment());
         setUpNavigationClickListener();
-
-        if (mListener != null){
-            drawerLayout.setDrawerListener(new FileDrawerListener());
-        }
+        StatusBarUtil.setColorForDrawerLayout(this, drawerLayout, ResourceUtil.getThemeColor(this), 0);
 
         this.mDrawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, R.string.app_menu,
                 R.string.app_name);
+        drawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
+
+        mIvtheme = (ImageView) mNavigation.getHeaderView(0).findViewById(R.id.ivTheme);
+        mSwitch = (SwitchCompat) mNavigation.getMenu().findItem(R.id.light_model)
+                .getActionView().findViewById(R.id.switchForActionBar);
+
+        if (SettingPrefUtil.getNightModel(this)) {
+            mIvtheme.setImageResource(R.drawable.ic_wb_sunny_white_24dp);
+            mSwitch.setChecked(true);
+        }
+
+        mSwitch.setOnCheckedChangeListener((compoundButton, checked) -> {
+            if (checked){
+                SettingPrefUtil.setNightModel(this, true);
+                mIvtheme.setImageResource(R.drawable.ic_brightness_3_white_24dp);
+            }else {
+                SettingPrefUtil.setNightModel(this, false);
+                mIvtheme.setImageResource(R.drawable.ic_wb_sunny_white_24dp);
+            }
+            isReload = true;
+            drawerLayout.closeDrawer(GravityCompat.START);
+        });
+
+        isReload = false;
+        drawerLayout.setDrawerListener(new FileDrawerListener());
     }
 
     private void transformFragment(BaseFragment fragment){
@@ -74,12 +105,16 @@ public abstract class BaseDrawerActivity extends BaseActivity{
 
             if (mListener!=null) {
                 switch (item.getItemId()) {
-                    case R.id.menu_local:
-                        mListener.onClickLocal();
+                    case R.id.menu_sdcard:
+                        mListener.onClickSDCard();
                         transformFragment(new CategoryFragment());
                         break;
-                    case R.id.menu_star:
-                        mListener.onClickStar();
+                    case R.id.menu_root:
+                        mListener.onClickRoot();
+                        transformFragment(new FileManagerFragment());
+                        break;
+                    case R.id.menu_system:
+                        mListener.onClickSystem();
                         transformFragment(new FileManagerFragment());
                         break;
                     case R.id.menu_setting:
@@ -99,7 +134,7 @@ public abstract class BaseDrawerActivity extends BaseActivity{
 
     @Override
     protected boolean isApplyStatusBarTranslucency() {
-        return true;
+        return false;
     }
 
     @Override
@@ -112,9 +147,11 @@ public abstract class BaseDrawerActivity extends BaseActivity{
     }
 
     public interface NavigationClickListener{
-        void onClickLocal();
+        void onClickSDCard();
 
-        void onClickStar();
+        void onClickRoot();
+
+        void onClickSystem();
 
         void onClickSetting();
 
@@ -152,7 +189,12 @@ public abstract class BaseDrawerActivity extends BaseActivity{
         return super.onKeyDown(keyCode, event);
     }
 
-    private class FileDrawerListener implements DrawerLayout.DrawerListener {
+    /**
+     * When using ActionBarDrawerToggle, all DrawerLayout listener methods should be forwarded
+     * if the ActionBarDrawerToggle is not used as the DrawerLayout listener directly.
+     */
+    private class FileDrawerListener implements DrawerLayout.DrawerListener{
+
         @Override
         public void onDrawerSlide(View drawerView, float slideOffset) {
             BaseDrawerActivity.this.mDrawerToggle.onDrawerSlide(drawerView, slideOffset);
@@ -166,6 +208,10 @@ public abstract class BaseDrawerActivity extends BaseActivity{
         @Override
         public void onDrawerClosed(View drawerView) {
             BaseDrawerActivity.this.mDrawerToggle.onDrawerClosed(drawerView);
+            if (isReload) {
+                reload();
+                isReload = false;
+            }
         }
 
         @Override
@@ -174,10 +220,4 @@ public abstract class BaseDrawerActivity extends BaseActivity{
         }
     }
 
-    @Override protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
-    }
 }

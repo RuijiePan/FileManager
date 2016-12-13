@@ -32,6 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         initTheme();
         setContentView(initContentView());
         ButterKnife.bind(this);
+        initToolbar(savedInstanceState);
         setTranslucentStatus(isApplyStatusBarTranslucency());
         setStatusBarColor(isApplyStatusBarColor());
         initUiAndListener();
@@ -40,6 +41,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private void initTheme(){
         int theme;
+        SettingPrefUtil.setThemeIndex(this,6);
         try {
             theme = getPackageManager().getActivityInfo(getComponentName(), 0).theme;
         } catch (PackageManager.NameNotFoundException e) {
@@ -56,6 +58,13 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 设置view
      */
     public abstract int initContentView();
+
+    /**
+     * Initialize the toolbar in the layout
+     *
+     * @param savedInstanceState savedInstanceState
+     */
+    protected abstract void initToolbar(Bundle savedInstanceState);
 
     /**
      * init UI && Listener

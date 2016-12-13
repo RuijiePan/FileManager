@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.jiepier.filemanager.base.BaseToolBar
+    <com.jiepier.filemanager.widget.BaseToolBar
         app:centerText="哈哈"
         app:centerTextSize="24"
         android:background="#383838"
@@ -17,6 +17,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
-    </com.jiepier.filemanager.base.BaseToolBar>
+    </com.jiepier.filemanager.widget.BaseToolBar>
 
 </android.support.design.widget.AppBarLayout>

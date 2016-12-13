@@ -1,30 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+
+<android.support.v4.widget.DrawerLayout
+    android:id="@+id/drawerLayout"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/drawerLayout"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <include layout="@layout/include_toolbar"/>
 
         <FrameLayout
             android:id="@+id/flContentRoot"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+    </LinearLayout>
 
-        <android.support.design.widget.NavigationView
-            android:id="@+id/vNavigation"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:background="#ffffff"
-            app:headerLayout="@layout/view_global_menu_header"
-            app:itemIconTint="@color/itemIconTint"
-            app:itemTextColor="@color/itemTextColor"
-            app:menu="@menu/drawer_menu" />
+    <android.support.design.widget.NavigationView
+        android:id="@+id/vNavigation"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/view_global_menu_header"
+        app:itemIconTint="?attr/colorPrimary"
+        app:itemTextColor="@color/itemTextColor"
+        app:menu="@menu/drawer_menu" />
 
-    </android.support.v4.widget.DrawerLayout>
-</LinearLayout>
+</android.support.v4.widget.DrawerLayout>

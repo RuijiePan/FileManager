@@ -26,23 +26,28 @@ public class MainActivity extends BaseDrawerActivity {
 
         setNavigationClickListener(new NavigationClickListener() {
             @Override
-            public void onClickLocal() {
-                ToastUtils.show(MainActivity.this,"local",1000);
+            public void onClickSDCard() {
+
             }
 
             @Override
-            public void onClickStar() {
-                ToastUtils.show(MainActivity.this,"star",1000);
+            public void onClickRoot() {
+
+            }
+
+            @Override
+            public void onClickSystem() {
+
             }
 
             @Override
             public void onClickSetting() {
-                ToastUtils.show(MainActivity.this,"setting",1000);
+
             }
 
             @Override
             public void onClickAbout() {
-                ToastUtils.show(MainActivity.this,"about",1000);
+
             }
         });
     }

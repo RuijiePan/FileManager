@@ -28,9 +28,12 @@
 
   <!-- App Theme Dark -->
   <style name="BaseAppThemeDark" parent="Theme.AppCompat.NoActionBar">
-    <item name="colorPrimary">?attr/themeColor</item>
+    <!--<item name="colorPrimary">?attr/themeColor</item>
     <item name="colorPrimaryDark">?attr/themeColor</item>
-    <item name="colorAccent">?attr/themeColor</item>
+    <item name="colorAccent">?attr/themeColor</item>-->
+    <item name="colorPrimary">@color/list_divider_dark</item>
+    <item name="colorPrimaryDark">@color/list_divider_dark</item>
+    <item name="colorAccent">@color/list_divider_dark</item>
     <item name="windowActionModeOverlay">true</item>
     <item name="android:windowBackground">@color/window_background_dark</item>
     <item name="android:listDivider">@color/list_divider_dark</item>
