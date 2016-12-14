@@ -17,4 +17,11 @@
     <dimen name="text_size_14">14.0sp</dimen>
     <dimen name="text_size_13">13.0sp</dimen>
     <dimen name="text_size_12">12.0sp</dimen>
+
+    <!-- list item height -->
+    <dimen name="item_height">60dp</dimen>
+    <!-- list item icon padding -->
+    <dimen name="item_icon_padding">10dp</dimen>
+    <!-- list item default padding -->
+    <dimen name="item_default_padding">8dp</dimen>
 </resources>

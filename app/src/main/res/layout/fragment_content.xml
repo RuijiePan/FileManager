@@ -27,7 +27,16 @@
         fab:menu_colorRipple="@color/white_transparent"
         fab:menu_labels_ellipsize="end"
         fab:menu_labels_singleLine="true"
-        fab:menu_backgroundColor="?attr/widgetBackground">
+        fab:menu_backgroundColor="#00ffffff">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_scoll_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_publish_white_24dp"
+            style="@style/MenuColorStyle"
+            fab:fab_size="mini"
+            fab:fab_label="@string/scrollToTop" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_create_file"

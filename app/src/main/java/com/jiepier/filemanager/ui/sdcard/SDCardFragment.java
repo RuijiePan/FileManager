@@ -24,7 +24,6 @@ import butterknife.ButterKnife;
 
 public class SDCardFragment extends BaseFragment {
 
-
     @BindView(R.id.tablayout)
     TabLayout tablayout;
     @BindView(R.id.viewpager)
@@ -39,17 +38,23 @@ public class SDCardFragment extends BaseFragment {
 
     @Override
     protected void initViews(View self, Bundle savedInstanceState) {
-        fragmentList = new ArrayList<>();
-        fragmentList.add(new ContentFragment());
-        fragmentList.add(new ContentFragment());
-        titleList = new ArrayList<>();
-        titleList.add("/SDCard");
-        titleList.add("/Android");
-        BaseFragmentPagerAdapter adapter = new BaseFragmentPagerAdapter(getActivity().getSupportFragmentManager(), fragmentList,titleList);
 
-        viewpager.setAdapter(adapter);
-        tablayout.setupWithViewPager(viewpager);
-        tablayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        if (savedInstanceState == null) {
+            fragmentList = new ArrayList<>();
+            BaseFragment baseFragment = new ContentFragment();
+            BaseFragment baseFragment2 = new ContentFragment();
+            //baseFragment.getArguments().putBundle("file",);
+            fragmentList.add(baseFragment);
+            fragmentList.add(baseFragment2);
+            titleList = new ArrayList<>();
+            titleList.add("/SDCard");
+            titleList.add("/Android");
+            BaseFragmentPagerAdapter adapter = new BaseFragmentPagerAdapter(getActivity().getSupportFragmentManager(), fragmentList, titleList);
+
+            viewpager.setAdapter(adapter);
+            tablayout.setupWithViewPager(viewpager);
+            tablayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        }
     }
 
     @Override

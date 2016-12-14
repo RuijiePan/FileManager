@@ -1,19 +1,23 @@
 package com.jiepier.filemanager.ui.sdcard;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseFragment;
+import com.jiepier.filemanager.ui.common.BrowserListAdapter;
+import com.jiepier.filemanager.util.Settings;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by JiePier on 16/12/13.
@@ -29,6 +33,9 @@ public class ContentFragment extends BaseFragment {
     FloatingActionButton fabCreateFloder;
     @BindView(R.id.floating_menu)
     FloatingActionMenu floatingMenu;
+    @BindView(R.id.fab_scoll_top)
+    FloatingActionButton fabScollTop;
+    private BrowserListAdapter mAdapter;
 
     @Override
     protected int getLayoutId() {
@@ -47,14 +54,24 @@ public class ContentFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-
+        mAdapter = new BrowserListAdapter();
+        //Log.w("haha",Settings.getDefaultDir());
+        mAdapter.addFiles(Settings.getDefaultDir());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(mAdapter);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        ButterKnife.bind(this, rootView);
-        return rootView;
+    @OnClick({R.id.fab_scoll_top, R.id.fab_create_file, R.id.fab_create_floder})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.fab_scoll_top:
+                recyclerView.smoothScrollToPosition(0);
+                floatingMenu.close(true);
+                break;
+            case R.id.fab_create_file:
+                break;
+            case R.id.fab_create_floder:
+                break;
+        }
     }
 }

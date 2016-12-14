@@ -1,5 +1,6 @@
 package com.jiepier.filemanager.base;
 
+import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,13 +12,18 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.jiepier.filemanager.R;
+import com.jiepier.filemanager.ui.about.AboutActivity;
 import com.jiepier.filemanager.ui.about.AboutFragment;
 import com.jiepier.filemanager.ui.sdcard.SDCardFragment;
 import com.jiepier.filemanager.ui.root.RootFragment;
+import com.jiepier.filemanager.ui.setting.SettingActivity;
 import com.jiepier.filemanager.ui.setting.SettingFragment;
+import com.jiepier.filemanager.ui.system.SystemFragment;
 import com.jiepier.filemanager.util.ResourceUtil;
 import com.jiepier.filemanager.util.SettingPrefUtil;
+import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.StatusBarUtil;
+import com.jiepier.filemanager.widget.IconPreview;
 
 import butterknife.BindView;
 
@@ -36,6 +42,9 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
     private boolean isReload;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationClickListener mListener;
+    private SDCardFragment mSdCardFragment;
+    private RootFragment mRootFragment;
+    private SystemFragment mSystemFragment;
 
     @Override
     public int initContentView() {
@@ -44,7 +53,14 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
 
     @Override
     public void initUiAndListener() {
-        transformFragment(setFragment());
+        Settings.updatePreferences(this);
+        new IconPreview(this);
+
+        mSdCardFragment = new SDCardFragment();
+        mRootFragment = new RootFragment();
+        mSystemFragment = new SystemFragment();
+        transformFragment(mSdCardFragment);
+
         setUpNavigationClickListener();
         StatusBarUtil.setColorForDrawerLayout(this, drawerLayout, ResourceUtil.getThemeColor(this), 0);
 
@@ -84,8 +100,6 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
                 .commit();
     }
 
-    protected abstract BaseFragment setFragment();
-
     private void setUpNavigationClickListener() {
         mNavigation.setNavigationItemSelectedListener(item -> {
 
@@ -93,23 +107,25 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
                 switch (item.getItemId()) {
                     case R.id.menu_sdcard:
                         mListener.onClickSDCard();
-                        transformFragment(new SDCardFragment());
+                        transformFragment(mSdCardFragment);
                         break;
                     case R.id.menu_root:
                         mListener.onClickRoot();
-                        transformFragment(new RootFragment());
+                        transformFragment(mRootFragment);
                         break;
                     case R.id.menu_system:
                         mListener.onClickSystem();
-                        transformFragment(new RootFragment());
+                        transformFragment(mSystemFragment);
                         break;
                     case R.id.menu_setting:
                         mListener.onClickSetting();
-                        transformFragment(new SettingFragment());
+                        Intent intent = new Intent(this, SettingActivity.class);
+                        startActivity(intent);
                         break;
                     case R.id.menu_about:
                         mListener.onClickAbout();
-                        transformFragment(new AboutFragment());
+                        intent = new Intent(this, AboutActivity.class);
+                        startActivity(intent);
                         break;
                 }
             }

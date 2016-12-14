@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class SortUtils {
 
@@ -15,7 +16,7 @@ public class SortUtils {
     private static final int SORT_SIZE = 2;
     private static final int SORT_DATE = 3;
 
-    public static void sortList(ArrayList<String> content,
+    public static void sortList(List<String> content,
                                 String current) {
         int len = content != null ? content.size() : 0;
 

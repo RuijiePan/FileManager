@@ -1,5 +1,7 @@
 package com.jiepier.filemanager.base;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,8 @@ public abstract class BaseAdapter<T,K extends BaseViewHolder> extends RecyclerVi
 
     protected List<T> mData;
     protected int mLayoutResId;
+    protected Resources mResources;
+    protected Context mContext;
     private OnRecyclerViewItemClickListener mListener;
 
     public BaseAdapter(int layoutResId, List<T> data){
@@ -23,6 +27,10 @@ public abstract class BaseAdapter<T,K extends BaseViewHolder> extends RecyclerVi
         if (mLayoutResId != 0){
             this.mLayoutResId = layoutResId;
         }
+    }
+
+    public BaseAdapter(int layoutResId){
+        this(layoutResId,new ArrayList<T>());
     }
 
     public BaseAdapter(List<T> data){
@@ -36,8 +44,12 @@ public abstract class BaseAdapter<T,K extends BaseViewHolder> extends RecyclerVi
 
     @Override
     public K onCreateViewHolder(ViewGroup parent, int viewType) {
-        View item = LayoutInflater.from(parent.getContext()).inflate(mLayoutResId,parent,false);
+
+        mContext = parent.getContext();
+        mResources = mContext.getResources();
+        View item = LayoutInflater.from(mContext).inflate(mLayoutResId,parent,false);
         final K holder = (K) new BaseViewHolder(item);
+
         if (mListener != null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

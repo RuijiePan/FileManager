@@ -7,11 +7,6 @@ import com.jiepier.filemanager.ui.sdcard.SDCardFragment;
 public class MainActivity extends BaseDrawerActivity {
 
     @Override
-    protected BaseFragment setFragment() {
-        return new SDCardFragment();
-    }
-
-    @Override
     public void initUiAndListener() {
         super.initUiAndListener();
 

@@ -95,4 +95,16 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         }
         return this;
     }
+
+    public BaseViewHolder setVisibility(int viewId,int type) {
+        View view = getView(viewId);
+        if (type == 0) {
+            view.setVisibility(View.VISIBLE);
+        }else if (type == 4){
+            view.setVisibility(View.INVISIBLE);
+        }else if (type == 8){
+            view.setVisibility(View.GONE);
+        }
+        return this;
+    }
 }

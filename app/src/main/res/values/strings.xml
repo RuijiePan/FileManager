@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">文件管理器</string>
+    <string name="app_name">File Manager</string>
     <string name="app_menu">File Manager</string>
 
     <string name="minus" translatable="false">-</string>
@@ -74,4 +74,5 @@
     <string name="xdaforum">XDA forum</string>
     <string name="createFile">Create File</string>
     <string name="createFolder">Create Folder</string>
+    <string name="scrollToTop">Scroll To Top</string>
 </resources>

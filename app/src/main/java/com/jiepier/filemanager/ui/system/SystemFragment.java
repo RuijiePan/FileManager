@@ -14,7 +14,7 @@ public class SystemFragment extends BaseFragment{
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_setting;
+        return R.layout.activity_setting;
     }
 
     @Override
