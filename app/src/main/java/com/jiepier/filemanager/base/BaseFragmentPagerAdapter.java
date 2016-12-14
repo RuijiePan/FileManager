@@ -3,6 +3,7 @@ package com.jiepier.filemanager.base;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -43,7 +44,7 @@ public class BaseFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getItemPosition(Object object) {
-        return super.getItemPosition(object);
+        return PagerAdapter.POSITION_NONE;
     }
 
     @Override

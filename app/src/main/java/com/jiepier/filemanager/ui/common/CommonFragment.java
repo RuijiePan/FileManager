@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -14,6 +15,7 @@ import com.jiepier.filemanager.base.BaseFragment;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.SnackbarUtil;
+import com.jiepier.filemanager.util.ToastUtil;
 
 import java.io.File;
 
@@ -53,7 +55,6 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         path = getArguments() != null ? getArguments().getString("path") : Settings.getDefaultDir();
-        //getArguments().remove("path");
     }
 
     @Override
@@ -95,6 +96,7 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
             case R.id.fab_scoll_top:
                 recyclerView.smoothScrollToPosition(0);
                 floatingMenu.close(true);
+                //Log.w("haha",mAdapter.getItemCount()+"");
                 break;
             case R.id.fab_create_file:
                 floatingMenu.close(true);
@@ -124,4 +126,5 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
     public void openFile(File file) {
         FileUtil.openFile(getContext(),file);
     }
+
 }

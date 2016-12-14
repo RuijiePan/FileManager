@@ -22,6 +22,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
@@ -80,13 +81,13 @@ public class SDCardFragment extends BaseFragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(event -> {
-                    removeFrgament(viewpager.getCurrentItem()+1);
+                    removeFrgament(viewpager.getCurrentItem() + 1);
                     BaseFragment baseFragment = CommonFragment.newInstance(event.getPath());
                     fragmentList.add(baseFragment);
                     titleList.add(FileUtil.getFileName(event.getPath()));
                     this.mAdapter.notifyDataSetChanged();
-                    viewpager.setCurrentItem(mAdapter.getCount()-1);
-                });
+                    viewpager.setCurrentItem(mAdapter.getCount() - 1);
+                }, Throwable::printStackTrace);
     }
 
     private void removeFrgament(int currentItem) {

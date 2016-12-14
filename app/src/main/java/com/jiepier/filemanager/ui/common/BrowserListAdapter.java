@@ -1,6 +1,7 @@
 package com.jiepier.filemanager.ui.common;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -66,6 +67,7 @@ public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
         if (mData != null)
             SortUtils.sortList(mData,path);
 
+        Log.w("haha",mData.size()+"");
         notifyDataSetChanged();
     }
 }
