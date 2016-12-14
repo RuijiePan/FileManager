@@ -1,6 +1,7 @@
 package com.jiepier.filemanager.ui.common;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.jiepier.filemanager.base.BasePresenter;
 import com.jiepier.filemanager.base.BaseView;
@@ -22,8 +23,11 @@ public class CommonPresenter implements CommonContact.Presenter {
     @Override
     public void onItemClick(String filePath) {
         File file = new File(filePath);
-        if (file.isDirectory()){
+        if (file.isDirectory()) {
+            //if (file.list() != nu)
             RxBus.getDefault().post(new NewTabEvent(filePath));
+            /*else
+                mView.showSnackbar("文件夹为空");*/
         }else {
             if (FileUtil.isSupportedArchive(file)){
 

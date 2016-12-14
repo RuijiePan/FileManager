@@ -13,6 +13,7 @@ import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseFragment;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.Settings;
+import com.jiepier.filemanager.util.SnackbarUtil;
 
 import java.io.File;
 
@@ -102,6 +103,11 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
                 floatingMenu.close(true);
                 break;
         }
+    }
+
+    @Override
+    public void showSnackbar(String content) {
+        SnackbarUtil.show(recyclerView,content,0,null);
     }
 
     @Override

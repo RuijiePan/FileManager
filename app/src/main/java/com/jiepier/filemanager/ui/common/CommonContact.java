@@ -13,6 +13,8 @@ public interface CommonContact {
 
     interface View extends BaseView{
 
+        void showSnackbar(String content);
+
         void showDialog();
 
         void dismissDialog();
