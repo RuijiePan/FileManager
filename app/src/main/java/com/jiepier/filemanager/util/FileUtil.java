@@ -485,4 +485,11 @@ public class FileUtil {
         String ext = getExtension(file.getName());
         return ext.equalsIgnoreCase("zip");
     }
+
+    public static String getFileName(String path){
+        String s[] = path.split("/");
+        if (s.length!=0)
+        return "/"+s[s.length-1];
+        return "/";
+    }
 }

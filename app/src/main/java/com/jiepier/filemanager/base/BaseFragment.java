@@ -46,7 +46,6 @@ public abstract class BaseFragment extends Fragment {
 
     protected View self;
 
-
     /**
      * @param inflater The LayoutInflater object that can be used to inflate
      * any views in the fragment,

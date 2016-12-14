@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -12,20 +13,20 @@ import java.util.List;
  */
 public class BaseFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
-    private ArrayList<Fragment> fragmentsList;
-    public ArrayList<String> titleList;
+    private LinkedList<Fragment> fragmentsList;
+    public LinkedList<String> titleList;
 
     public BaseFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
-    public BaseFragmentPagerAdapter(FragmentManager fm, ArrayList<Fragment> fragments, ArrayList<String> titleList) {
+    public BaseFragmentPagerAdapter(FragmentManager fm, LinkedList<Fragment> fragments, LinkedList<String> titleList) {
         super(fm);
         this.fragmentsList = fragments;
         this.titleList = titleList;
     }
 
-    public BaseFragmentPagerAdapter(FragmentManager fm, ArrayList<Fragment> fragments) {
+    public BaseFragmentPagerAdapter(FragmentManager fm, LinkedList<Fragment> fragments) {
         super(fm);
         this.fragmentsList = fragments;
     }
@@ -49,4 +50,5 @@ public class BaseFragmentPagerAdapter extends FragmentStatePagerAdapter {
     public CharSequence getPageTitle(int position) {
         return titleList.get(position);
     }
+
 }

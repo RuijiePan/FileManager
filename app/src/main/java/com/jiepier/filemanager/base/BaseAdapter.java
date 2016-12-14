@@ -86,8 +86,12 @@ public abstract class BaseAdapter<T,K extends BaseViewHolder> extends RecyclerVi
         notifyDataSetChanged();
     }
 
+    public T getData(int position){
+        return mData.get(position);
+    }
+
     public interface OnRecyclerViewItemClickListener{
-        public void onItemClick(int pisition);
+        public void onItemClick(int position);
     }
 
     public void setItemClickListner(OnRecyclerViewItemClickListener listner){

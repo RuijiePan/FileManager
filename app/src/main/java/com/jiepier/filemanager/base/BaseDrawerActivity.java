@@ -2,6 +2,7 @@ package com.jiepier.filemanager.base;
 
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -37,6 +38,10 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
     protected DrawerLayout drawerLayout;
     @BindView(R.id.vNavigation)
     protected NavigationView mNavigation;
+    public static final String SDCARD = "1";
+    public static final String ROOT = "2";
+    public static final String SYSTEM = "3";
+    private String OLDTAG = SDCARD;
     private ImageView mIvtheme;
     private SwitchCompat mSwitch;
     private boolean isReload;
@@ -45,6 +50,7 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
     private SDCardFragment mSdCardFragment;
     private RootFragment mRootFragment;
     private SystemFragment mSystemFragment;
+    private FragmentManager fm;
 
     @Override
     public int initContentView() {
@@ -59,7 +65,8 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
         mSdCardFragment = new SDCardFragment();
         mRootFragment = new RootFragment();
         mSystemFragment = new SystemFragment();
-        transformFragment(mSdCardFragment);
+        addFragment();
+        transformFragment(SDCARD);
 
         setUpNavigationClickListener();
         StatusBarUtil.setColorForDrawerLayout(this, drawerLayout, ResourceUtil.getThemeColor(this), 0);
@@ -94,10 +101,42 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
         drawerLayout.setDrawerListener(new FileDrawerListener());
     }
 
-    private void transformFragment(BaseFragment fragment){
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.flContentRoot, fragment)
+    protected void addFragment(){
+        fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .add(R.id.flContentRoot,mSdCardFragment,SDCARD)
                 .commit();
+        fm.beginTransaction()
+                .add(R.id.flContentRoot,mRootFragment,ROOT)
+                .commit();
+        fm.beginTransaction()
+                .add(R.id.flContentRoot,mSystemFragment,SYSTEM)
+                .commit();
+        fm.beginTransaction().hide(mRootFragment).commit();
+        fm.beginTransaction().hide(mSystemFragment).commit();
+
+    }
+
+    private void transformFragment(String TAG){
+        if (OLDTAG.equals(TAG))
+            return;
+        else {
+            if (TAG.equals(SDCARD))
+                fm.beginTransaction().show(mSdCardFragment).commit();
+            if (TAG.equals(ROOT))
+                fm.beginTransaction().show(mRootFragment).commit();
+            if (TAG.equals(SYSTEM))
+                fm.beginTransaction().show(mSystemFragment).commit();
+
+            if (OLDTAG.equals(SDCARD))
+                fm.beginTransaction().hide(mSdCardFragment).commit();
+            if (OLDTAG.equals(ROOT))
+                fm.beginTransaction().hide(mRootFragment).commit();
+            if (OLDTAG.equals(SYSTEM))
+                fm.beginTransaction().hide(mSystemFragment).commit();
+
+        }
+        OLDTAG = TAG;
     }
 
     private void setUpNavigationClickListener() {
@@ -107,15 +146,15 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
                 switch (item.getItemId()) {
                     case R.id.menu_sdcard:
                         mListener.onClickSDCard();
-                        transformFragment(mSdCardFragment);
+                        transformFragment(SDCARD);
                         break;
                     case R.id.menu_root:
                         mListener.onClickRoot();
-                        transformFragment(mRootFragment);
+                        transformFragment(ROOT);
                         break;
                     case R.id.menu_system:
                         mListener.onClickSystem();
-                        transformFragment(mSystemFragment);
+                        transformFragment(SYSTEM);
                         break;
                     case R.id.menu_setting:
                         mListener.onClickSetting();

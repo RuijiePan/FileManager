@@ -1,29 +1,29 @@
-package com.jiepier.filemanager.ui.sdcard;
+package com.jiepier.filemanager.ui.common;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseFragment;
-import com.jiepier.filemanager.ui.common.BrowserListAdapter;
+import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.Settings;
 
+import java.io.File;
+
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
  * Created by JiePier on 16/12/13.
  */
 
-public class ContentFragment extends BaseFragment {
+public class CommonFragment extends BaseFragment implements CommonContact.View{
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -35,7 +35,25 @@ public class ContentFragment extends BaseFragment {
     FloatingActionMenu floatingMenu;
     @BindView(R.id.fab_scoll_top)
     FloatingActionButton fabScollTop;
+    private CommonPresenter mPresenter;
+    private MaterialDialog mDialog;
     private BrowserListAdapter mAdapter;
+    private String path;
+
+    public static CommonFragment newInstance(String path){
+        CommonFragment instance = new CommonFragment();
+        Bundle args = new Bundle();
+        args.putString("path",path);
+        instance.setArguments(args);
+        return instance;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        path = getArguments() != null ? getArguments().getString("path") : Settings.getDefaultDir();
+        //getArguments().remove("path");
+    }
 
     @Override
     protected int getLayoutId() {
@@ -44,7 +62,10 @@ public class ContentFragment extends BaseFragment {
 
     @Override
     protected void initViews(View self, Bundle savedInstanceState) {
-
+        mDialog = new MaterialDialog
+                .Builder(getContext())
+                .title("文件")
+                .build();
     }
 
     @Override
@@ -55,10 +76,16 @@ public class ContentFragment extends BaseFragment {
     @Override
     protected void initData() {
         mAdapter = new BrowserListAdapter();
-        //Log.w("haha",Settings.getDefaultDir());
-        mAdapter.addFiles(Settings.getDefaultDir());
+        mAdapter.addFiles(path);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(mAdapter);
+
+        mAdapter.setItemClickListner(position ->
+            mPresenter.onItemClick(mAdapter.getData(position))
+        );
+
+        mPresenter = new CommonPresenter();
+        mPresenter.attachView(this);
     }
 
     @OnClick({R.id.fab_scoll_top, R.id.fab_create_file, R.id.fab_create_floder})
@@ -69,9 +96,26 @@ public class ContentFragment extends BaseFragment {
                 floatingMenu.close(true);
                 break;
             case R.id.fab_create_file:
+                floatingMenu.close(true);
                 break;
             case R.id.fab_create_floder:
+                floatingMenu.close(true);
                 break;
         }
+    }
+
+    @Override
+    public void showDialog() {
+        mDialog.show();
+    }
+
+    @Override
+    public void dismissDialog() {
+        mDialog.dismiss();
+    }
+
+    @Override
+    public void openFile(File file) {
+        FileUtil.openFile(getContext(),file);
     }
 }
