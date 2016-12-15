@@ -26,8 +26,7 @@ public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
 
 
     public BrowserListAdapter() {
-        super(0);
-        this.mLayoutResId = R.layout.item_browserlist;
+        super(R.layout.item_browserlist);
     }
 
     @Override
@@ -67,7 +66,6 @@ public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
         if (mData != null)
             SortUtils.sortList(mData,path);
 
-        Log.w("haha",mData.size()+"");
         notifyDataSetChanged();
     }
 }

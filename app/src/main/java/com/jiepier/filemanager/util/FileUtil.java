@@ -492,4 +492,14 @@ public class FileUtil {
         return "/"+s[s.length-1];
         return "/";
     }
+
+    public static String getPath(String[] s,int position){
+        String path = "";
+
+        for (int i=0;i<=position;i++){
+            path += "/"+s[i];
+        }
+
+        return path;
+    }
 }

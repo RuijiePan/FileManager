@@ -1,10 +1,12 @@
 package com.jiepier.filemanager.ui.sdcard;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.jiepier.filemanager.R;
@@ -15,6 +17,7 @@ import com.jiepier.filemanager.ui.common.CommonFragment;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.RxBus;
 import com.jiepier.filemanager.util.Settings;
+import com.jiepier.filemanager.util.SnackbarUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -36,9 +39,25 @@ public class SDCardFragment extends BaseFragment {
     TabLayout tablayout;
     @BindView(R.id.viewpager)
     ViewPager viewpager;
+    private String path;
+    public static final String SDCARD = "1";
     private LinkedList<Fragment> fragmentList;
     private LinkedList<String> titleList;
     private BaseFragmentPagerAdapter mAdapter;
+
+    public static SDCardFragment newInstance(String path){
+        SDCardFragment instance = new SDCardFragment();
+        Bundle args = new Bundle();
+        args.putString("path",path);
+        instance.setArguments(args);
+        return instance;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        path = getArguments() != null ? getArguments().getString("path") : Settings.getDefaultDir();
+    }
 
     @Override
     protected int getLayoutId() {
@@ -48,29 +67,22 @@ public class SDCardFragment extends BaseFragment {
     @Override
     protected void initViews(View self, Bundle savedInstanceState) {
 
-        BaseFragment baseFragment = CommonFragment.newInstance("/");
-        BaseFragment baseFragment2 = CommonFragment.newInstance("/storage");
-        BaseFragment baseFragment3 = CommonFragment.newInstance("/storage/emulated");
-        BaseFragment baseFragment4 = CommonFragment.newInstance(Settings.getDefaultDir());
+        String[] filePath = path.split("/");
 
         fragmentList = new LinkedList<>();
-        fragmentList.add(baseFragment);
-        fragmentList.add(baseFragment2);
-        fragmentList.add(baseFragment3);
-        fragmentList.add(baseFragment4);
-
         titleList = new LinkedList<>();
-        titleList.add("/root");
-        titleList.add("/storage");
-        titleList.add("/emulated");
-        titleList.add("/0");
+
+        for (int i=0 ;i <filePath.length; i++){
+            fragmentList.add(CommonFragment.newInstance(FileUtil.getPath(filePath,i)));
+            titleList.add(FileUtil.getFileName(FileUtil.getPath(filePath,i)));
+        }
 
         mAdapter = new BaseFragmentPagerAdapter(getActivity().getSupportFragmentManager(), fragmentList, titleList);
 
         viewpager.setAdapter(mAdapter);
         tablayout.setupWithViewPager(viewpager);
         tablayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        viewpager.setCurrentItem(3);
+        viewpager.setCurrentItem(viewpager.getCurrentItem()-1);
     }
 
     @Override
@@ -88,6 +100,8 @@ public class SDCardFragment extends BaseFragment {
                     this.mAdapter.notifyDataSetChanged();
                     viewpager.setCurrentItem(mAdapter.getCount() - 1);
                 }, Throwable::printStackTrace);
+
+
     }
 
     private void removeFrgament(int currentItem) {
@@ -104,4 +118,15 @@ public class SDCardFragment extends BaseFragment {
 
     }
 
+    public boolean onBackPressed(){
+        if (mAdapter.getCount()!=1){
+            removeFrgament(mAdapter.getCount()-1);
+            mAdapter.notifyDataSetChanged();
+            viewpager.setCurrentItem(mAdapter.getCount() - 1);
+            return true;
+        }else {
+            SnackbarUtil.show(viewpager, "确定退出吗？", 1, view -> getActivity().finish());
+        }
+        return false;
+    }
 }

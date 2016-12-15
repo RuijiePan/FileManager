@@ -1,5 +1,6 @@
 package com.jiepier.filemanager.ui.common;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -18,7 +19,11 @@ import java.io.File;
 public class CommonPresenter implements CommonContact.Presenter {
 
     private CommonContact.View mView;
+    private Context mContext;
 
+    public CommonPresenter(Context context){
+        this.mContext = context;
+    }
 
     @Override
     public void onItemClick(String filePath) {
@@ -32,7 +37,7 @@ public class CommonPresenter implements CommonContact.Presenter {
             if (FileUtil.isSupportedArchive(file)){
 
             }else {
-                mView.openFile(file);
+                FileUtil.openFile(mContext,file);
             }
         }
     }

@@ -24,7 +24,7 @@ public abstract class BaseAdapter<T,K extends BaseViewHolder> extends RecyclerVi
 
     public BaseAdapter(int layoutResId, List<T> data){
         this.mData = data == null ? new ArrayList<T>():data;
-        if (mLayoutResId != 0){
+        if (layoutResId != 0){
             this.mLayoutResId = layoutResId;
         }
     }

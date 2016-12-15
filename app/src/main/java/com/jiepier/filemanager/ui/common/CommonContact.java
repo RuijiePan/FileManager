@@ -19,11 +19,11 @@ public interface CommonContact {
 
         void dismissDialog();
 
-        void openFile(File file);
     }
 
     interface Presenter extends BasePresenter<View>{
 
         void onItemClick(String filePath);
+
     }
 }

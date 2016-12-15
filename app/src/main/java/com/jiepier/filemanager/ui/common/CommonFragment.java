@@ -86,7 +86,7 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
             mPresenter.onItemClick(mAdapter.getData(position))
         );
 
-        mPresenter = new CommonPresenter();
+        mPresenter = new CommonPresenter(getContext());
         mPresenter.attachView(this);
     }
 
@@ -96,7 +96,6 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
             case R.id.fab_scoll_top:
                 recyclerView.smoothScrollToPosition(0);
                 floatingMenu.close(true);
-                //Log.w("haha",mAdapter.getItemCount()+"");
                 break;
             case R.id.fab_create_file:
                 floatingMenu.close(true);
@@ -120,11 +119,6 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
     @Override
     public void dismissDialog() {
         mDialog.dismiss();
-    }
-
-    @Override
-    public void openFile(File file) {
-        FileUtil.openFile(getContext(),file);
     }
 
 }

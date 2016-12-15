@@ -41,7 +41,7 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
     public static final String SDCARD = "1";
     public static final String ROOT = "2";
     public static final String SYSTEM = "3";
-    private String OLDTAG = SDCARD;
+    protected String OLDTAG = SDCARD;
     private ImageView mIvtheme;
     private SwitchCompat mSwitch;
     private boolean isReload;
@@ -227,6 +227,10 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
             this.drawerLayout.closeDrawer(this.mNavigation);
             return true;
         }
+
+        if (OLDTAG.equals(SDCARD)&&keyCode == KeyEvent.KEYCODE_BACK)
+            return mSdCardFragment.onBackPressed();
+
         return super.onKeyDown(keyCode, event);
     }
 
