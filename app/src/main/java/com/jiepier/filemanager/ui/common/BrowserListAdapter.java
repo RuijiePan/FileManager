@@ -71,10 +71,10 @@ public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
         int position = holder.getLayoutPosition();
         if (selectedItems.get(position, false)){
             holder.setVisibility(R.id.bottom_view,View.GONE);
-            holder.setVisibility(R.id.iv_check,View.VISIBLE);
+            //holder.setVisibility(R.id.iv_check,View.VISIBLE);
         }else {
             holder.setVisibility(R.id.bottom_view,View.VISIBLE);
-            holder.setVisibility(R.id.iv_check,View.GONE);
+            //holder.setVisibility(R.id.iv_check,View.GONE);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

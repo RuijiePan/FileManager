@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
     android:layout_width="fill_parent"
     android:layout_height="@dimen/item_height"
     android:layout_alignParentBottom="true"
     android:layout_alignParentTop="true"
     android:background="@drawable/item_click_bg"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ImageView
         android:id="@+id/row_image"
@@ -75,12 +76,6 @@
         android:id="@+id/iv_check"
         android:visibility="gone"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:ellipsize="end"
-        android:gravity="right|center_vertical|center"
-        android:paddingRight="@dimen/item_default_padding" />
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>

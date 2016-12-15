@@ -28,11 +28,20 @@ public class CheckCircleView extends View {
     private int mHeight;
     private Matrix mMatrix;
 
+    public CheckCircleView(Context context) {
+        this(context,null);
+    }
+
     public CheckCircleView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs , 0);
+    }
+
+    public CheckCircleView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         initPaint();
         initBitmap();
     }
+
 
     private void initPaint() {
         mPaint = new Paint();
