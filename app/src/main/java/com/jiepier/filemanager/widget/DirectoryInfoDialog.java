@@ -1,8 +1,6 @@
-package com.jiepier.filemanager.dialog;
+package com.jiepier.filemanager.widget;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,21 +9,15 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jiepier.filemanager.R;
-import com.jiepier.filemanager.event.NewTabEvent;
-import com.jiepier.filemanager.ui.common.CommonFragment;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.Permissions;
 import com.jiepier.filemanager.util.RootCommands;
-import com.jiepier.filemanager.util.RxBus;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.StatFsCompat;
 import com.stericson.RootTools.RootTools;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
-
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public final class DirectoryInfoDialog extends DialogFragment {
 

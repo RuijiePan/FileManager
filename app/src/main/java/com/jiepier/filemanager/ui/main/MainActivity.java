@@ -1,21 +1,11 @@
 package com.jiepier.filemanager.ui.main;
 
-import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseDrawerActivity;
-import com.jiepier.filemanager.base.BaseFragment;
-import com.jiepier.filemanager.dialog.DirectoryInfoDialog;
-import com.jiepier.filemanager.event.NewTabEvent;
-import com.jiepier.filemanager.ui.sdcard.SDCardFragment;
-import com.jiepier.filemanager.util.RxBus;
-import com.jiepier.filemanager.util.Settings;
-
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import com.jiepier.filemanager.widget.DirectoryInfoDialog;
 
 public class MainActivity extends BaseDrawerActivity {
 

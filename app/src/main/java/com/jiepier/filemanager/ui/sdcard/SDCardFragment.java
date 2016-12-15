@@ -5,14 +5,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseFragment;
 import com.jiepier.filemanager.base.BaseFragmentPagerAdapter;
-import com.jiepier.filemanager.dialog.DirectoryInfoDialog;
 import com.jiepier.filemanager.event.NewTabEvent;
 import com.jiepier.filemanager.ui.common.CommonFragment;
 import com.jiepier.filemanager.util.FileUtil;
@@ -20,14 +17,10 @@ import com.jiepier.filemanager.util.RxBus;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.SnackbarUtil;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import butterknife.BindView;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**

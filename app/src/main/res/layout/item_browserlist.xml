@@ -71,4 +71,16 @@
         android:fontFamily="sans-serif-light"
         android:textSize="12sp" />
 
+    <com.jiepier.filemanager.widget.CheckCircleView
+        android:id="@+id/iv_check"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:ellipsize="end"
+        android:gravity="right|center_vertical|center"
+        android:paddingRight="@dimen/item_default_padding" />
+
 </RelativeLayout>

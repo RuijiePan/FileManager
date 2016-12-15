@@ -20,7 +20,7 @@ public abstract class BaseAdapter<T,K extends BaseViewHolder> extends RecyclerVi
     protected int mLayoutResId;
     protected Resources mResources;
     protected Context mContext;
-    private OnRecyclerViewItemClickListener mListener;
+    protected OnRecyclerViewItemClickListener mListener;
 
     public BaseAdapter(int layoutResId, List<T> data){
         this.mData = data == null ? new ArrayList<T>():data;
@@ -58,6 +58,7 @@ public abstract class BaseAdapter<T,K extends BaseViewHolder> extends RecyclerVi
                 }
             });
         }
+
         return holder;
     }
 
@@ -91,7 +92,9 @@ public abstract class BaseAdapter<T,K extends BaseViewHolder> extends RecyclerVi
     }
 
     public interface OnRecyclerViewItemClickListener{
-        public void onItemClick(int position);
+        void onItemClick(int position);
+
+        void onMultipeChoice(List<Integer> items);
     }
 
     public void setItemClickListner(OnRecyclerViewItemClickListener listner){

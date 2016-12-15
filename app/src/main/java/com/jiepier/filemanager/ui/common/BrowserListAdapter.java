@@ -3,6 +3,7 @@ package com.jiepier.filemanager.ui.common;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -16,6 +17,7 @@ import com.jiepier.filemanager.widget.IconPreview;
 
 import java.io.File;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -25,10 +27,14 @@ import java.util.Locale;
 
 public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
 
+    private SparseBooleanArray selectedItems;
+    private boolean isLongClick;
 
     public BrowserListAdapter(Context context) {
         super(R.layout.item_browserlist);
         mContext = context;
+        selectedItems = new SparseBooleanArray();
+        isLongClick = false;
     }
 
     @Override
@@ -60,6 +66,43 @@ public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
 
         holder.setText(R.id.top_view,file.getName())
                 .setText(R.id.dateview,df.format(file.lastModified()));
+
+
+        int position = holder.getLayoutPosition();
+        if (selectedItems.get(position, false)){
+            holder.setVisibility(R.id.bottom_view,View.GONE);
+            holder.setVisibility(R.id.iv_check,View.VISIBLE);
+        }else {
+            holder.setVisibility(R.id.bottom_view,View.VISIBLE);
+            holder.setVisibility(R.id.iv_check,View.GONE);
+        }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isLongClick) {
+                    toggleSelection(position);
+                    if (getSelectedItemCount()==0)
+                        isLongClick = false;
+                    else
+                        mListener.onMultipeChoice(getSelectedItems());
+                }else {
+                    mListener.onItemClick(position);
+                }
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                toggleSelection(position);
+                if (getSelectedItemCount()!=0)
+                    isLongClick = true;
+                else
+                    isLongClick = false;
+                return false;
+            }
+        });
     }
 
     public void addFiles(String path){
@@ -69,5 +112,32 @@ public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
             SortUtils.sortList(mData,path);
 
         notifyDataSetChanged();
+    }
+
+    public void toggleSelection(int pos) {
+        if (selectedItems.get(pos, false)) {
+            selectedItems.delete(pos);
+        }
+        else {
+            selectedItems.put(pos, true);
+        }
+        notifyItemChanged(pos);
+    }
+
+    public void clearSelections() {
+        selectedItems.clear();
+        notifyDataSetChanged();
+    }
+
+    public int getSelectedItemCount() {
+        return selectedItems.size();
+    }
+
+    public List<Integer> getSelectedItems() {
+        List<Integer> items = new ArrayList<Integer>(selectedItems.size());
+        for (int i = 0; i < selectedItems.size(); i++) {
+            items.add(selectedItems.keyAt(i));
+        }
+        return items;
     }
 }

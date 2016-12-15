@@ -2,15 +2,19 @@ package com.jiepier.filemanager.ui.common;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.jiepier.filemanager.R;
+import com.jiepier.filemanager.base.BaseAdapter;
 import com.jiepier.filemanager.base.BaseFragment;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.Settings;
@@ -18,6 +22,7 @@ import com.jiepier.filemanager.util.SnackbarUtil;
 import com.jiepier.filemanager.util.ToastUtil;
 
 import java.io.File;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -68,6 +73,7 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
                 .Builder(getContext())
                 .title("文件")
                 .build();
+
     }
 
     @Override
@@ -80,11 +86,20 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
         mAdapter = new BrowserListAdapter(getContext());
         mAdapter.addFiles(path);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mAdapter);
 
-        mAdapter.setItemClickListner(position ->
-            mPresenter.onItemClick(mAdapter.getData(position))
-        );
+        mAdapter.setItemClickListner(new BaseAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                mPresenter.onItemClick(mAdapter.getData(position));
+            }
+
+            @Override
+            public void onMultipeChoice(List<Integer> items) {
+
+            }
+        });
 
         mPresenter = new CommonPresenter(getContext());
         mPresenter.attachView(this);
