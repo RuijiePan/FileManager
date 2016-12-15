@@ -4,7 +4,7 @@
     android:layout_height="@dimen/item_height"
     android:layout_alignParentBottom="true"
     android:layout_alignParentTop="true"
-    android:background="?android:attr/activatedBackgroundIndicator"
+    android:background="@drawable/item_click_bg"
     android:gravity="center_vertical">
 
     <ImageView

@@ -1,5 +1,6 @@
 package com.jiepier.filemanager.ui.common;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -25,8 +26,9 @@ import java.util.Locale;
 public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
 
 
-    public BrowserListAdapter() {
+    public BrowserListAdapter(Context context) {
         super(R.layout.item_browserlist);
+        mContext = context;
     }
 
     @Override

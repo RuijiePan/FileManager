@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:padding="15dp"
+    android:shrinkColumns="1"
+    android:stretchColumns="1">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:text="@string/location"
+            android:textIsSelectable="false"
+            android:textAppearance="?android:attr/textAppearance"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:singleLine="true"
+            android:text="@string/minus"
+            android:textIsSelectable="false"
+            tools:text="/sdcard" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
+
+        <TextView
+            android:id="@+id/permission_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:text="@string/permissions"
+            android:textIsSelectable="false"
+            android:textAppearance="?android:attr/textAppearance"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/dir_permission"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:singleLine="true"
+            android:text="@string/minus"
+            android:textIsSelectable="false"
+            tools:text="drwxrwxrwx" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:text="@string/block_size"
+            android:textIsSelectable="false"
+            android:textAppearance="?android:attr/textAppearance"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/block_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:singleLine="true"
+            android:text="@string/minus"
+            android:textIsSelectable="false"
+            tools:text="4096" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:text="@string/total"
+            android:textIsSelectable="false"
+            android:textAppearance="?android:attr/textAppearance"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:singleLine="true"
+            android:text="@string/minus"
+            android:textIsSelectable="false"
+            tools:text="10 GiB" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:text="@string/free"
+            android:textIsSelectable="false"
+            android:textAppearance="?android:attr/textAppearance"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/free"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:singleLine="true"
+            android:text="@string/minus"
+            android:textIsSelectable="false"
+            tools:text="1 GiB" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:text="@string/used"
+            android:textIsSelectable="false"
+            android:textAppearance="?android:attr/textAppearance"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/used"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:singleLine="true"
+            android:text="@string/minus"
+            android:textIsSelectable="false"
+            tools:text="9 GiB (86%)" />
+    </TableRow>
+
+</TableLayout>

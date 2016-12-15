@@ -12,6 +12,7 @@ import android.view.View;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseFragment;
 import com.jiepier.filemanager.base.BaseFragmentPagerAdapter;
+import com.jiepier.filemanager.dialog.DirectoryInfoDialog;
 import com.jiepier.filemanager.event.NewTabEvent;
 import com.jiepier.filemanager.ui.common.CommonFragment;
 import com.jiepier.filemanager.util.FileUtil;
@@ -40,7 +41,6 @@ public class SDCardFragment extends BaseFragment {
     @BindView(R.id.viewpager)
     ViewPager viewpager;
     private String path;
-    public static final String SDCARD = "1";
     private LinkedList<Fragment> fragmentList;
     private LinkedList<String> titleList;
     private BaseFragmentPagerAdapter mAdapter;
@@ -82,7 +82,8 @@ public class SDCardFragment extends BaseFragment {
         viewpager.setAdapter(mAdapter);
         tablayout.setupWithViewPager(viewpager);
         tablayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        viewpager.setCurrentItem(viewpager.getCurrentItem()-1);
+        viewpager.setCurrentItem(mAdapter.getCount()-1);
+
     }
 
     @Override
@@ -99,8 +100,20 @@ public class SDCardFragment extends BaseFragment {
                     titleList.add(FileUtil.getFileName(event.getPath()));
                     this.mAdapter.notifyDataSetChanged();
                     viewpager.setCurrentItem(mAdapter.getCount() - 1);
+                    setCurrentPath();
                 }, Throwable::printStackTrace);
 
+
+    }
+
+    private void setCurrentPath() {
+
+        if (titleList.size()==1)
+            path = "/";
+
+        path = "";
+        for (int i=1;i<titleList.size();i++)
+            path += titleList.get(i);
 
     }
 
@@ -111,6 +124,7 @@ public class SDCardFragment extends BaseFragment {
             fragmentList.remove(currentItem);
             titleList.remove(currentItem);
         }
+        setCurrentPath();
     }
 
     @Override
@@ -128,5 +142,9 @@ public class SDCardFragment extends BaseFragment {
             SnackbarUtil.show(viewpager, "确定退出吗？", 1, view -> getActivity().finish());
         }
         return false;
+    }
+
+    public String getPath(){
+        return path;
     }
 }

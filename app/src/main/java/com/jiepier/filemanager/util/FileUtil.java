@@ -94,7 +94,8 @@ public class FileUtil {
         } else if (Settings.rootAccess()) {
             mDirContent = RootCommands.listFiles(file.getAbsolutePath(), showhidden);
         } else {
-            Toast.makeText(c, c.getString(R.string.cantreadfolder), Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(c,c.getString(R.string.cantreadfolder));
+            //Toast.makeText(c, c.getString(R.string.cantreadfolder), Toast.LENGTH_SHORT).show();
         }
         return mDirContent;
     }

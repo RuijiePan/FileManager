@@ -41,16 +41,18 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
     public static final String SDCARD = "1";
     public static final String ROOT = "2";
     public static final String SYSTEM = "3";
+    public static final String TAG_DIALOG = "dialog";
     protected String OLDTAG = SDCARD;
+    protected android.app.FragmentManager fm_v4;
+    private FragmentManager fm;
     private ImageView mIvtheme;
     private SwitchCompat mSwitch;
     private boolean isReload;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationClickListener mListener;
-    private SDCardFragment mSdCardFragment;
+    protected SDCardFragment mSdCardFragment;
     private RootFragment mRootFragment;
     private SystemFragment mSystemFragment;
-    private FragmentManager fm;
 
     @Override
     public int initContentView() {
@@ -81,17 +83,17 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
                 .getActionView().findViewById(R.id.switchForActionBar);
 
         if (SettingPrefUtil.getNightModel(this)) {
-            mIvtheme.setImageResource(R.drawable.ic_wb_sunny_white_24dp);
+            mIvtheme.setImageResource(R.drawable.ic_brightness_3_white_24dp);
             mSwitch.setChecked(true);
         }
 
         mSwitch.setOnCheckedChangeListener((compoundButton, checked) -> {
             if (checked){
                 SettingPrefUtil.setNightModel(this, true);
-                mIvtheme.setImageResource(R.drawable.ic_brightness_3_white_24dp);
+                mIvtheme.setImageResource(R.drawable.ic_wb_sunny_white_24dp);
             }else {
                 SettingPrefUtil.setNightModel(this, false);
-                mIvtheme.setImageResource(R.drawable.ic_wb_sunny_white_24dp);
+                mIvtheme.setImageResource(R.drawable.ic_brightness_3_white_24dp);
             }
             isReload = true;
             drawerLayout.closeDrawer(GravityCompat.START);
@@ -103,6 +105,7 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
 
     protected void addFragment(){
         fm = getSupportFragmentManager();
+        fm_v4 = getFragmentManager();
         fm.beginTransaction()
                 .add(R.id.flContentRoot,mSdCardFragment,SDCARD)
                 .commit();

@@ -8,4 +8,17 @@
   <attr format="color|reference" name="widgetBackgroundDark"/>
   <attr format="color|reference" name="widgetBackgroundTitle"/>
 
+  <!-- drawables -->
+  <attr name="action_copy" format="reference" />
+  <attr name="action_cut" format="reference" />
+  <attr name="action_edit" format="reference" />
+  <attr name="action_info" format="reference" />
+  <attr name="action_paste" format="reference" />
+  <attr name="action_bookmark" format="reference" />
+  <attr name="action_delete" format="reference" />
+  <attr name="action_remove" format="reference" />
+  <attr name="action_search" format="reference" />
+  <attr name="action_share" format="reference" />
+  <attr name="action_zip" format="reference" />
+  <attr name="action_multi" format="reference" />
 </resources>

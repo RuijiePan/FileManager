@@ -75,4 +75,25 @@
     <string name="createFile">Create File</string>
     <string name="createFolder">Create Folder</string>
     <string name="scrollToTop">Scroll To Top</string>
+    <string name="waitForOpen">Please wait for open</string>
+
+    <!-- directory info dialog -->
+    <string name="location">Location:</string>
+    <string name="total">Total space:</string>
+    <string name="free">Free space:</string>
+    <string name="block_size">Block size:</string>
+    <string name="used">Used:</string>
+
+    <!-- permissions -->
+    <string name="permissions">Permissions:</string>
+    <string name="owner">Owner:</string>
+    <string name="group">Group:</string>
+    <string name="others">Other:</string>
+    <string name="read">Read</string>
+    <string name="write">Write</string>
+    <string name="execute">Execute</string>
+    <string name="permissionschanged">Permissions changed</string>
+
+    <!-- permissions -->
+    <string name="message_denied">Permission \"%1$s\" has been denied</string>
 </resources>

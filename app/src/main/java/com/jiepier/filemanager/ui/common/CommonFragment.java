@@ -77,7 +77,7 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
 
     @Override
     protected void initData() {
-        mAdapter = new BrowserListAdapter();
+        mAdapter = new BrowserListAdapter(getContext());
         mAdapter.addFiles(path);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(mAdapter);
@@ -99,9 +99,11 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
                 break;
             case R.id.fab_create_file:
                 floatingMenu.close(true);
+                ToastUtil.showToast(getContext(),getString(R.string.waitForOpen));
                 break;
             case R.id.fab_create_floder:
                 floatingMenu.close(true);
+                ToastUtil.showToast(getContext(),getString(R.string.waitForOpen));
                 break;
         }
     }

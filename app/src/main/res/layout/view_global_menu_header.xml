@@ -20,6 +20,6 @@
         android:adjustViewBounds="true"
         android:padding="10dp"
         android:scaleType="center"
-        android:src="@drawable/ic_brightness_3_white_24dp"
+        android:src="@drawable/ic_wb_sunny_white_24dp"
         />
 </RelativeLayout>
