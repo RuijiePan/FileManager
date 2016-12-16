@@ -65,7 +65,7 @@ public class CheckCircleView extends View {
     }
 
     private void initBitmap() {
-        mBitmap = BitmapUtil.getBitmapFromRes(getContext(),R.drawable.ic_check_white_36dp);
+        mBitmap = BitmapUtil.getBitmapFromRes(getContext(),R.drawable.ic_check_white_24dp);
         mBitmapWidth = mBitmap.getWidth();
         mBitmapHeight = mBitmap.getHeight();
         mMatrix = new Matrix();

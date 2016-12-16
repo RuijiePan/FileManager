@@ -9,7 +9,7 @@
         <!--Checkbox、Edittext、Toggle、Seekbar颜色:一般控件的选种效果默认采用该颜色-->
         <item name="colorAccent">@color/colorAccent</item>
         <!--字体颜色-->
-        <item name="android:textColorPrimary">@color/green</item>
+        <item name="actionModeBackground">@null</item>
         <!--背景色-->
         <!--<item name="android:windowBackground">@color/white</item>
         <item name="android:windowIsTranslucent">false</item>-->
@@ -28,6 +28,21 @@
         android:textColor Button，textView的文字颜色
         android:textColorPrimaryDisableOnly RadioButton checkbox等控件的文字
         android:textColorPrimary 应用的主要文字颜色，actionBar的标题文字默认使用该颜色-->
+        <!-- main drawables -->
+        <item name="action_info">@drawable/holo_light_action_info</item>
+        <item name="action_paste">@drawable/actionpaste</item>
+        <item name="action_remove">@drawable/holo_light_action_remove</item>
+        <item name="action_search">@drawable/holo_light_action_search</item>
+
+        <!-- action mode drawables -->
+        <item name="action_copy">@drawable/holo_dark_action_copy</item>
+        <item name="action_cut">@drawable/holo_dark_action_cut</item>
+        <item name="action_edit">@drawable/holo_dark_action_edit</item>
+        <item name="action_multi">@drawable/holo_dark_ic_action_select_all</item>
+        <item name="action_zip">@drawable/holo_dark_ic_storage</item>
+        <item name="action_bookmark">@drawable/holo_dark_ic_bookmark</item>
+        <item name="action_delete">@drawable/holo_dark_action_delete</item>
+        <item name="action_share">@drawable/holo_dark_action_share</item>
     </style>
 
     <style name="toolbar_text_style">
@@ -80,4 +95,10 @@
         <item name="android:maxLines">2</item>
         <item name="android:ellipsize">end</item>
     </style>
+
+    <style name="popupTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:colorBackground">@color/white</item>
+    </style>
+
 </resources>

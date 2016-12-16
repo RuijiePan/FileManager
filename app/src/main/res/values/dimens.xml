@@ -24,4 +24,8 @@
     <dimen name="item_icon_padding">10dp</dimen>
     <!-- list item default padding -->
     <dimen name="item_default_padding">8dp</dimen>
+    <!-- properties container height -->
+    <dimen name="container_height">265dp</dimen>
+    <!-- navigation view height -->
+    <dimen name="nav_height">48dp</dimen>
 </resources>

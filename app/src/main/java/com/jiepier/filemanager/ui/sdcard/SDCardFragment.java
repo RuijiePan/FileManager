@@ -10,6 +10,7 @@ import android.view.View;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseFragment;
 import com.jiepier.filemanager.base.BaseFragmentPagerAdapter;
+import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.NewTabEvent;
 import com.jiepier.filemanager.ui.common.CommonFragment;
 import com.jiepier.filemanager.util.FileUtil;
@@ -76,7 +77,6 @@ public class SDCardFragment extends BaseFragment {
         tablayout.setupWithViewPager(viewpager);
         tablayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         viewpager.setCurrentItem(mAdapter.getCount()-1);
-
     }
 
     @Override
@@ -95,7 +95,6 @@ public class SDCardFragment extends BaseFragment {
                     viewpager.setCurrentItem(mAdapter.getCount() - 1);
                     setCurrentPath();
                 }, Throwable::printStackTrace);
-
 
     }
 
@@ -138,6 +137,16 @@ public class SDCardFragment extends BaseFragment {
     }
 
     public String getPath(){
+        return path;
+    }
+
+    public String getCurrentPath(){
+        if (titleList.size()==1)
+            path = "/";
+
+        path = "";
+        for (int i=1;i<=viewpager.getCurrentItem();i++)
+            path += titleList.get(i);
         return path;
     }
 }

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="4dp"
+        android:paddingBottom="3dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="7dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/location"
+                android:textIsSelectable="false"
+                android:textStyle="bold"
+                android:textColor="?android:textColorPrimary" />
+
+            <TextView
+                android:id="@+id/path_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@string/minus"
+                android:textIsSelectable="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/permission_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/LastModified"
+                android:textIsSelectable="false"
+                android:textStyle="bold"
+                android:textColor="?android:textColorPrimary" />
+
+            <TextView
+                android:id="@+id/time_stamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/minus"
+                android:textIsSelectable="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/size"
+                android:textIsSelectable="false"
+                android:textStyle="bold"
+                android:textColor="?android:textColorPrimary" />
+
+            <TextView
+                android:id="@+id/total_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/minus"
+                android:textIsSelectable="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/md5"
+                android:textIsSelectable="false"
+                android:textStyle="bold"
+                android:textColor="?android:textColorPrimary" />
+
+            <TextView
+                android:id="@+id/md5_summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:ellipsize="none"
+                android:singleLine="true"
+                android:text="@string/minus"
+                android:textIsSelectable="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="7dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/sha1_key"
+                android:textIsSelectable="false"
+                android:textStyle="bold"
+                android:textColor="?android:textColorPrimary" />
+
+            <TextView
+                android:id="@+id/sha1_summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:ellipsize="none"
+                android:singleLine="true"
+                android:text="@string/minus"
+                android:textSize="13sp"
+                android:textIsSelectable="false" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

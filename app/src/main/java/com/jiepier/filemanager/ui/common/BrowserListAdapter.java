@@ -29,6 +29,7 @@ public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
 
     private SparseBooleanArray selectedItems;
     private boolean isLongClick;
+    private String mPath;
 
     public BrowserListAdapter(Context context) {
         super(R.layout.item_browserlist);
@@ -71,45 +72,61 @@ public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
         int position = holder.getLayoutPosition();
         if (selectedItems.get(position, false)){
             holder.setVisibility(R.id.bottom_view,View.GONE);
-            //holder.setVisibility(R.id.iv_check,View.VISIBLE);
+            holder.setVisibility(R.id.iv_check,View.VISIBLE);
         }else {
             holder.setVisibility(R.id.bottom_view,View.VISIBLE);
-            //holder.setVisibility(R.id.iv_check,View.GONE);
+            holder.setVisibility(R.id.iv_check,View.GONE);
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isLongClick) {
-                    toggleSelection(position);
-                    if (getSelectedItemCount()==0)
-                        isLongClick = false;
-                    else
-                        mListener.onMultipeChoice(getSelectedItems());
-                }else {
-                    mListener.onItemClick(position);
+        holder.itemView.setOnClickListener(view -> {
+            if (isLongClick) {
+                toggleSelection(position);
+                if (getSelectedItemCount()==0) {
+                    isLongClick = false;
+                    mListener.onMultipeChoiceCancel();
                 }
+                else {
+                    mListener.onMultipeChoice(getSelectedFilesPath());
+                    if (getSelectedItemCount()==1)
+                        mListener.onMultipeChoiceStart();
+                }
+                mListener.onMultipeChoice(getSelectedFilesPath());
+            }else {
+                mListener.onItemClick(position);
             }
         });
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                toggleSelection(position);
-                if (getSelectedItemCount()!=0)
-                    isLongClick = true;
-                else
-                    isLongClick = false;
-                return false;
+        holder.itemView.setOnLongClickListener(view -> {
+            toggleSelection(position);
+            if (getSelectedItemCount()!=0) {
+                isLongClick = true;
+                if (getSelectedItemCount()==1)
+                    mListener.onMultipeChoiceStart();
             }
+            else {
+                isLongClick = false;
+                mListener.onMultipeChoiceCancel();
+            }
+            mListener.onMultipeChoice(getSelectedFilesPath());
+            return false;
         });
     }
 
     public void addFiles(String path){
+        mPath = path;
         mData = FileUtil.listFiles(path,mContext);
 
         if (mData != null)
             SortUtils.sortList(mData,path);
+
+        notifyDataSetChanged();
+    }
+
+    public void refresh(){
+        mData = FileUtil.listFiles(mPath,mContext);
+
+        if (mData != null)
+            SortUtils.sortList(mData,mPath);
 
         notifyDataSetChanged();
     }
@@ -140,4 +157,19 @@ public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
         }
         return items;
     }
+
+    public List<String> getSelectedFilesPath(){
+
+        List<Integer> items = new ArrayList<Integer>(selectedItems.size());
+        for (int i = 0; i < selectedItems.size(); i++) {
+            items.add(selectedItems.keyAt(i));
+        }
+
+        List<String> list = new ArrayList<>();
+        for (int i=0;i<items.size();i++){
+            list.add(getData(items.get(i)));
+        }
+        return list;
+    }
+
 }

@@ -21,4 +21,20 @@
   <attr name="action_share" format="reference" />
   <attr name="action_zip" format="reference" />
   <attr name="action_multi" format="reference" />
+
+  <!-- PageIndicator style -->
+  <declare-styleable name="PageIndicatorStyle">
+    <attr name="PageIndicatorStyle" format="reference" />
+    <!-- Whether or not the selected indicator fades. -->
+    <attr name="fades" format="boolean" />
+    <!-- Length of the delay to fade the indicator. -->
+    <attr name="fadeDelay" format="integer" />
+    <!-- Length of the indicator fade to transparent. -->
+    <attr name="fadeLength" format="integer" />
+    <!-- Color of the selected line that represents the current page. -->
+    <attr name="selectedColor" format="color" />
+    <!-- View background -->
+    <attr name="android:background" />
+  </declare-styleable>
+
 </resources>

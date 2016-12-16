@@ -6,9 +6,13 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AbsListView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.clans.fab.FloatingActionButton;
@@ -16,16 +20,24 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseAdapter;
 import com.jiepier.filemanager.base.BaseFragment;
+import com.jiepier.filemanager.event.CleanActionModeEvent;
+import com.jiepier.filemanager.event.CleanChoiceEvent;
+import com.jiepier.filemanager.event.MutipeChoiceEvent;
+import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.util.FileUtil;
+import com.jiepier.filemanager.util.RxBus;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.SnackbarUtil;
 import com.jiepier.filemanager.util.ToastUtil;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by JiePier on 16/12/13.
@@ -96,10 +108,36 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
             }
 
             @Override
-            public void onMultipeChoice(List<Integer> items) {
+            public void onMultipeChoice(List<String> items) {
+                RxBus.getDefault().post(new MutipeChoiceEvent(items));
+            }
 
+            @Override
+            public void onMultipeChoiceStart() {
+                //ToastUtil.showToast(getContext(),"进入多选模式");
+            }
+
+            @Override
+            public void onMultipeChoiceCancel() {
+                ToastUtil.showToast(getContext(),"退出多选模式");
             }
         });
+
+        RxBus.getDefault()
+                .toObservable(CleanChoiceEvent.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(event->{
+                    mAdapter.clearSelections();
+                }, Throwable::printStackTrace);
+
+        RxBus.getDefault()
+                .toObservable(RefreshEvent.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(event->{
+                    mAdapter.refresh();
+                }, Throwable::printStackTrace);
 
         mPresenter = new CommonPresenter(getContext());
         mPresenter.attachView(this);
@@ -138,4 +176,12 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
         mDialog.dismiss();
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (!isVisibleToUser) {
+            RxBus.getDefault().post(new CleanActionModeEvent());
+            RxBus.getDefault().post(new CleanChoiceEvent());
+        }
+    }
 }

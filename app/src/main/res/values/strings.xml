@@ -96,4 +96,25 @@
 
     <!-- permissions -->
     <string name="message_denied">Permission \"%1$s\" has been denied</string>
+
+    <!-- bookmarks -->
+    <string name="bookmark">Bookmarks</string>
+    <string name="bookmarkadded">Bookmark added.</string>
+    <string name="bookmarkexist">Bookmark already exists!</string>
+    <string name="createbookmark">Create bookmark</string>
+
+    <!-- actionmode -->
+    <string name="_files">\u0020file(s)</string>
+    <string name="_selected">\u0020selected</string>
+
+    <!-- overwrite dialog -->
+    <string name="overwrite_title">Target file already exists</string>
+    <string name="overwrite_source">Source</string>
+    <string name="overwrite_destination">Destination</string>
+    <string name="overwrite_skip">Skip</string>
+    <string name="overwrite_skip_all">Skip all</string>
+    <string name="overwrite_replace">Replace</string>
+    <string name="overwrite_replace_all">Replace all</string>
 </resources>
+
+

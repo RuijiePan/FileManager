@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- PageIndicator defaults -->
+    <bool name="default_underline_indicator_fades">true</bool>
+    <integer name="default_underline_indicator_fade_delay">300</integer>
+    <integer name="default_underline_indicator_fade_length">400</integer>
+    <color name="default_underline_indicator_selected_color">#FF33B5E5</color>
+
+</resources>

@@ -13,7 +13,24 @@
     <item name="widgetBackgroundDark">@color/selectable_item_background_general_light_pressed
     </item>
     <item name="widgetBackgroundTitle">@android:color/white</item>
+    <item name="actionModeBackground">?attr/colorPrimary</item>
     <item name="android:windowIsTranslucent">true</item>
+    <item name="android:popupBackground">@color/white</item>
+    <!-- main drawables -->
+    <item name="action_info">@drawable/holo_light_action_info</item>
+    <item name="action_paste">@drawable/actionpaste</item>
+    <item name="action_remove">@drawable/holo_light_action_remove</item>
+    <item name="action_search">@drawable/holo_light_action_search</item>
+
+    <!-- action mode drawables -->
+    <item name="action_copy">@drawable/holo_dark_action_copy</item>
+    <item name="action_cut">@drawable/holo_dark_action_cut</item>
+    <item name="action_edit">@drawable/holo_dark_action_edit</item>
+    <item name="action_multi">@drawable/holo_dark_ic_action_select_all</item>
+    <item name="action_zip">@drawable/holo_dark_ic_storage</item>
+    <item name="action_bookmark">@drawable/holo_dark_ic_bookmark</item>
+    <item name="action_delete">@drawable/holo_dark_action_delete</item>
+    <item name="action_share">@drawable/holo_dark_action_share</item>
   </style>
 
   <style name="AppThemeLight" parent="BaseAppThemeLight">
@@ -42,6 +59,22 @@
     </item>
     <item name="widgetBackgroundTitle">@color/colorPrimary</item>
     <item name="android:windowIsTranslucent">true</item>
+    <item name="actionModeBackground">?attr/colorPrimary</item>
+    <!-- main drawables -->
+    <item name="action_info">@drawable/holo_light_action_info</item>
+    <item name="action_paste">@drawable/actionpaste</item>
+    <item name="action_remove">@drawable/holo_light_action_remove</item>
+    <item name="action_search">@drawable/holo_light_action_search</item>
+
+    <!-- action mode drawables -->
+    <item name="action_copy">@drawable/holo_dark_action_copy</item>
+    <item name="action_cut">@drawable/holo_dark_action_cut</item>
+    <item name="action_edit">@drawable/holo_dark_action_edit</item>
+    <item name="action_multi">@drawable/holo_dark_ic_action_select_all</item>
+    <item name="action_zip">@drawable/holo_dark_ic_storage</item>
+    <item name="action_bookmark">@drawable/holo_dark_ic_bookmark</item>
+    <item name="action_delete">@drawable/holo_dark_action_delete</item>
+    <item name="action_share">@drawable/holo_dark_action_share</item>
   </style>
 
   <style name="AppThemeDark" parent="BaseAppThemeDark">

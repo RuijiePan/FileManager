@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,7 +95,11 @@ public abstract class BaseAdapter<T,K extends BaseViewHolder> extends RecyclerVi
     public interface OnRecyclerViewItemClickListener{
         void onItemClick(int position);
 
-        void onMultipeChoice(List<Integer> items);
+        void onMultipeChoice(List<String> items);
+
+        void onMultipeChoiceStart();
+
+        void onMultipeChoiceCancel();
     }
 
     public void setItemClickListner(OnRecyclerViewItemClickListener listner){
