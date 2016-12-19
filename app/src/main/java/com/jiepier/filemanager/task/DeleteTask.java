@@ -7,8 +7,12 @@ import android.media.MediaScannerConnection;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jiepier.filemanager.R;
+import com.jiepier.filemanager.event.CleanChoiceEvent;
+import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.util.FileUtil;
+import com.jiepier.filemanager.util.RxBus;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -18,7 +22,7 @@ public final class DeleteTask extends AsyncTask<String, Void, List<String>> {
 
     private final WeakReference<Activity> activity;
 
-    private ProgressDialog dialog;
+    private MaterialDialog dialog;
 
     public DeleteTask(final Activity activity) {
         this.activity = new WeakReference<>(activity);
@@ -29,16 +33,12 @@ public final class DeleteTask extends AsyncTask<String, Void, List<String>> {
         final Activity activity = this.activity.get();
 
         if (activity != null) {
-            this.dialog = new ProgressDialog(activity);
-            this.dialog.setMessage(activity.getString(R.string.deleting));
-            this.dialog.setCancelable(true);
-            this.dialog
-                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            cancel(false);
-                        }
-                    });
+            this.dialog = new MaterialDialog.Builder(activity)
+                    .progress(true,0)
+                    .content(activity.getString(R.string.deleting))
+                    .cancelable(true)
+                    .build();
+
             if (!activity.isFinishing()) {
                 this.dialog.show();
             }
@@ -88,5 +88,8 @@ public final class DeleteTask extends AsyncTask<String, Void, List<String>> {
                     activity.getString(R.string.deletesuccess),
                     Toast.LENGTH_SHORT).show();
         }
+
+        RxBus.getDefault().post(new CleanChoiceEvent());
+        RxBus.getDefault().post(new RefreshEvent());
     }
 }

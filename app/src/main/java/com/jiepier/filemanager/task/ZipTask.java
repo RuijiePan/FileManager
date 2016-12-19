@@ -6,7 +6,10 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jiepier.filemanager.R;
+import com.jiepier.filemanager.event.RefreshEvent;
+import com.jiepier.filemanager.util.RxBus;
 import com.jiepier.filemanager.util.ZipUtils;
 
 import java.lang.ref.WeakReference;
@@ -17,7 +20,7 @@ import java.util.List;
 public final class ZipTask extends AsyncTask<String, Void, List<String>> {
 
     private final WeakReference<Activity> activity;
-    private ProgressDialog dialog;
+    private MaterialDialog dialog;
     private final String zipname;
 
     public ZipTask(final Activity activity, String name1) {
@@ -30,15 +33,12 @@ public final class ZipTask extends AsyncTask<String, Void, List<String>> {
         final Activity activity = this.activity.get();
 
         if (activity != null) {
-            this.dialog = new ProgressDialog(activity);
-            this.dialog.setMessage(activity.getString(R.string.packing));
-            this.dialog.setCancelable(true);
-            this.dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            cancel(false);
-                        }
-                    });
+            this.dialog = new MaterialDialog.Builder(activity)
+                    .progress(true,0)
+                    .content(activity.getString(R.string.packing))
+                    .cancelable(true)
+                    .build();
+
             if (!activity.isFinishing()) {
                 this.dialog.show();
             }
@@ -82,5 +82,6 @@ public final class ZipTask extends AsyncTask<String, Void, List<String>> {
                 dialog.show();
             }
         }
+        RxBus.getDefault().post(new RefreshEvent());
     }
 }

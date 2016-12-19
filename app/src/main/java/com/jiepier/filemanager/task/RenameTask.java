@@ -4,13 +4,19 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jiepier.filemanager.R;
+import com.jiepier.filemanager.event.CleanChoiceEvent;
+import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.RootCommands;
+import com.jiepier.filemanager.util.RxBus;
 import com.jiepier.filemanager.util.Settings;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +25,7 @@ public final class RenameTask extends AsyncTask<String, Void, List<String>> {
 
     private final WeakReference<Activity> activity;
 
-    private ProgressDialog dialog;
+    private MaterialDialog dialog;
 
     private boolean succes = false;
 
@@ -35,16 +41,13 @@ public final class RenameTask extends AsyncTask<String, Void, List<String>> {
         final Activity activity = this.activity.get();
 
         if (activity != null) {
-            this.dialog = new ProgressDialog(activity);
-            this.dialog.setMessage(activity.getString(R.string.rename));
-            this.dialog.setCancelable(true);
-            this.dialog
-                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            cancel(false);
-                        }
-                    });
+            this.dialog = new MaterialDialog.Builder(activity)
+                    .progress(true,0)
+                    .content(activity.getString(R.string.rename))
+                    .cancelable(true)
+                    .negativeText(R.string.cancel)
+                    .build();
+
             if (!activity.isFinishing()) {
                 this.dialog.show();
             }
@@ -56,7 +59,7 @@ public final class RenameTask extends AsyncTask<String, Void, List<String>> {
         final List<String> failed = new ArrayList<>();
 
         try {
-            if (FileUtil.renameTarget(path + "/" + files[0], files[1])) {
+            if (FileUtil.renameTarget(path + File.separator + files[0], files[1])) {
                 succes = true;
             } else {
                 if (Settings.rootAccess()) {
@@ -94,7 +97,8 @@ public final class RenameTask extends AsyncTask<String, Void, List<String>> {
             Toast.makeText(activity,
                     activity.getString(R.string.filewasrenamed),
                     Toast.LENGTH_LONG).show();
-
+            RxBus.getDefault().post(new CleanChoiceEvent());
+            RxBus.getDefault().post(new RefreshEvent());
         if (activity != null && !failed.isEmpty()) {
             Toast.makeText(activity, activity.getString(R.string.cantopenfile),
                     Toast.LENGTH_SHORT).show();

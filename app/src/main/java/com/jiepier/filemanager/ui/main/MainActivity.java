@@ -3,18 +3,25 @@ package com.jiepier.filemanager.ui.main;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AbsListView;
 
+import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
+import com.blankj.utilcode.utils.FileUtils;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseDrawerActivity;
+import com.jiepier.filemanager.event.AllChoiceEvent;
 import com.jiepier.filemanager.event.CleanActionModeEvent;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.MutipeChoiceEvent;
+import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.task.PasteTaskExecutor;
+import com.jiepier.filemanager.task.ZipTask;
 import com.jiepier.filemanager.util.ClipBoard;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.ResourceUtil;
@@ -22,7 +29,11 @@ import com.jiepier.filemanager.util.RxBus;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.StatusBarUtil;
 import com.jiepier.filemanager.util.ToastUtil;
+import com.jiepier.filemanager.util.UUIDUtil;
+import com.jiepier.filemanager.widget.DeleteFilesDialog;
 import com.jiepier.filemanager.widget.DirectoryInfoDialog;
+import com.jiepier.filemanager.widget.RenameDialog;
+import com.jiepier.filemanager.widget.ZipFilesDialog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,7 +45,7 @@ import rx.schedulers.Schedulers;
 
 import static android.R.attr.mode;
 
-public class MainActivity extends BaseDrawerActivity implements ActionMode.Callback{
+public class MainActivity extends BaseDrawerActivity implements ActionMode.Callback,FolderChooserDialog.FolderCallback{
 
     private ActionMode mActionMode;
     private String[] mFiles;
@@ -104,6 +115,7 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
                 .subscribe(event -> {
                     if (mActionMode != null)
                        mActionMode.finish();
+                    invalidateOptionsMenu();
                 }, Throwable::printStackTrace);
     }
 
@@ -152,7 +164,6 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
         if (mFiles.length > 1) {
             menu.removeItem(R.id.actionrename);
             menu.removeItem(R.id.actiongroupowner);
-            menu.removeItem(R.id.actiondetails);
         }
         return true;
     }
@@ -163,19 +174,20 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
         switch (menuItem.getItemId()) {
             case R.id.actionmove:
                 ClipBoard.cutMove(mFiles);
-                actionMode.finish();
-                invalidateOptionsMenu();
+                RxBus.getDefault().post(new CleanActionModeEvent());
                 RxBus.getDefault().post(new CleanChoiceEvent());
                 return true;
             case R.id.actioncopy:
                 ClipBoard.cutCopy(mFiles);
-                actionMode.finish();
-                invalidateOptionsMenu();
+                RxBus.getDefault().post(new CleanActionModeEvent());
                 RxBus.getDefault().post(new CleanChoiceEvent());
                 return true;
             case R.id.actiongroupowner:
                 return true;
             case R.id.actiondelete:
+                DialogFragment deleteDialog = DeleteFilesDialog.instantiate(mFiles);
+                deleteDialog.show(fm_v4,TAG_DIALOG);
+                RxBus.getDefault().post(new CleanActionModeEvent());
                 //删除文件
                 return true;
             case R.id.actionshare:
@@ -191,24 +203,30 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 intent.setType("*/*");
                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
-                actionMode.finish();
                 startActivity(Intent.createChooser(intent, getString(R.string.share)));
+                RxBus.getDefault().post(new CleanActionModeEvent());
                 return true;
             case R.id.actionshortcut:
-                actionMode.finish();
+                RxBus.getDefault().post(new CleanActionModeEvent());
                 return true;
             case R.id.actionbookmark:
-                actionMode.finish();
+                RxBus.getDefault().post(new CleanActionModeEvent());
                 return true;
             case R.id.actionzip:
-                actionMode.finish();
+                new FolderChooserDialog.Builder(this)
+                        .chooseButton(R.string.md_choose_label)  // changes label of the choose button
+                        .initialPath(mSdCardFragment.getCurrentPath())  // changes initial path, defaults to external storage directory
+                        .goUpLabel("Up") // custom go up label, default label is "..."
+                        .show();
                 return true;
             case R.id.actionrename:
-                return true;
-            case R.id.actiondetails:
+                DialogFragment renameDialog = RenameDialog.instantiate(mSdCardFragment.getCurrentPath(),mList.get(0));
+                renameDialog.show(fm_v4,TAG_DIALOG);
+                RxBus.getDefault().post(new CleanActionModeEvent());
                 return true;
             case R.id.actionall:
-                actionMode.invalidate();
+                //RxBus.getDefault().post(new CleanActionModeEvent());
+                RxBus.getDefault().post(new AllChoiceEvent(mSdCardFragment.getCurrentPath()));
                 return true;
             default:
                 return false;
@@ -218,7 +236,17 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
     @Override
     public void onDestroyActionMode(ActionMode actionMode) {
         this.mActionMode = null;
+        RxBus.getDefault().post(new CleanChoiceEvent());
     }
 
+    @Override
+    public void onFolderSelection(@NonNull FolderChooserDialog dialog, @NonNull File folder) {
+        final ZipTask task = new ZipTask(this,
+                //zip文件新名字
+                folder.getAbsolutePath()+File.separator+UUIDUtil.createUUID()+".zip");
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,mList.get(0));
+        RxBus.getDefault().post(new CleanActionModeEvent());
+        RxBus.getDefault().post(new CleanChoiceEvent());
+    }
 }
 

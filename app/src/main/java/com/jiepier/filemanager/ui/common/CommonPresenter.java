@@ -31,9 +31,9 @@ public class CommonPresenter implements CommonContact.Presenter {
         if (file.isDirectory()) {
             //if (file.list() != nu)
             RxBus.getDefault().post(new NewTabEvent(filePath));
-            /*else
-                mView.showSnackbar("文件夹为空");*/
+
         }else {
+            //解压文件
             if (FileUtil.isSupportedArchive(file)){
 
             }else {

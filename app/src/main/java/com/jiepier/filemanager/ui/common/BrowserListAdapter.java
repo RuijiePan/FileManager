@@ -146,6 +146,14 @@ public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
         notifyDataSetChanged();
     }
 
+    public void setAllSelections(){
+        for (int i = 0;i < getItemCount();i++){
+            selectedItems.put(i,true);
+        }
+        mListener.onMultipeChoice(getSelectedFilesPath());
+        notifyDataSetChanged();
+    }
+
     public int getSelectedItemCount() {
         return selectedItems.size();
     }
@@ -172,4 +180,7 @@ public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
         return list;
     }
 
+    public void isLongClick(boolean click){
+        isLongClick = click;
+    }
 }

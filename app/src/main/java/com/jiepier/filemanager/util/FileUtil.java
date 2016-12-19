@@ -10,6 +10,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.provider.DocumentFile;
 import android.widget.Toast;
 
+import com.blankj.utilcode.utils.FileUtils;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.preview.MimeTypes;
 
@@ -286,7 +287,7 @@ public class FileUtil {
         intent.setAction(Intent.ACTION_VIEW);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            Uri contentUri = FileProvider.getUriForFile(context, "com.jiepier.filemanager.debug" + ".fileprovider", target);
+            Uri contentUri = FileProvider.getUriForFile(context, "com.jiepier.filemanager" + ".fileprovider", target);
             intent.setDataAndType(contentUri, mime);
 
             if (mime != null) {
@@ -503,4 +504,5 @@ public class FileUtil {
 
         return path;
     }
+
 }

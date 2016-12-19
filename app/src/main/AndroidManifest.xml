@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/BaseAppThemeLight">
-        <activity android:name=".ui.main.MainActivity">
+        <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,8 +20,24 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.main.MainActivity"/>
         <activity android:name=".ui.about.AboutActivity"/>
         <activity android:name=".ui.setting.SettingActivity"/>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
+        <!-- support multi-window for samsung devices -->
+        <meta-data
+            android:name="com.sec.android.support.multiwindow"
+            android:value="true" />
     </application>
 
 </manifest>

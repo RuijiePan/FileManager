@@ -20,6 +20,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseAdapter;
 import com.jiepier.filemanager.base.BaseFragment;
+import com.jiepier.filemanager.event.AllChoiceEvent;
 import com.jiepier.filemanager.event.CleanActionModeEvent;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.MutipeChoiceEvent;
@@ -128,6 +129,7 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(event->{
+                    mAdapter.isLongClick(false);
                     mAdapter.clearSelections();
                 }, Throwable::printStackTrace);
 
@@ -137,6 +139,16 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(event->{
                     mAdapter.refresh();
+                }, Throwable::printStackTrace);
+
+        RxBus.getDefault()
+                .toObservable(AllChoiceEvent.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(event -> "/"+event.getPath())
+                .subscribe(path->{
+                    if (path.equals(this.path))
+                        mAdapter.setAllSelections();
                 }, Throwable::printStackTrace);
 
         mPresenter = new CommonPresenter(getContext());

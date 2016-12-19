@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.blankj.utilcode.utils.FileUtils;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.util.ClipBoard;
@@ -40,12 +41,12 @@ public final class PasteTask extends AsyncTask<String, Void, List<String>> {
         final Activity activity = this.activity.get();
 
         if (activity != null) {
-            this.dialog = new MaterialDialog.Builder(activity).build();
+            this.dialog = new MaterialDialog.Builder(activity).progress(true, 0).build();
 
             if (ClipBoard.isMove())
-                this.dialog.setMessage(activity.getString(R.string.moving));
+                this.dialog.setContent(activity.getString(R.string.moving));
             else
-                this.dialog.setMessage(activity.getString(R.string.copying));
+                this.dialog.setContent(activity.getString(R.string.copying));
 
             this.dialog.setCancelable(true);
             this.dialog
@@ -73,8 +74,12 @@ public final class PasteTask extends AsyncTask<String, Void, List<String>> {
                 FileUtil.moveToDirectory(new File(s), new File(location, fileName), activity);
                 success = true;
             } else {
-                FileUtil.copyFile(new File(s), new File(location, fileName), activity);
-                success = true;
+                if (new File(s).isDirectory()){
+                    success = FileUtils.copyDir(s,location+File.separator+fileName);
+                }else {
+                    success = FileUtils.copyFile(new File(s),new File(location, fileName));
+                }
+                //FileUtil.copyFile(new File(s), new File(location, fileName), activity);
             }
         }
 

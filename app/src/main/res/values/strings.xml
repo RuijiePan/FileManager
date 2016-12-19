@@ -11,6 +11,7 @@
     <string name="changegroupowner">Change group/owner</string>
     <string name="copiedtoclipboard">Copied to clipboard.</string>
     <string name="copy">Copy</string>
+    <string name="zip">Zip</string>
     <string name="copyfail">Copy failed!</string>
     <string name="copying">Copying</string>
     <string name="copysuccsess">Successfully copied.</string>
