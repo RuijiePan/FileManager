@@ -5,16 +5,16 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseFragment;
 import com.jiepier.filemanager.base.BaseFragmentPagerAdapter;
-import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.NewTabEvent;
 import com.jiepier.filemanager.ui.common.CommonFragment;
 import com.jiepier.filemanager.util.FileUtil;
-import com.jiepier.filemanager.util.RxBus;
+import com.jiepier.filemanager.util.RxBus.RxBus;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.SnackbarUtil;
 
@@ -83,9 +83,7 @@ public class SDCardFragment extends BaseFragment {
     protected void initListeners() {
 
         RxBus.getDefault()
-                .toObservable(NewTabEvent.class)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .IoToUiObservable(NewTabEvent.class)
                 .subscribe(event -> {
                     removeFrgament(viewpager.getCurrentItem() + 1);
                     BaseFragment baseFragment = CommonFragment.newInstance(event.getPath());

@@ -1,15 +1,13 @@
 package com.jiepier.filemanager.task;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.event.RefreshEvent;
-import com.jiepier.filemanager.util.RxBus;
+import com.jiepier.filemanager.util.RxBus.RxBus;
 import com.jiepier.filemanager.util.ZipUtils;
 
 import java.lang.ref.WeakReference;

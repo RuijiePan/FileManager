@@ -13,13 +13,13 @@ import android.view.WindowManager;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.util.AppManager;
 import com.jiepier.filemanager.util.ResourceUtil;
+import com.jiepier.filemanager.util.RxBus.RxBus;
 import com.jiepier.filemanager.util.SettingPrefUtil;
-import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.StatusBarUtil;
 import com.jiepier.filemanager.util.ThemeUtil;
-import com.jiepier.filemanager.widget.IconPreview;
 
 import butterknife.ButterKnife;
+import rx.subscriptions.CompositeSubscription;
 
 
 /**
@@ -43,7 +43,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private void initTheme(){
         int theme;
-        SettingPrefUtil.setThemeIndex(this,6);
+
         try {
             theme = getPackageManager().getActivityInfo(getComponentName(), 0).theme;
         } catch (PackageManager.NameNotFoundException e) {
@@ -128,8 +128,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override protected void onDestroy() {
-        AppManager.getAppManager().finishActivity(this);
         super.onDestroy();
+        AppManager.getAppManager().finishActivity(this);
     }
 
 }

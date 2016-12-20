@@ -20,9 +20,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.main.MainActivity"/>
-        <activity android:name=".ui.about.AboutActivity"/>
-        <activity android:name=".ui.setting.SettingActivity"/>
+        <activity android:name=".ui.main.MainActivity" android:launchMode="singleTask"/>
+
+        <activity android:name=".ui.about.AboutActivity" />
+
+        <activity android:name=".ui.setting.SettingActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

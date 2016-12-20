@@ -44,6 +44,10 @@ public final class Settings {
         return mPrefs.getString("defaultdir", Environment.getExternalStorageDirectory().getPath());
     }
 
+    public static void setDefaultDir(String path) {
+        mPrefs.edit().putString("defaultdir", path).apply();
+    }
+
     public static int getListAppearance() {
         return Integer.parseInt(mPrefs.getString("viewmode", "1"));
     }

@@ -1,22 +1,18 @@
 package com.jiepier.filemanager.widget;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.widget.EditText;
 import android.widget.Toast;
 
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.util.FileUtil;
-import com.jiepier.filemanager.util.RxBus;
+import com.jiepier.filemanager.util.RxBus.RxBus;
 import com.jiepier.filemanager.util.Settings;
 
 import java.io.File;

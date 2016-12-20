@@ -3,6 +3,7 @@ package com.jiepier.filemanager.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.jiepier.filemanager.R;
 
@@ -18,7 +19,7 @@ public class SettingPrefUtil {
 
   public static int getThemeIndex(Context context) {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-    return prefs.getInt("ThemeIndex", 9);
+    return prefs.getInt("ThemeIndex", 6);
   }
 
   public static void setThemeIndex(Context context, int index) {

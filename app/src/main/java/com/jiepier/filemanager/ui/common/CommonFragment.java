@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.jiepier.filemanager.R;
@@ -19,7 +18,7 @@ import com.jiepier.filemanager.event.CleanActionModeEvent;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.MutipeChoiceEvent;
 import com.jiepier.filemanager.event.RefreshEvent;
-import com.jiepier.filemanager.util.RxBus;
+import com.jiepier.filemanager.util.RxBus.RxBus;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.SnackbarUtil;
 import com.jiepier.filemanager.util.ToastUtil;
@@ -114,27 +113,21 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
             }
         });
 
-        RxBus.getDefault()
-                .toObservable(CleanChoiceEvent.class)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        RxBus.getDefault().add(this,RxBus.getDefault()
+                .IoToUiObservable(CleanChoiceEvent.class)
                 .subscribe(event->{
                     mAdapter.isLongClick(false);
                     mAdapter.clearSelections();
-                }, Throwable::printStackTrace);
+                }, Throwable::printStackTrace));
 
-        RxBus.getDefault()
-                .toObservable(RefreshEvent.class)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        RxBus.getDefault().add(this,RxBus.getDefault()
+                .IoToUiObservable(RefreshEvent.class)
                 .subscribe(event->{
                     mAdapter.refresh();
-                }, Throwable::printStackTrace);
+                }, Throwable::printStackTrace));
 
-        RxBus.getDefault()
-                .toObservable(AllChoiceEvent.class)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        RxBus.getDefault().add(this,RxBus.getDefault()
+                .IoToUiObservable(AllChoiceEvent.class)
                 .map(event -> "/"+event.getPath())
                 .subscribe(path->{
                     //如果全选了，就取消。否则全选
@@ -144,7 +137,7 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
                         else
                             mAdapter.clearSelections();
                     }
-                }, Throwable::printStackTrace);
+                }, Throwable::printStackTrace));
 
         mPresenter = new CommonPresenter(getContext());
         mPresenter.attachView(this);
@@ -194,4 +187,9 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
+    }
 }

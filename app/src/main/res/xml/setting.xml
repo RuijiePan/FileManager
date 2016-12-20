@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <PreferenceCategory
+      android:title="@string/settings_general_settings">
+    <Preference
+        android:key="pTheme"
+        android:title="@string/settings_md_colors"/>
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:enabled="true"
+        android:key="pAutoUpdate"
+        android:title="@string/settings_auto_update"/>
+
+  </PreferenceCategory>
+
+  <PreferenceCategory android:title="@string/settings_notification_settings">
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:enabled="true"
+        android:key="pNotification"
+        android:title="@string/settings_auto_notification"/>
+  </PreferenceCategory>
+
+  <PreferenceCategory android:title="@string/settings_other">
+    <Preference
+        android:key="pDefaultDir"
+        android:summary="/sdcard/"
+        android:title="@string/defaultdir"/>
+  </PreferenceCategory>
+
+</PreferenceScreen>

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseDrawerActivity;
 import com.jiepier.filemanager.event.AllChoiceEvent;
+import com.jiepier.filemanager.event.ChangeThemeEvent;
 import com.jiepier.filemanager.event.ChoiceFolderEvent;
 import com.jiepier.filemanager.event.CleanActionModeEvent;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
@@ -24,9 +26,10 @@ import com.jiepier.filemanager.task.ZipTask;
 import com.jiepier.filemanager.util.ClipBoard;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.ResourceUtil;
-import com.jiepier.filemanager.util.RxBus;
-import com.jiepier.filemanager.util.Settings;
+import com.jiepier.filemanager.util.RxBus.RxBus;
+import com.jiepier.filemanager.util.SettingPrefUtil;
 import com.jiepier.filemanager.util.StatusBarUtil;
+import com.jiepier.filemanager.util.ThemeUtil;
 import com.jiepier.filemanager.util.UUIDUtil;
 import com.jiepier.filemanager.widget.DeleteFilesDialog;
 import com.jiepier.filemanager.widget.DirectoryInfoDialog;
@@ -36,7 +39,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseDrawerActivity implements ActionMode.Callback,FolderChooserDialog.FolderCallback{
@@ -79,11 +84,8 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
             }
         });
 
-
-        RxBus.getDefault()
-                .toObservable(MutipeChoiceEvent.class)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        RxBus.getDefault().add(this,RxBus.getDefault()
+                .IoToUiObservable(MutipeChoiceEvent.class)
                 .subscribe(mutipeChoiceEvent -> {
 
                     mList = mutipeChoiceEvent.getList();
@@ -103,22 +105,18 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
                     if (mList.size() == 0)
                         mActionMode.finish();
 
-                }, Throwable::printStackTrace);
+                }, Throwable::printStackTrace));
 
-        RxBus.getDefault()
-                .toObservable(CleanActionModeEvent.class)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        RxBus.getDefault().add(this,RxBus.getDefault()
+                .IoToUiObservable(CleanActionModeEvent.class)
                 .subscribe(event -> {
                     if (mActionMode != null)
                        mActionMode.finish();
                     invalidateOptionsMenu();
-                }, Throwable::printStackTrace);
+                }, Throwable::printStackTrace));
 
-        RxBus.getDefault()
-                .toObservable(ChoiceFolderEvent.class)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        RxBus.getDefault().add(this,RxBus.getDefault()
+                .IoToUiObservable(ChoiceFolderEvent.class)
                 .subscribe(event -> {
                     unZipPath = event.getFilePath();
                     new FolderChooserDialog.Builder(this)
@@ -127,7 +125,13 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
                             .tag(UNZIP)
                             .goUpLabel("Up") // custom go up label, default label is "..."
                             .show();
-                }, Throwable::printStackTrace);
+                }, Throwable::printStackTrace));
+
+        RxBus.getDefault().add(this,RxBus.getDefault()
+                .IoToUiObservable(ChangeThemeEvent.class)
+                .subscribe(event-> {
+                    reload();
+                },Throwable::printStackTrace));
     }
 
     @Override
@@ -232,7 +236,6 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
                 RxBus.getDefault().post(new CleanActionModeEvent());
                 return true;
             case R.id.actionall:
-                //RxBus.getDefault().post(new CleanActionModeEvent());
                 RxBus.getDefault().post(new AllChoiceEvent(mSdCardFragment.getCurrentPath()));
                 return true;
             default:
@@ -263,5 +266,6 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
         RxBus.getDefault().post(new CleanChoiceEvent());
         RxBus.getDefault().post(new RefreshEvent());
     }
+
 }
 

@@ -2,15 +2,11 @@ package com.jiepier.filemanager.ui.common;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import com.jiepier.filemanager.base.BasePresenter;
-import com.jiepier.filemanager.base.BaseView;
 import com.jiepier.filemanager.event.ChoiceFolderEvent;
 import com.jiepier.filemanager.event.NewTabEvent;
-import com.jiepier.filemanager.task.UnzipTask;
 import com.jiepier.filemanager.util.FileUtil;
-import com.jiepier.filemanager.util.RxBus;
+import com.jiepier.filemanager.util.RxBus.RxBus;
 
 import java.io.File;
 

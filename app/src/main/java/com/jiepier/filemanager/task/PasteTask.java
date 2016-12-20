@@ -1,7 +1,6 @@
 package com.jiepier.filemanager.task;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -14,7 +13,7 @@ import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.util.ClipBoard;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.MediaStoreUtils;
-import com.jiepier.filemanager.util.RxBus;
+import com.jiepier.filemanager.util.RxBus.RxBus;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
