@@ -23,7 +23,7 @@ public interface CommonContact {
 
     interface Presenter extends BasePresenter<View>{
 
-        void onItemClick(String filePath);
+        void onItemClick(String filePath,String parentPath);
 
     }
 }

@@ -47,11 +47,12 @@ public class SplashActivity extends BaseActivity {
         RxPermissions rxPermissions = new RxPermissions(this);
         rxPermissions
                 .requestEach(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                        Manifest.permission.READ_EXTERNAL_STORAGE   )
                 .subscribe(permission -> { // will emit 2 Permission objects
                     if (permission.granted) {
                         Intent intent = new Intent(this, MainActivity.class);
                         startActivity(intent);
+                        finish();
                     } else if (permission.shouldShowRequestPermissionRationale) {
                         // Denied permission without ask never again
                         ToastUtil.showToast(this, "请给予读写权限，否则无法使用");

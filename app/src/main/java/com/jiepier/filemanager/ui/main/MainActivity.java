@@ -5,22 +5,21 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AbsListView;
 
 import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
-import com.blankj.utilcode.utils.FileUtils;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseDrawerActivity;
 import com.jiepier.filemanager.event.AllChoiceEvent;
+import com.jiepier.filemanager.event.ChoiceFolderEvent;
 import com.jiepier.filemanager.event.CleanActionModeEvent;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.MutipeChoiceEvent;
 import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.task.PasteTaskExecutor;
+import com.jiepier.filemanager.task.UnzipTask;
 import com.jiepier.filemanager.task.ZipTask;
 import com.jiepier.filemanager.util.ClipBoard;
 import com.jiepier.filemanager.util.FileUtil;
@@ -28,28 +27,26 @@ import com.jiepier.filemanager.util.ResourceUtil;
 import com.jiepier.filemanager.util.RxBus;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.StatusBarUtil;
-import com.jiepier.filemanager.util.ToastUtil;
 import com.jiepier.filemanager.util.UUIDUtil;
 import com.jiepier.filemanager.widget.DeleteFilesDialog;
 import com.jiepier.filemanager.widget.DirectoryInfoDialog;
 import com.jiepier.filemanager.widget.RenameDialog;
-import com.jiepier.filemanager.widget.ZipFilesDialog;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
-
-import static android.R.attr.mode;
 
 public class MainActivity extends BaseDrawerActivity implements ActionMode.Callback,FolderChooserDialog.FolderCallback{
 
     private ActionMode mActionMode;
     private String[] mFiles;
     private List<String> mList;
+    public static final String ZIP = "zip";
+    public static final String UNZIP = "unzip";
+    private String unZipPath = "";
 
     @Override
     public void initUiAndListener() {
@@ -117,6 +114,20 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
                        mActionMode.finish();
                     invalidateOptionsMenu();
                 }, Throwable::printStackTrace);
+
+        RxBus.getDefault()
+                .toObservable(ChoiceFolderEvent.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(event -> {
+                    unZipPath = event.getFilePath();
+                    new FolderChooserDialog.Builder(this)
+                            .chooseButton(R.string.md_choose_label)  // changes label of the choose button
+                            .initialPath(event.getParentPath())  // changes initial path, defaults to external storage directory
+                            .tag(UNZIP)
+                            .goUpLabel("Up") // custom go up label, default label is "..."
+                            .show();
+                }, Throwable::printStackTrace);
     }
 
     @Override
@@ -158,12 +169,9 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
     public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
         menu.clear();
         getMenuInflater().inflate(R.menu.actionmode,menu);
-        if (!Settings.rootAccess())
-            menu.removeItem(R.id.actiongroupowner);
 
         if (mFiles.length > 1) {
             menu.removeItem(R.id.actionrename);
-            menu.removeItem(R.id.actiongroupowner);
         }
         return true;
     }
@@ -181,8 +189,6 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
                 ClipBoard.cutCopy(mFiles);
                 RxBus.getDefault().post(new CleanActionModeEvent());
                 RxBus.getDefault().post(new CleanChoiceEvent());
-                return true;
-            case R.id.actiongroupowner:
                 return true;
             case R.id.actiondelete:
                 DialogFragment deleteDialog = DeleteFilesDialog.instantiate(mFiles);
@@ -207,15 +213,16 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
                 RxBus.getDefault().post(new CleanActionModeEvent());
                 return true;
             case R.id.actionshortcut:
-                RxBus.getDefault().post(new CleanActionModeEvent());
-                return true;
-            case R.id.actionbookmark:
+                for (String file:mFiles){
+                    FileUtil.createShortcut(this,file);
+                }
                 RxBus.getDefault().post(new CleanActionModeEvent());
                 return true;
             case R.id.actionzip:
                 new FolderChooserDialog.Builder(this)
                         .chooseButton(R.string.md_choose_label)  // changes label of the choose button
                         .initialPath(mSdCardFragment.getCurrentPath())  // changes initial path, defaults to external storage directory
+                        .tag(ZIP)
                         .goUpLabel("Up") // custom go up label, default label is "..."
                         .show();
                 return true;
@@ -241,12 +248,20 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
 
     @Override
     public void onFolderSelection(@NonNull FolderChooserDialog dialog, @NonNull File folder) {
-        final ZipTask task = new ZipTask(this,
-                //zip文件新名字
-                folder.getAbsolutePath()+File.separator+UUIDUtil.createUUID()+".zip");
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,mList.get(0));
+
+        String tag = dialog.getTag();
+        if (tag.equals(ZIP)) {
+            final ZipTask task = new ZipTask(this,
+                    //zip文件新名字
+                    folder.getAbsolutePath() + File.separator + UUIDUtil.createUUID() + ".zip");
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mList.get(0));
+        }else {
+            UnzipTask task = new UnzipTask(this);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new File(unZipPath),folder);
+        }
         RxBus.getDefault().post(new CleanActionModeEvent());
         RxBus.getDefault().post(new CleanChoiceEvent());
+        RxBus.getDefault().post(new RefreshEvent());
     }
 }
 

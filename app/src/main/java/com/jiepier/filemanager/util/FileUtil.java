@@ -13,6 +13,8 @@ import android.widget.Toast;
 import com.blankj.utilcode.utils.FileUtils;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.preview.MimeTypes;
+import com.jiepier.filemanager.ui.main.MainActivity;
+import com.jiepier.filemanager.widget.IconPreview;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -505,4 +507,50 @@ public class FileUtil {
         return path;
     }
 
+    public static void createShortcut(Activity main, String path) {
+        File file = new File(path);
+        Intent shortcutIntent;
+
+        try {
+            // Create the intent that will handle the shortcut
+            if (file.isFile()) {
+                shortcutIntent = new Intent(Intent.ACTION_VIEW);
+                shortcutIntent.setDataAndType(Uri.fromFile(file), MimeTypes.getMimeType(file));
+                shortcutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            } else {
+                shortcutIntent = new Intent(main, MainActivity.class);
+                shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                shortcutIntent.putExtra("shortcut_path", path);
+            }
+
+            // The intent to send to broadcast for register the shortcut intent
+            Intent intent = new Intent();
+            intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+            intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, file.getName());
+
+            if (file.isFile()) {
+                BitmapDrawable bd = (BitmapDrawable) IconPreview.getBitmapDrawableFromFile(file);
+
+                if (bd != null) {
+                    intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, bd.getBitmap());
+                } else {
+                    intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+                            Intent.ShortcutIconResource.fromContext(main, R.drawable.type_unknown));
+                }
+            } else {
+                intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+                        Intent.ShortcutIconResource.fromContext(main, R.drawable.ic_launcher));
+            }
+
+            intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+            main.sendBroadcast(intent);
+
+            Toast.makeText(main, main.getString(R.string.shortcutcreated),
+                    Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(main, main.getString(R.string.error), Toast.LENGTH_SHORT).show();
+        }
+    }
 }

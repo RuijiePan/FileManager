@@ -1,20 +1,14 @@
 package com.jiepier.filemanager.ui.common;
 
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.ActionMode;
-import android.view.GestureDetector;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AbsListView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.jiepier.filemanager.R;
@@ -25,14 +19,13 @@ import com.jiepier.filemanager.event.CleanActionModeEvent;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.MutipeChoiceEvent;
 import com.jiepier.filemanager.event.RefreshEvent;
-import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.RxBus;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.SnackbarUtil;
 import com.jiepier.filemanager.util.ToastUtil;
+import com.jiepier.filemanager.widget.CreateFileDialog;
+import com.jiepier.filemanager.widget.CreateFolderDialog;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -56,6 +49,7 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
     FloatingActionMenu floatingMenu;
     @BindView(R.id.fab_scoll_top)
     FloatingActionButton fabScollTop;
+    public static final String DIALOGTAG = "dialog_tag";
     private CommonPresenter mPresenter;
     private MaterialDialog mDialog;
     private BrowserListAdapter mAdapter;
@@ -82,10 +76,6 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
 
     @Override
     protected void initViews(View self, Bundle savedInstanceState) {
-        mDialog = new MaterialDialog
-                .Builder(getContext())
-                .title("文件")
-                .build();
 
     }
 
@@ -105,7 +95,7 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
         mAdapter.setItemClickListner(new BaseAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                mPresenter.onItemClick(mAdapter.getData(position));
+                mPresenter.onItemClick(mAdapter.getData(position),path);
             }
 
             @Override
@@ -147,8 +137,13 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(event -> "/"+event.getPath())
                 .subscribe(path->{
-                    if (path.equals(this.path))
-                        mAdapter.setAllSelections();
+                    //如果全选了，就取消。否则全选
+                    if (path.equals(this.path)) {
+                        if (mAdapter.getItemCount()!=mAdapter.getSelectedItemCount())
+                            mAdapter.setAllSelections();
+                        else
+                            mAdapter.clearSelections();
+                    }
                 }, Throwable::printStackTrace);
 
         mPresenter = new CommonPresenter(getContext());
@@ -164,11 +159,13 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
                 break;
             case R.id.fab_create_file:
                 floatingMenu.close(true);
-                ToastUtil.showToast(getContext(),getString(R.string.waitForOpen));
+                DialogFragment fileDialog = CreateFileDialog.create(path);
+                fileDialog.show(getActivity().getFragmentManager(),DIALOGTAG);
                 break;
             case R.id.fab_create_floder:
                 floatingMenu.close(true);
-                ToastUtil.showToast(getContext(),getString(R.string.waitForOpen));
+                DialogFragment folderDialog = CreateFolderDialog.create(path);
+                folderDialog.show(getActivity().getFragmentManager(),DIALOGTAG);
                 break;
         }
     }
@@ -196,4 +193,5 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
             RxBus.getDefault().post(new CleanChoiceEvent());
         }
     }
+
 }
