@@ -12,6 +12,7 @@ import android.view.Menu;
 
 import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 import com.jiepier.filemanager.R;
+import com.jiepier.filemanager.event.ActionModeTitleEvent;
 import com.jiepier.filemanager.event.AllChoiceEvent;
 import com.jiepier.filemanager.event.ChangeThemeEvent;
 import com.jiepier.filemanager.event.ChoiceFolderEvent;
@@ -93,6 +94,13 @@ public class MainPresenter implements MainContact.Presenter {
                 .IoToUiObservable(ChangeThemeEvent.class)
                 .subscribe(event-> {
                     mView.reload();
+                },Throwable::printStackTrace));
+
+        mCompositeSubscription.add(RxBus.getDefault()
+                .IoToUiObservable(ActionModeTitleEvent.class)
+                .subscribe(event-> {
+                    final String mSelected = activity.getString(R.string._selected);
+                    mView.setActionModeTitle(event.getCount()+mSelected);
                 },Throwable::printStackTrace));
     }
 

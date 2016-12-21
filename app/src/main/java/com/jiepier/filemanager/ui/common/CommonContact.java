@@ -1,5 +1,6 @@
 package com.jiepier.filemanager.ui.common;
 
+import com.jiepier.filemanager.base.BasePresenter;
 import com.jiepier.filemanager.base.BaseView;
 
 /**
@@ -10,15 +11,16 @@ public interface CommonContact {
 
     interface View extends BaseView{
 
-        void showSnackbar(String content);
+        void setLongClick(boolean longClick);
 
-        void showDialog();
+        void clearSelect();
 
-        void dismissDialog();
+        void refreshAdapter();
 
+        void allChoiceClick();
     }
 
-    interface BasePresenter extends com.jiepier.filemanager.base.BasePresenter<View> {
+    interface Presenter extends BasePresenter<View> {
 
         void onItemClick(String filePath,String parentPath);
 

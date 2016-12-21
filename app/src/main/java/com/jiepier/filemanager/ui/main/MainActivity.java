@@ -13,10 +13,6 @@ import android.view.MenuItem;
 import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseDrawerActivity;
-import com.jiepier.filemanager.event.AllChoiceEvent;
-import com.jiepier.filemanager.event.ChangeThemeEvent;
-import com.jiepier.filemanager.event.ChoiceFolderEvent;
-import com.jiepier.filemanager.event.CleanActionModeEvent;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.MutipeChoiceEvent;
 import com.jiepier.filemanager.event.RefreshEvent;
@@ -178,7 +174,7 @@ public class MainActivity extends BaseDrawerActivity implements
     @Override
     public void cretaeActionMode() {
         if (mActionMode == null){
-            mActionMode = startActionMode(MainActivity.this);
+            mActionMode = startActionMode(this);
             StatusBarUtil.setColor(this, ResourceUtil.getThemeColor(this), 0);
         }
     }

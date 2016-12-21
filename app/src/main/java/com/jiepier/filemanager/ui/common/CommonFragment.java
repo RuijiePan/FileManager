@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -13,6 +14,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseAdapter;
 import com.jiepier.filemanager.base.BaseFragment;
+import com.jiepier.filemanager.event.ActionModeTitleEvent;
 import com.jiepier.filemanager.event.AllChoiceEvent;
 import com.jiepier.filemanager.event.CleanActionModeEvent;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
@@ -47,8 +49,7 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
     @BindView(R.id.fab_scoll_top)
     FloatingActionButton fabScollTop;
     public static final String DIALOGTAG = "dialog_tag";
-    private CommonBasePresenter mPresenter;
-    private MaterialDialog mDialog;
+    private CommonPresenter mPresenter;
     private BrowserListAdapter mAdapter;
     private String path;
 
@@ -111,33 +112,7 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
             }
         });
 
-        RxBus.getDefault().add(this,RxBus.getDefault()
-                .IoToUiObservable(CleanChoiceEvent.class)
-                .subscribe(event->{
-                    mAdapter.isLongClick(false);
-                    mAdapter.clearSelections();
-                }, Throwable::printStackTrace));
-
-        RxBus.getDefault().add(this,RxBus.getDefault()
-                .IoToUiObservable(RefreshEvent.class)
-                .subscribe(event->{
-                    mAdapter.refresh();
-                }, Throwable::printStackTrace));
-
-        RxBus.getDefault().add(this,RxBus.getDefault()
-                .IoToUiObservable(AllChoiceEvent.class)
-                .map(event -> "/"+event.getPath())
-                .subscribe(path->{
-                    //如果全选了，就取消。否则全选
-                    if (path.equals(this.path)) {
-                        if (mAdapter.getItemCount()!=mAdapter.getSelectedItemCount())
-                            mAdapter.setAllSelections();
-                        else
-                            mAdapter.clearSelections();
-                    }
-                }, Throwable::printStackTrace));
-
-        mPresenter = new CommonBasePresenter(getContext());
+        mPresenter = new CommonPresenter(getContext(),path);
         mPresenter.attachView(this);
     }
 
@@ -162,18 +137,28 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
     }
 
     @Override
-    public void showSnackbar(String content) {
-        SnackbarUtil.show(recyclerView,content,0,null);
+    public void setLongClick(boolean longClick) {
+        mAdapter.isLongClick(longClick);
     }
 
     @Override
-    public void showDialog() {
-        mDialog.show();
+    public void clearSelect() {
+        mAdapter.clearSelections();
     }
 
     @Override
-    public void dismissDialog() {
-        mDialog.dismiss();
+    public void refreshAdapter() {
+        mAdapter.refresh();
+    }
+
+    @Override
+    public void allChoiceClick() {
+        if (mAdapter.getSelectedItemCount() == mAdapter.getItemCount()){
+            mAdapter.clearSelections();
+            RxBus.getDefault().post(new ActionModeTitleEvent(0));
+        }else {
+            mAdapter.setAllSelections();
+        }
     }
 
     @Override
