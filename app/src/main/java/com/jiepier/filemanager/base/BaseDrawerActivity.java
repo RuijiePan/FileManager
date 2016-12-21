@@ -24,6 +24,7 @@ import com.jiepier.filemanager.util.ResourceUtil;
 import com.jiepier.filemanager.util.SettingPrefUtil;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.StatusBarUtil;
+import com.jiepier.filemanager.widget.ColorsDialog;
 import com.jiepier.filemanager.widget.IconPreview;
 
 import butterknife.BindView;
@@ -169,6 +170,8 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
                         intent = new Intent(this, AboutActivity.class);
                         startActivity(intent);
                         break;
+                    case R.id.menu_theme:
+                        ColorsDialog.launch(this).show(fm_v4,TAG_DIALOG);
                 }
             }
             drawerLayout.closeDrawer(GravityCompat.START);

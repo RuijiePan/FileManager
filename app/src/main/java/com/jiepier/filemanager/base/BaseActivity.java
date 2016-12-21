@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
@@ -110,6 +111,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         Intent intent = getIntent();
         overridePendingTransition(0, 0);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        RxBus.getDefault().unsubscribeAll();
         finish();
         overridePendingTransition(0, 0);
         startActivity(intent);

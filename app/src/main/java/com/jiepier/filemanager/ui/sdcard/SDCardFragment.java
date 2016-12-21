@@ -93,7 +93,6 @@ public class SDCardFragment extends BaseFragment {
                     viewpager.setCurrentItem(mAdapter.getCount() - 1);
                     setCurrentPath();
                 }, Throwable::printStackTrace);
-
     }
 
     private void setCurrentPath() {

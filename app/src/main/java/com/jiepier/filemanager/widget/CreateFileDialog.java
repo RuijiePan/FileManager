@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -42,13 +44,10 @@ public final class CreateFileDialog extends DialogFragment {
 
         final MaterialDialog dialog = new MaterialDialog.Builder(a)
                 .title(R.string.newfile)
-                .customView(inputf,true)
-                .positiveText(R.string.create)
-                .onPositive((dialog1, which) -> {
-                    String name = inputf.getText().toString();
-
-                    if (name.length() >= 1) {
-                        boolean success = FileUtil.createFile(new File(path, name));
+                .input(getString(R.string.enter_name), "", false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        boolean success = FileUtil.createFile(new File(path, input.toString()));
 
                         if (success) {
                             Toast.makeText(a, R.string.filecreated, Toast.LENGTH_SHORT).show();
@@ -57,7 +56,10 @@ public final class CreateFileDialog extends DialogFragment {
                         else
                             Toast.makeText(a, R.string.error, Toast.LENGTH_SHORT).show();
                     }
-                }).negativeText(R.string.cancel).build();
+                })
+                .positiveText(R.string.create)
+                .negativeText(R.string.cancel)
+                .build();
 
         return dialog;
     }

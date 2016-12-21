@@ -3,9 +3,6 @@
 
   <PreferenceCategory
       android:title="@string/settings_general_settings">
-    <Preference
-        android:key="pTheme"
-        android:title="@string/settings_md_colors"/>
 
     <CheckBoxPreference
         android:defaultValue="true"

@@ -35,5 +35,11 @@
             android:icon="@drawable/ic_lightbulb_outline_black_24dp"
             app:actionLayout="@layout/switch_layout"
             />
+
+        <item
+            android:id="@+id/menu_theme"
+            android:title="Theme"
+            android:icon="@drawable/ic_skin_white_24dp"
+            />
     </group>
 </menu>

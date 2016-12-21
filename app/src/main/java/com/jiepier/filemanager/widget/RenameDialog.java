@@ -34,27 +34,20 @@ public final class RenameDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle state) {
         final Activity a = getActivity();
         final String fileName = FileUtils.getFileName(mFilePath);
-        // Set an EditText view to get user input
-        final EditText inputf = new EditText(a);
-        inputf.setHint(R.string.enter_name);
-        inputf.setText(fileName);
 
         MaterialDialog dialog = new MaterialDialog.Builder(a)
                 .title(R.string.rename)
-                .customView(inputf,true)
+                .input(getString(R.string.enter_name), fileName, false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        RenameTask task = new RenameTask(a,mParentPath);
+                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+                                fileName, input.toString());
+                    }
+                })
                 .positiveText(getString(R.string.ok))
-                .onPositive((dialog1, which) -> {
-                    String newname = inputf.getText().toString();
-
-                    if (inputf.getText().length() < 1)
-                        dialog1.dismiss();
-
-                    dialog1.dismiss();
-                    final RenameTask task = new RenameTask(a,mParentPath);
-                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-                            fileName, newname);
-                }).negativeText(R.string.cancel)
-                .onNegative((dialog12, which) -> dialog12.dismiss()).build();
+                .negativeText(R.string.cancel)
+                .build();
 
         return dialog;
     }

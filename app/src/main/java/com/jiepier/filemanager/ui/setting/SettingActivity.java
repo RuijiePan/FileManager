@@ -60,13 +60,6 @@ public class SettingActivity extends BaseActivity implements FolderChooserDialog
                             .show();
                 }, Throwable::printStackTrace));
 
-        RxBus.getDefault().add(this,RxBus.getDefault()
-                .IoToUiObservable(ChangeThemeEvent.class)
-                .subscribe(event -> {
-                    RxBus.getDefault().unsubscribeAll();
-                    reload();
-                }, Throwable::printStackTrace));
-
     }
 
     @Override
