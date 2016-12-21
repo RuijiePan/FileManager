@@ -51,33 +51,6 @@ public class MainActivity extends BaseDrawerActivity implements
     public void initUiAndListener() {
         super.initUiAndListener();
 
-        setNavigationClickListener(new NavigationClickListener() {
-            @Override
-            public void onClickSDCard() {
-
-            }
-
-            @Override
-            public void onClickRoot() {
-
-            }
-
-            @Override
-            public void onClickSystem() {
-
-            }
-
-            @Override
-            public void onClickSetting() {
-
-            }
-
-            @Override
-            public void onClickAbout() {
-
-            }
-        });
-
         mPresenter = new MainPresenter(this);
         mPresenter.attachView(this);
     }
@@ -137,7 +110,6 @@ public class MainActivity extends BaseDrawerActivity implements
                 return true;
             case R.id.actiondelete:
                 mPresenter.clickDelete();
-                //删除文件
                 return true;
             case R.id.actionshare:
                 mPresenter.clickShare();
@@ -181,8 +153,9 @@ public class MainActivity extends BaseDrawerActivity implements
 
     @Override
     public void finishActionMode() {
-        if (mActionMode != null)
-        mActionMode.finish();
+        if (mActionMode != null) {
+            mActionMode.finish();
+        }
     }
 
     @Override

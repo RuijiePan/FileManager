@@ -68,4 +68,9 @@ public class SettingFragment extends PreferenceFragment
         return true;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RxBus.getDefault().unsubscribeAll();
+    }
 }

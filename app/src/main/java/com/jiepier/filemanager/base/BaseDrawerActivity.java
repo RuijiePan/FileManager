@@ -50,7 +50,7 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
     private SwitchCompat mSwitch;
     private boolean isReload;
     private ActionBarDrawerToggle mDrawerToggle;
-    private NavigationClickListener mListener;
+    //private NavigationClickListener mListener;
     protected SDCardFragment mSdCardFragment;
     private RootFragment mRootFragment;
     private SystemFragment mSystemFragment;
@@ -146,33 +146,26 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
     private void setUpNavigationClickListener() {
         mNavigation.setNavigationItemSelectedListener(item -> {
 
-            if (mListener!=null) {
-                switch (item.getItemId()) {
-                    case R.id.menu_sdcard:
-                        mListener.onClickSDCard();
-                        transformFragment(SDCARD);
-                        break;
-                    case R.id.menu_root:
-                        mListener.onClickRoot();
-                        transformFragment(ROOT);
-                        break;
-                    case R.id.menu_system:
-                        mListener.onClickSystem();
-                        transformFragment(SYSTEM);
-                        break;
-                    case R.id.menu_setting:
-                        mListener.onClickSetting();
-                        Intent intent = new Intent(this, SettingActivity.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.menu_about:
-                        mListener.onClickAbout();
-                        intent = new Intent(this, AboutActivity.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.menu_theme:
-                        ColorsDialog.launch(this).show(fm_v4,TAG_DIALOG);
-                }
+            switch (item.getItemId()) {
+                case R.id.menu_sdcard:
+                    transformFragment(SDCARD);
+                    break;
+                case R.id.menu_root:
+                    transformFragment(ROOT);
+                    break;
+                case R.id.menu_system:
+                    transformFragment(SYSTEM);
+                    break;
+                case R.id.menu_setting:
+                    Intent intent = new Intent(this, SettingActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.menu_about:
+                    intent = new Intent(this, AboutActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.menu_theme:
+                    ColorsDialog.launch(this).show(fm_v4,TAG_DIALOG);
             }
             drawerLayout.closeDrawer(GravityCompat.START);
             return false;
@@ -189,7 +182,7 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
         return false;
     }
 
-    public void setNavigationClickListener(NavigationClickListener listener){
+    /*public void setNavigationClickListener(NavigationClickListener listener){
         this.mListener = listener;
     }
 
@@ -203,7 +196,7 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
         void onClickSetting();
 
         void onClickAbout();
-    }
+    }*/
 
     /**
      * @param item The menu item that was selected.

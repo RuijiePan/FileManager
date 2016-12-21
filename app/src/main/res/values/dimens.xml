@@ -28,4 +28,9 @@
     <dimen name="container_height">265dp</dimen>
     <!-- navigation view height -->
     <dimen name="nav_height">48dp</dimen>
+
+    <!--about-->
+    <dimen name="about_title">15sp</dimen>
+    <dimen name="about_sign">14sp</dimen>
+    <dimen name="about_content">13sp</dimen>
 </resources>

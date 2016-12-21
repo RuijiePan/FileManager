@@ -125,6 +125,14 @@
     <string name="settings_notification_settings">Notification</string>
     <string name="settings_auto_notification">accept notification</string>
 
+    <!--about-->
+    <string name="about_title">About</string>
+    <string name="about_nickname">JiePier</string>
+    <string name="about_github">https://github.com/RuijiePan</string>
+    <string name="about_sign">An Android Developer In GOMO</string>
+    <string name="about_project_introduce">File Manager项目所用的基本上是Rx系列的框架 ( ReactiveX ) :\n\n\tRxJava\n\tRxAndroid\n\tButterknife\n\n以基本的MVP模式为主划分模块，抽出Presenter作为View代理业务层，减轻View层代码的耦合度，然后集成了现在主流的RxJava+RxAndroid+MVP组合框架。\n</string>
+    <string name="about_project_introduce_content">https://github.com/RuijiePan/FileManager\n</string>
+
     <string-array name="mdColorNames">
         <item>Red</item>
         <item>Pink</item>
