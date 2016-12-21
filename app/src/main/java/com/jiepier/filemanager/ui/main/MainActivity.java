@@ -44,14 +44,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends BaseDrawerActivity implements ActionMode.Callback,FolderChooserDialog.FolderCallback{
+public class MainActivity extends BaseDrawerActivity implements
+        ActionMode.Callback,FolderChooserDialog.FolderCallback,MainContact.View{
 
+    private MainPresenter mPresenter;
     private ActionMode mActionMode;
-    private String[] mFiles;
-    private List<String> mList;
-    public static final String ZIP = "zip";
-    public static final String UNZIP = "unzip";
-    private String unZipPath = "";
+    private int mChoiceCount;
 
     @Override
     public void initUiAndListener() {
@@ -84,54 +82,8 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
             }
         });
 
-        RxBus.getDefault().add(this,RxBus.getDefault()
-                .IoToUiObservable(MutipeChoiceEvent.class)
-                .subscribe(mutipeChoiceEvent -> {
-
-                    mList = mutipeChoiceEvent.getList();
-                    mFiles = new String[mList.size()];
-                    for (int i=0;i<mFiles.length;i++){
-                        mFiles[i] = mList.get(i);
-                    }
-
-                    if (mActionMode == null){
-                        mActionMode = startActionMode(MainActivity.this);
-                        StatusBarUtil.setColor(this, ResourceUtil.getThemeColor(this), 0);
-                    }
-
-                    final String mSelected = getString(R.string._selected);
-                    mActionMode.setTitle(mList.size()+mSelected);
-
-                    if (mList.size() == 0)
-                        mActionMode.finish();
-
-                }, Throwable::printStackTrace));
-
-        RxBus.getDefault().add(this,RxBus.getDefault()
-                .IoToUiObservable(CleanActionModeEvent.class)
-                .subscribe(event -> {
-                    if (mActionMode != null)
-                       mActionMode.finish();
-                    invalidateOptionsMenu();
-                }, Throwable::printStackTrace));
-
-        RxBus.getDefault().add(this,RxBus.getDefault()
-                .IoToUiObservable(ChoiceFolderEvent.class)
-                .subscribe(event -> {
-                    unZipPath = event.getFilePath();
-                    new FolderChooserDialog.Builder(this)
-                            .chooseButton(R.string.md_choose_label)  // changes label of the choose button
-                            .initialPath(event.getParentPath())  // changes initial path, defaults to external storage directory
-                            .tag(UNZIP)
-                            .goUpLabel("Up") // custom go up label, default label is "..."
-                            .show();
-                }, Throwable::printStackTrace));
-
-        RxBus.getDefault().add(this,RxBus.getDefault()
-                .IoToUiObservable(ChangeThemeEvent.class)
-                .subscribe(event-> {
-                    reload();
-                },Throwable::printStackTrace));
+        mPresenter = new MainPresenter(this);
+        mPresenter.attachView(this);
     }
 
     @Override
@@ -148,16 +100,13 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.cancel:
-                ClipBoard.clear();
-                invalidateOptionsMenu();
+                mPresenter.clickCancel();
                 return true;
             case R.id.paste:
-                PasteTaskExecutor ptc = new PasteTaskExecutor(this, mSdCardFragment.getCurrentPath());
-                ptc.start();
+                new PasteTaskExecutor(this,mSdCardFragment.getCurrentPath()).start();
                 return true;
             case R.id.folderinfo:
-                DirectoryInfoDialog dialog = DirectoryInfoDialog.create(mSdCardFragment.getPath());
-                dialog.show(fm_v4,TAG_DIALOG);
+                mPresenter.clickFloderInfo(mSdCardFragment.getCurrentPath());
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -173,10 +122,10 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
     public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
         menu.clear();
         getMenuInflater().inflate(R.menu.actionmode,menu);
-
-        if (mFiles.length > 1) {
+        if (mChoiceCount > 1){
             menu.removeItem(R.id.actionrename);
         }
+
         return true;
     }
 
@@ -185,58 +134,29 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
 
         switch (menuItem.getItemId()) {
             case R.id.actionmove:
-                ClipBoard.cutMove(mFiles);
-                RxBus.getDefault().post(new CleanActionModeEvent());
-                RxBus.getDefault().post(new CleanChoiceEvent());
+                mPresenter.clickMove();
                 return true;
             case R.id.actioncopy:
-                ClipBoard.cutCopy(mFiles);
-                RxBus.getDefault().post(new CleanActionModeEvent());
-                RxBus.getDefault().post(new CleanChoiceEvent());
+                mPresenter.clickCopy();
                 return true;
             case R.id.actiondelete:
-                DialogFragment deleteDialog = DeleteFilesDialog.instantiate(mFiles);
-                deleteDialog.show(fm_v4,TAG_DIALOG);
-                RxBus.getDefault().post(new CleanActionModeEvent());
+                mPresenter.clickDelete();
                 //删除文件
                 return true;
             case R.id.actionshare:
-                final ArrayList<Uri> uris = new ArrayList<>(mFiles.length);
-                for (String mFile : mFiles) {
-                    final File selected = new File(mFile);
-                    if (!selected.isDirectory()) {
-                        uris.add(Uri.fromFile(selected));
-                    }
-                }
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_SEND_MULTIPLE);
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                intent.setType("*/*");
-                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
-                startActivity(Intent.createChooser(intent, getString(R.string.share)));
-                RxBus.getDefault().post(new CleanActionModeEvent());
+                mPresenter.clickShare();
                 return true;
             case R.id.actionshortcut:
-                for (String file:mFiles){
-                    FileUtil.createShortcut(this,file);
-                }
-                RxBus.getDefault().post(new CleanActionModeEvent());
+                mPresenter.clickShortCut();
                 return true;
             case R.id.actionzip:
-                new FolderChooserDialog.Builder(this)
-                        .chooseButton(R.string.md_choose_label)  // changes label of the choose button
-                        .initialPath(mSdCardFragment.getCurrentPath())  // changes initial path, defaults to external storage directory
-                        .tag(ZIP)
-                        .goUpLabel("Up") // custom go up label, default label is "..."
-                        .show();
+                mPresenter.clickZip(mSdCardFragment.getCurrentPath());
                 return true;
             case R.id.actionrename:
-                DialogFragment renameDialog = RenameDialog.instantiate(mSdCardFragment.getCurrentPath(),mList.get(0));
-                renameDialog.show(fm_v4,TAG_DIALOG);
-                RxBus.getDefault().post(new CleanActionModeEvent());
+                mPresenter.clickRename(mSdCardFragment.getCurrentPath());
                 return true;
             case R.id.actionall:
-                RxBus.getDefault().post(new AllChoiceEvent(mSdCardFragment.getCurrentPath()));
+                mPresenter.clickSelectAll(mSdCardFragment.getCurrentPath());
                 return true;
             default:
                 return false;
@@ -252,20 +172,81 @@ public class MainActivity extends BaseDrawerActivity implements ActionMode.Callb
     @Override
     public void onFolderSelection(@NonNull FolderChooserDialog dialog, @NonNull File folder) {
 
-        String tag = dialog.getTag();
-        if (tag.equals(ZIP)) {
-            final ZipTask task = new ZipTask(this,
-                    //zip文件新名字
-                    folder.getAbsolutePath() + File.separator + UUIDUtil.createUUID() + ".zip");
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mList.get(0));
-        }else {
-            UnzipTask task = new UnzipTask(this);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new File(unZipPath),folder);
-        }
-        RxBus.getDefault().post(new CleanActionModeEvent());
-        RxBus.getDefault().post(new CleanChoiceEvent());
-        RxBus.getDefault().post(new RefreshEvent());
+        mPresenter.folderSelect(dialog,folder);
     }
 
+    @Override
+    public void cretaeActionMode() {
+        if (mActionMode == null){
+            mActionMode = startActionMode(MainActivity.this);
+            StatusBarUtil.setColor(this, ResourceUtil.getThemeColor(this), 0);
+        }
+    }
+
+    @Override
+    public void finishActionMode() {
+        if (mActionMode != null)
+        mActionMode.finish();
+    }
+
+    @Override
+    public void refreshMenu() {
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    public void setActionModeTitle(String title) {
+        mActionMode.setTitle(title);
+    }
+
+    @Override
+    public void createShortCut(String[] files) {
+        for (String file:files){
+            FileUtil.createShortcut(this,file);
+        }
+    }
+
+    @Override
+    public void showDialog(DialogFragment dialog) {
+        dialog.show(fm_v4,TAG_DIALOG);
+    }
+
+    @Override
+    public void showFolderDialog(String TAG) {
+        new FolderChooserDialog.Builder(this)
+                .chooseButton(R.string.md_choose_label)  // changes label of the choose button
+                .initialPath(mSdCardFragment.getCurrentPath())  // changes initial path, defaults to external storage directory
+                .tag(TAG)
+                .goUpLabel("Up") // custom go up label, default label is "..."
+                .show();
+    }
+
+    @Override
+    public void startShareActivity(Intent intent) {
+        startActivity(Intent.createChooser(intent, getString(R.string.share)));
+    }
+
+    @Override
+    public void setChoiceCount(int count) {
+        this.mChoiceCount = count;
+    }
+
+    @Override
+    public void startZipTask(String fileName, String[] files) {
+        final ZipTask task = new ZipTask(this,fileName);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, files);
+    }
+
+    @Override
+    public void startUnZipTask(File unZipFile, File folder) {
+        UnzipTask task = new UnzipTask(this);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, unZipFile,folder);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
+    }
 }
 

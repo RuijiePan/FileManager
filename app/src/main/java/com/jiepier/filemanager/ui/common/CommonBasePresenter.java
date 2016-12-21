@@ -14,12 +14,12 @@ import java.io.File;
  * Created by JiePier on 16/12/14.
  */
 
-public class CommonPresenter implements CommonContact.Presenter {
+public class CommonBasePresenter implements CommonContact.BasePresenter {
 
     private CommonContact.View mView;
     private Context mContext;
 
-    public CommonPresenter(Context context){
+    public CommonBasePresenter(Context context){
         this.mContext = context;
     }
 

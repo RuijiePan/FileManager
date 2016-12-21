@@ -29,8 +29,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by JiePier on 16/12/13.
@@ -49,7 +47,7 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
     @BindView(R.id.fab_scoll_top)
     FloatingActionButton fabScollTop;
     public static final String DIALOGTAG = "dialog_tag";
-    private CommonPresenter mPresenter;
+    private CommonBasePresenter mPresenter;
     private MaterialDialog mDialog;
     private BrowserListAdapter mAdapter;
     private String path;
@@ -139,7 +137,7 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
                     }
                 }, Throwable::printStackTrace));
 
-        mPresenter = new CommonPresenter(getContext());
+        mPresenter = new CommonBasePresenter(getContext());
         mPresenter.attachView(this);
     }
 

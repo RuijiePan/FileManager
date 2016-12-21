@@ -1,9 +1,6 @@
 package com.jiepier.filemanager.ui.common;
 
-import com.jiepier.filemanager.base.BasePresenter;
 import com.jiepier.filemanager.base.BaseView;
-
-import java.io.File;
 
 /**
  * Created by JiePier on 16/12/14.
@@ -21,7 +18,7 @@ public interface CommonContact {
 
     }
 
-    interface Presenter extends BasePresenter<View>{
+    interface BasePresenter extends com.jiepier.filemanager.base.BasePresenter<View> {
 
         void onItemClick(String filePath,String parentPath);
 
