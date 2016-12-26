@@ -46,9 +46,7 @@ public class SettingFragment extends PreferenceFragment
         pNotification.setOnPreferenceClickListener(this);
 
         RxBus.getDefault().add(this,RxBus.getDefault()
-                .toObservable(NewDirEvent.class)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .IoToUiObservable(NewDirEvent.class)
                 .map(NewDirEvent::getPath)
                 .subscribe(path -> {
                     Settings.setDefaultDir(path);

@@ -14,11 +14,9 @@ import android.widget.ImageView;
 
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.ui.about.AboutActivity;
-import com.jiepier.filemanager.ui.about.AboutFragment;
 import com.jiepier.filemanager.ui.sdcard.SDCardFragment;
-import com.jiepier.filemanager.ui.root.RootFragment;
+import com.jiepier.filemanager.ui.root.FileCategoryFragment;
 import com.jiepier.filemanager.ui.setting.SettingActivity;
-import com.jiepier.filemanager.ui.setting.SettingFragment;
 import com.jiepier.filemanager.ui.system.SystemFragment;
 import com.jiepier.filemanager.util.ResourceUtil;
 import com.jiepier.filemanager.util.SettingPrefUtil;
@@ -50,9 +48,8 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
     private SwitchCompat mSwitch;
     private boolean isReload;
     private ActionBarDrawerToggle mDrawerToggle;
-    //private NavigationClickListener mListener;
     protected SDCardFragment mSdCardFragment;
-    private RootFragment mRootFragment;
+    private FileCategoryFragment mFileCategoryFragment;
     private SystemFragment mSystemFragment;
 
     @Override
@@ -66,7 +63,7 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
         new IconPreview(this);
 
         mSdCardFragment = new SDCardFragment();
-        mRootFragment = new RootFragment();
+        mFileCategoryFragment = new FileCategoryFragment();
         mSystemFragment = new SystemFragment();
         addFragment();
         transformFragment(SDCARD);
@@ -111,12 +108,12 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
                 .add(R.id.flContentRoot,mSdCardFragment,SDCARD)
                 .commit();
         fm.beginTransaction()
-                .add(R.id.flContentRoot,mRootFragment,ROOT)
+                .add(R.id.flContentRoot, mFileCategoryFragment,ROOT)
                 .commit();
         fm.beginTransaction()
                 .add(R.id.flContentRoot,mSystemFragment,SYSTEM)
                 .commit();
-        fm.beginTransaction().hide(mRootFragment).commit();
+        fm.beginTransaction().hide(mFileCategoryFragment).commit();
         fm.beginTransaction().hide(mSystemFragment).commit();
 
     }
@@ -128,14 +125,14 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
             if (TAG.equals(SDCARD))
                 fm.beginTransaction().show(mSdCardFragment).commit();
             if (TAG.equals(ROOT))
-                fm.beginTransaction().show(mRootFragment).commit();
+                fm.beginTransaction().show(mFileCategoryFragment).commit();
             if (TAG.equals(SYSTEM))
                 fm.beginTransaction().show(mSystemFragment).commit();
 
             if (OLDTAG.equals(SDCARD))
                 fm.beginTransaction().hide(mSdCardFragment).commit();
             if (OLDTAG.equals(ROOT))
-                fm.beginTransaction().hide(mRootFragment).commit();
+                fm.beginTransaction().hide(mFileCategoryFragment).commit();
             if (OLDTAG.equals(SYSTEM))
                 fm.beginTransaction().hide(mSystemFragment).commit();
 
