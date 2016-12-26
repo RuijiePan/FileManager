@@ -1,4 +1,4 @@
-package com.jiepier.filemanager.ui.root;
+package com.jiepier.filemanager.ui.category;
 
 import android.os.Bundle;
 import android.view.View;

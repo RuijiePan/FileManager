@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.ui.about.AboutActivity;
 import com.jiepier.filemanager.ui.sdcard.SDCardFragment;
-import com.jiepier.filemanager.ui.root.FileCategoryFragment;
+import com.jiepier.filemanager.ui.category.FileCategoryFragment;
 import com.jiepier.filemanager.ui.setting.SettingActivity;
 import com.jiepier.filemanager.ui.system.SystemFragment;
 import com.jiepier.filemanager.util.ResourceUtil;

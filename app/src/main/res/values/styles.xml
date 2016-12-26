@@ -101,4 +101,19 @@
         <item name="android:colorBackground">@color/white</item>
     </style>
 
+    <declare-styleable name="PowerProgressBar">
+        <attr name="progress" format="integer"/>
+        <attr name="startAngle" format="integer"/>
+        <attr name="roundColor" format="color"/>
+        <attr name="roundFillColor" format="color"/>
+        <attr name="centerTopTextSizePercent" format="dimension"/>
+        <attr name="centerTextSizePercent" format="dimension"/>
+        <attr name="centerBottomTextSizePercent" format="dimension"/>
+        <attr name="centerTopText" format="string"/>
+        <attr name="centerTexts" format="string"/>
+        <attr name="centerBottomText" format="string"/>
+        <attr name="isClockwise" format="boolean"/>
+        <attr name="roundWith" format="integer"/>
+        <attr name="roundRadius" format="integer"/>
+    </declare-styleable>
 </resources>

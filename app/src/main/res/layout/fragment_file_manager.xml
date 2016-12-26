@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+<RelativeLayout android:id="@+id/activity_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:text="file_manager"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <com.jiepier.filemanager.widget.PowerProgressBar
+        app:isClockwise="true"
+        app:roundColor="@color/black"
+        app:roundFillColor="@color/blue"
+        app:centerTexts="14G/25G"
+        app:centerTopText="56%"
+        app:roundRadius="100"
+        app:roundWith="20"
+        app:centerBottomText="存储空间"
+        app:progress="50"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </RelativeLayout>
