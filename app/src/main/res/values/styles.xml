@@ -115,5 +115,6 @@
         <attr name="isClockwise" format="boolean"/>
         <attr name="roundWith" format="integer"/>
         <attr name="roundRadius" format="integer"/>
+        <attr name="duration" format="integer"/>
     </declare-styleable>
 </resources>

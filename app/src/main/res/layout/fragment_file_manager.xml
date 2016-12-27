@@ -1,21 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/activity_main"
+<LinearLayout android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.jiepier.filemanager.widget.PowerProgressBar
-        app:isClockwise="true"
-        app:roundColor="@color/black"
-        app:roundFillColor="@color/blue"
-        app:centerTexts="14G/25G"
-        app:centerTopText="56%"
-        app:roundRadius="100"
-        app:roundWith="20"
-        app:centerBottomText="存储空间"
-        app:progress="50"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content">
 
-</RelativeLayout>
+        <com.jiepier.filemanager.widget.PowerProgressBar
+            android:id="@+id/memoryProgressbar"
+            app:isClockwise="true"
+            app:centerTexts="2.0G/2.7G"
+            app:centerTopText="76%"
+            app:centerBottomText="内存"
+            app:progress="70"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <com.jiepier.filemanager.widget.PowerProgressBar
+            android:id="@+id/storageProgressbar"
+            app:isClockwise="true"
+            app:centerTexts="14G/25G"
+            app:centerTopText="56%"
+            app:roundRadius="150"
+            app:centerBottomText="存储空间"
+            app:progress="50"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

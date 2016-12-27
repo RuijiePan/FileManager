@@ -1,5 +1,7 @@
 package com.jiepier.filemanager.widget;
 
+import android.animation.ObjectAnimator;
+import android.animation.TypeEvaluator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -10,6 +12,10 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.CycleInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.TextView;
 
 import com.jiepier.filemanager.R;
@@ -29,14 +35,16 @@ public class PowerProgressBar extends View {
     private int mRoundColor;//圆的颜色
     private int mRoundFillColor;//圆的填充颜色
     private int mStartAngle;//开始角度
+    private int mDuration;
     private float mCenterTopTextSize;
     private float mCenterTextSize;
     private float mCenterBottomTextSize;
     private float mProgress;//填充百分比
+    private float mProgressStart;
     private boolean mIsClockwise;//是否顺时针进度
     private String mCenterTopText;//显示所占百分比textview
     private String mCenterText;//显示具体数值textview
-    private String mCenterBootomText;//进度条类型（memory或者storage）
+    private String mCenterBottomText;//进度条类型（memory或者storage）
     private RectF mOval;
     private Paint mRoundPaint;
     private Paint mRoundFillPaint;
@@ -49,6 +57,8 @@ public class PowerProgressBar extends View {
     private final static int DEFAULT_START_ANGLE = -90;
     private final static int DEFAULT_PROGRESS = 0;
     private final static int DEFAULT_RADIUS = 200;
+    private final static int DEFAULT_DURATION = 2000;
+    private final static float DEFAULT_PROGRESS_START = 10;
     private final static double DEFAULT_TOP_TEXT_SIZE_PERCENT = 0.64;
     private final static double DEFAULT_CENTER_TEXT_SIZE_PERCENT = 0.24;
     private final static double DEFAULT_BOTTOM_TEXT_SIZE_PERCENT = 0.24;
@@ -92,6 +102,7 @@ public class PowerProgressBar extends View {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.PowerProgressBar);
         mRoundRadius = ta.getInteger(R.styleable.PowerProgressBar_roundRadius,DEFAULT_RADIUS);
         mRoundWidth = ta.getInteger(R.styleable.PowerProgressBar_roundWith,DEFAULT_WIDTH);
+        mDuration = ta.getInteger(R.styleable.PowerProgressBar_duration,DEFAULT_DURATION);
         mRoundColor = ta.getColor(R.styleable.PowerProgressBar_roundColor,DEFAULT_ROUND_COLOR);
         mRoundFillColor = ta.getColor(R.styleable.PowerProgressBar_roundFillColor,DEFAULT_ROUND_FILL_COLOR);
         mStartAngle = ta.getInteger(R.styleable.PowerProgressBar_startAngle,DEFAULT_START_ANGLE);
@@ -99,7 +110,7 @@ public class PowerProgressBar extends View {
         mIsClockwise = ta.getBoolean(R.styleable.PowerProgressBar_isClockwise,DEFAULT_CLOCK_WISE);
         mCenterTopText = ta.getString(R.styleable.PowerProgressBar_centerTopText);
         mCenterText = ta.getString(R.styleable.PowerProgressBar_centerTexts);
-        mCenterBootomText = ta.getString(R.styleable.PowerProgressBar_centerBottomText);
+        mCenterBottomText = ta.getString(R.styleable.PowerProgressBar_centerBottomText);
         mCenterTopTextSize = ta.getDimension(
                 R.styleable.PowerProgressBar_centerTopTextSizePercent,
                 (float) DEFAULT_TOP_TEXT_SIZE_PERCENT) * mRoundRadius;
@@ -109,7 +120,10 @@ public class PowerProgressBar extends View {
         mCenterBottomTextSize = ta.getDimension(
                 R.styleable.PowerProgressBar_centerBottomTextSizePercent,
                 (float) DEFAULT_BOTTOM_TEXT_SIZE_PERCENT) * mRoundRadius;
-
+        mCenterTopText = mCenterTopText == null?"":mCenterTopText;
+        mCenterText = mCenterText == null?"":mCenterText;
+        mCenterBottomText = mCenterBottomText == null?"":mCenterBottomText;
+        mProgressStart = DEFAULT_PROGRESS_START;
 
         //根据主题色设置圆形进度条的颜色
         mRoundPaint.setColor(mRoundColor);
@@ -141,81 +155,109 @@ public class PowerProgressBar extends View {
         canvas.drawCircle(mCenter,mCenter,mRoundRadius,mRoundPaint);
         //画出填充的弧
         if (mIsClockwise) {
-            canvas.drawArc(mOval, mStartAngle, mStartAngle - (float) (3.6 * mProgress), false, mRoundFillPaint);
+            canvas.drawArc(mOval, mStartAngle, (float) (3.6 * getProgress()), false, mRoundFillPaint);
         }else {
-            canvas.drawArc(mOval, mStartAngle, mStartAngle + (float) (3.6 * mProgress), false, mRoundFillPaint);
+            canvas.drawArc(mOval, mStartAngle, -(float) (3.6 * getProgress()), false, mRoundFillPaint);
         }
 
         //画出圆环中间的字体
         float topTextWidth = mCenterTopTextPaint.measureText(mCenterTopText);
         float centerTextWidth = mCenterTextPaint.measureText(mCenterText);
-        float bottomTextWidth = mCenterBottomTextPaint.measureText(mCenterBootomText);
+        float bottomTextWidth = mCenterBottomTextPaint.measureText(mCenterBottomText);
 
-        canvas.drawText(mCenterTopText
-                ,mCenter - topTextWidth/2
-                ,mCenter + mCenterTopTextSize/2 - mRoundRadius/3
-                ,mCenterTopTextPaint);
+        if (getProgress() <= 100) {
+            canvas.drawText((int) getProgress() + "%"
+                    , mCenter - topTextWidth / 2
+                    , mCenter + mCenterTopTextSize / 2 - mRoundRadius / 3
+                    , mCenterTopTextPaint);
+        }else {
+            canvas.drawText(100 + "%"
+                    , mCenter - topTextWidth / 2
+                    , mCenter + mCenterTopTextSize / 2 - mRoundRadius / 3
+                    , mCenterTopTextPaint);
+        }
 
         canvas.drawText(mCenterText
                 ,mCenter - centerTextWidth/2
                 ,mCenter + mCenterTopTextSize/2
                 ,mCenterTextPaint);
 
-        canvas.drawText(mCenterBootomText
+        canvas.drawText(mCenterBottomText
                 ,mCenter - bottomTextWidth/2
                 ,mCenter + mCenterTopTextSize/2 + mRoundRadius/3
                 ,mCenterBottomTextPaint);
+
+        invalidate();
     }
 
-    public void setmRoundRadius(int mRoundRadius) {
+    public void setRoundRadius(int mRoundRadius) {
         this.mRoundRadius = mRoundRadius;
     }
 
-    public void setmRoundWidth(int mRoundWidth) {
+    public void setRoundWidth(int mRoundWidth) {
         this.mRoundWidth = mRoundWidth;
     }
 
-    public void setmRoundColor(int mRoundColor) {
+    public void setRoundColor(int mRoundColor) {
         this.mRoundColor = mRoundColor;
     }
 
-    public void setmRoundFillColor(int mRoundFillColor) {
+    public void setRoundFillColor(int mRoundFillColor) {
         this.mRoundFillColor = mRoundFillColor;
     }
 
-    public void setmStartAngle(int mStartAngle) {
+    public void setStartAngle(int mStartAngle) {
         this.mStartAngle = mStartAngle;
     }
 
-    public void setmCenterTopTextSize(float mCenterTopTextSize) {
+    public void setCenterTopTextSize(float mCenterTopTextSize) {
         this.mCenterTopTextSize = mCenterTopTextSize;
     }
 
-    public void setmCenterTextSize(float mCenterTextSize) {
+    public void setCenterTextSize(float mCenterTextSize) {
         this.mCenterTextSize = mCenterTextSize;
     }
 
-    public void setmCenterBottomTextSize(float mCenterBottomTextSize) {
+    public void setCenterBottomTextSize(float mCenterBottomTextSize) {
         this.mCenterBottomTextSize = mCenterBottomTextSize;
     }
 
-    public void setmProgress(float mProgress) {
+    public void setProgress(float mProgress) {
         this.mProgress = mProgress;
     }
 
-    public void setmIsClockwise(boolean mIsClockwise) {
+    public void setIsClockwise(boolean mIsClockwise) {
         this.mIsClockwise = mIsClockwise;
     }
 
-    public void setmCenterTopText(String mCenterTopText) {
+    public void setCenterTopText(String mCenterTopText) {
         this.mCenterTopText = mCenterTopText;
     }
 
-    public void setmCenterText(String mCenterText) {
+    public void setCenterText(String mCenterText) {
         this.mCenterText = mCenterText;
     }
 
-    public void setmCenterBootomText(String mCenterBootomText) {
-        this.mCenterBootomText = mCenterBootomText;
+    public void setCenterBootomText(String mCenterBootomText) {
+        this.mCenterBottomText = mCenterBootomText;
+    }
+
+    public void setDuration(int mDuration) {
+        this.mDuration = mDuration;
+    }
+
+    public void setProgressStart(int mProgressStart){
+        this.mProgressStart = mProgressStart;
+    }
+
+    public float getProgress() {
+        return mProgress;
+    }
+
+    public void startAnimation(){
+        ObjectAnimator animator = ObjectAnimator.ofFloat(this,"progress",mProgressStart,mProgress);
+        animator.setInterpolator(new OvershootInterpolator());
+        animator.setDuration(mDuration);
+        animator.start();
     }
 }
