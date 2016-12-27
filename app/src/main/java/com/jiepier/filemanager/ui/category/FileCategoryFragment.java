@@ -23,8 +23,6 @@ public class FileCategoryFragment extends BaseLazyFragment {
     PowerProgressBar memoryProgressbar;
     @BindView(R.id.storageProgressbar)
     PowerProgressBar storageProgressbar;
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
 
     @Override
     protected int getLayoutId() {
@@ -58,11 +56,4 @@ public class FileCategoryFragment extends BaseLazyFragment {
 
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        ButterKnife.bind(this, rootView);
-        return rootView;
-    }
 }

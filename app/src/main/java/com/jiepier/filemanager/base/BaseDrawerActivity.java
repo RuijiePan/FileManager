@@ -38,7 +38,7 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
     @BindView(R.id.vNavigation)
     protected NavigationView mNavigation;
     public static final String SDCARD = "1";
-    public static final String ROOT = "2";
+    public static final String CATEGORY = "2";
     public static final String SYSTEM = "3";
     public static final String TAG_DIALOG = "dialog";
     protected String OLDTAG = SDCARD;
@@ -108,7 +108,7 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
                 .add(R.id.flContentRoot,mSdCardFragment,SDCARD)
                 .commit();
         fm.beginTransaction()
-                .add(R.id.flContentRoot, mFileCategoryFragment,ROOT)
+                .add(R.id.flContentRoot, mFileCategoryFragment,CATEGORY)
                 .commit();
         fm.beginTransaction()
                 .add(R.id.flContentRoot,mSystemFragment,SYSTEM)
@@ -124,14 +124,14 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
         else {
             if (TAG.equals(SDCARD))
                 fm.beginTransaction().show(mSdCardFragment).commit();
-            if (TAG.equals(ROOT))
+            if (TAG.equals(CATEGORY))
                 fm.beginTransaction().show(mFileCategoryFragment).commit();
             if (TAG.equals(SYSTEM))
                 fm.beginTransaction().show(mSystemFragment).commit();
 
             if (OLDTAG.equals(SDCARD))
                 fm.beginTransaction().hide(mSdCardFragment).commit();
-            if (OLDTAG.equals(ROOT))
+            if (OLDTAG.equals(CATEGORY))
                 fm.beginTransaction().hide(mFileCategoryFragment).commit();
             if (OLDTAG.equals(SYSTEM))
                 fm.beginTransaction().hide(mSystemFragment).commit();
@@ -147,8 +147,8 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
                 case R.id.menu_sdcard:
                     transformFragment(SDCARD);
                     break;
-                case R.id.menu_root:
-                    transformFragment(ROOT);
+                case R.id.menu_category:
+                    transformFragment(CATEGORY);
                     break;
                 case R.id.menu_system:
                     transformFragment(SYSTEM);

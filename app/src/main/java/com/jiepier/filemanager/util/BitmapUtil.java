@@ -2,10 +2,13 @@ package com.jiepier.filemanager.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
@@ -102,5 +105,35 @@ public class BitmapUtil {
 
     }
 
+    public static Drawable changeDrawableColor(int drawableRes, int colorRes, Context context) {
+        //Convert drawable res to bitmap
+        final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), drawableRes);
+        final Bitmap resultBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                bitmap.getWidth() - 1, bitmap.getHeight() - 1);
+        final Paint p = new Paint();
+        final Canvas canvas = new Canvas(resultBitmap);
+        canvas.drawBitmap(resultBitmap, 0, 0, p);
 
+        //Create new drawable based on bitmap
+        final Drawable drawable = new BitmapDrawable(context.getResources(), resultBitmap);
+        drawable.setColorFilter(new
+                PorterDuffColorFilter(context.getResources().getColor(colorRes), PorterDuff.Mode.MULTIPLY));
+        return drawable;
+    }
+
+    public static Drawable changeDrawableColor(Drawable mydrawable, int colorRes, Context context) {
+        //Convert drawable res to bitmap
+        final Bitmap bitmap = getBitmapFromDrawable(mydrawable);
+        final Bitmap resultBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                bitmap.getWidth() - 1, bitmap.getHeight() - 1);
+        final Paint p = new Paint();
+        final Canvas canvas = new Canvas(resultBitmap);
+        canvas.drawBitmap(resultBitmap, 0, 0, p);
+
+        //Create new drawable based on bitmap
+        final Drawable drawable = new BitmapDrawable(context.getResources(), resultBitmap);
+        drawable.setColorFilter(new
+                PorterDuffColorFilter(context.getResources().getColor(colorRes), PorterDuff.Mode.MULTIPLY));
+        return drawable;
+    }
 }

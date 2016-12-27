@@ -8,9 +8,9 @@
             android:title="SDCard" />
 
         <item
-            android:id="@+id/menu_root"
+            android:id="@+id/menu_category"
             android:icon="@drawable/ic_android_white_24dp"
-            android:title="Root" />
+            android:title="Category" />
 
         <item
             android:id="@+id/menu_system"

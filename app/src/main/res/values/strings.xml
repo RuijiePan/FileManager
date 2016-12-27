@@ -117,6 +117,14 @@
     <string name="overwrite_replace">Replace</string>
     <string name="overwrite_replace_all">Replace all</string>
 
+    <!--categroy-->
+    <string name="music">Music</string>
+    <string name="video">Video</string>
+    <string name="picture">Picture</string>
+    <string name="document">Document</string>
+    <!--<string name="zip">Zip</string>-->
+    <string name="download">Download</string>
+
     <!-- setting -->
     <string name="settings_general_settings">General Setting</string>
     <string name="settings_md_colors">theme color</string>

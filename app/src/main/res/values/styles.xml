@@ -117,4 +117,24 @@
         <attr name="roundRadius" format="integer"/>
         <attr name="duration" format="integer"/>
     </declare-styleable>
+
+    <declare-styleable name="ThemeColorIconView">
+        <attr name="icon" format="reference" />
+    </declare-styleable>
+
+    <style name="item_category_style">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/category_item_click_bg</item>
+    </style>
+
+    <style name="power_progressbar_style">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/category_item_click_bg</item>
+    </style>
 </resources>

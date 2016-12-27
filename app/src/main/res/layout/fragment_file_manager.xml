@@ -9,7 +9,8 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="2">
 
         <com.jiepier.filemanager.widget.PowerProgressBar
             android:id="@+id/memoryProgressbar"
@@ -18,9 +19,7 @@
             app:centerTopText="76%"
             app:centerBottomText="内存"
             app:progress="70"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            style="@style/power_progressbar_style"/>
 
         <com.jiepier.filemanager.widget.PowerProgressBar
             android:id="@+id/storageProgressbar"
@@ -30,14 +29,58 @@
             app:roundRadius="150"
             app:centerBottomText="存储空间"
             app:progress="50"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            style="@style/power_progressbar_style"/>
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="0dp"
+        android:layout_weight="1.5">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.jiepier.filemanager.widget.ThemeColorIconView
+                app:icon="@drawable/icon_category_music_white"
+                style="@style/item_category_style"/>
+
+            <com.jiepier.filemanager.widget.ThemeColorIconView
+                app:icon="@drawable/icon_category_video_white"
+                style="@style/item_category_style" />
+
+            <com.jiepier.filemanager.widget.ThemeColorIconView
+                app:icon="@drawable/icon_category_picture_white"
+                style="@style/item_category_style" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.jiepier.filemanager.widget.ThemeColorIconView
+                style="@style/item_category_style"
+                app:icon="@drawable/icon_category_document_white" />
+
+            <com.jiepier.filemanager.widget.ThemeColorIconView
+                app:icon="@drawable/icon_category_zip_white"
+                style="@style/item_category_style" />
+
+            <com.jiepier.filemanager.widget.ThemeColorIconView
+                app:icon="@drawable/icon_category_download_white"
+                style="@style/item_category_style" />
+        </LinearLayout>
+    </LinearLayout>
+
 </LinearLayout>
