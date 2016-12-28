@@ -106,14 +106,16 @@
         <attr name="startAngle" format="integer"/>
         <attr name="roundColor" format="color"/>
         <attr name="roundFillColor" format="color"/>
-        <attr name="centerTopTextSizePercent" format="dimension"/>
-        <attr name="centerTextSizePercent" format="dimension"/>
-        <attr name="centerBottomTextSizePercent" format="dimension"/>
+        <attr name="centerTopTextSizePercent" format="float"/>
+        <attr name="centerTextSizePercent" format="float"/>
+        <attr name="centerBottomTextSizePercent" format="float"/>
         <attr name="centerTopText" format="string"/>
         <attr name="centerTexts" format="string"/>
         <attr name="centerBottomText" format="string"/>
         <attr name="isClockwise" format="boolean"/>
         <attr name="roundWith" format="integer"/>
+        <attr name="roundRadiusWeight" format="float"/>
+        <attr name="roundWidthWeight" format="float"/>
         <attr name="roundRadius" format="integer"/>
         <attr name="duration" format="integer"/>
     </declare-styleable>

@@ -19,6 +19,7 @@
             app:centerTopText="76%"
             app:centerBottomText="内存"
             app:progress="70"
+            app:roundRadiusWeight="0.7"
             style="@style/power_progressbar_style"/>
 
         <com.jiepier.filemanager.widget.PowerProgressBar
@@ -26,7 +27,6 @@
             app:isClockwise="true"
             app:centerTexts="14G/25G"
             app:centerTopText="56%"
-            app:roundRadius="150"
             app:centerBottomText="存储空间"
             app:progress="50"
             style="@style/power_progressbar_style"/>
