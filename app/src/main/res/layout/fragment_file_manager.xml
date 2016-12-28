@@ -17,8 +17,9 @@
             app:isClockwise="true"
             app:centerTexts="2.0G/2.7G"
             app:centerTopText="76%"
-            app:centerBottomText="内存"
+            app:centerBottomText="memory"
             app:progress="70"
+            app:startAngle="45"
             app:roundRadiusWeight="0.7"
             style="@style/power_progressbar_style"/>
 
@@ -27,7 +28,8 @@
             app:isClockwise="true"
             app:centerTexts="14G/25G"
             app:centerTopText="56%"
-            app:centerBottomText="存储空间"
+            app:centerBottomText="storage"
+            app:startAngle="45"
             app:progress="50"
             style="@style/power_progressbar_style"/>
     </LinearLayout>

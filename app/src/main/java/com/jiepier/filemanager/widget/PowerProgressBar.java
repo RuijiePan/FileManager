@@ -265,5 +265,6 @@ public class PowerProgressBar extends View {
         animator.setInterpolator(new OvershootInterpolator());
         animator.setDuration(mDuration);
         animator.start();
+
     }
 }

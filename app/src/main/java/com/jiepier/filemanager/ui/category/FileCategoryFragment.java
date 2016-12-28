@@ -47,8 +47,7 @@ public class FileCategoryFragment extends BaseLazyFragment {
 
     @Override
     protected void initViews(View self, Bundle savedInstanceState) {
-        memoryProgressbar.setStartAngle(45);
-        storageProgressbar.setStartAngle(45);
+
     }
 
     @Override
