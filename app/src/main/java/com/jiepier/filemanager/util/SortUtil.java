@@ -2,8 +2,6 @@ package com.jiepier.filemanager.util;
 
 import android.provider.MediaStore;
 
-import com.jiepier.filemanager.ui.category.ApkManager;
-
 /**
  * Created by panruijie on 16/12/28.
  * Email : zquprj@gmail.com

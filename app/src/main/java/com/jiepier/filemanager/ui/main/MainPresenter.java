@@ -53,7 +53,7 @@ public class MainPresenter implements MainContact.Presenter {
     public static final String UNZIP = "unzip";
     private String unZipPath = "";
 
-    public MainPresenter(Activity activity){
+    public MainPresenter(Context context){
         this.mCompositeSubscription = new CompositeSubscription();
 
         mCompositeSubscription.add(RxBus.getDefault()
@@ -68,7 +68,7 @@ public class MainPresenter implements MainContact.Presenter {
 
                     mView.cretaeActionMode();
 
-                    final String mSelected = activity.getString(R.string._selected);
+                    final String mSelected = context.getString(R.string._selected);
                     mView.setActionModeTitle(mList.size()+mSelected);
 
                     if (mList.size() == 0)
@@ -99,7 +99,7 @@ public class MainPresenter implements MainContact.Presenter {
         mCompositeSubscription.add(RxBus.getDefault()
                 .IoToUiObservable(ActionModeTitleEvent.class)
                 .subscribe(event-> {
-                    final String mSelected = activity.getString(R.string._selected);
+                    final String mSelected = context.getString(R.string._selected);
                     mView.setActionModeTitle(event.getCount()+mSelected);
                 },Throwable::printStackTrace));
     }

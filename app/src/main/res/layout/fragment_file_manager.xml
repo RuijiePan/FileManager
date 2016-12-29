@@ -85,7 +85,7 @@
                 style="@style/item_category_style" />
 
             <com.jiepier.filemanager.widget.ThemeColorIconView
-                android:id="@+id/item_download"
+                android:id="@+id/item_apk"
                 app:icon="@drawable/icon_category_download_white"
                 style="@style/item_category_style" />
         </LinearLayout>

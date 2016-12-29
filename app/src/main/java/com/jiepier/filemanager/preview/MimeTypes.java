@@ -342,4 +342,5 @@ public final class MimeTypes {
         final String mime = getMimeType(f);
         return mime != null && mimeTypeMatch("video/*", mime);
     }
+
 }
