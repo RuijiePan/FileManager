@@ -20,6 +20,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import rx.Observable;
+import rx.functions.Action1;
 
 /**
  * Created by JiePier on 16/12/7.
@@ -28,6 +30,7 @@ import butterknife.OnClick;
 public class FileCategoryFragment extends BaseLazyFragment {
 
     private ScannerReceiver mScannerReceiver;
+    private String TAG = getClass().getSimpleName();
     @BindView(R.id.memoryProgressbar)
     PowerProgressBar memoryProgressbar;
     @BindView(R.id.storageProgressbar)
@@ -77,16 +80,10 @@ public class FileCategoryFragment extends BaseLazyFragment {
         CategoryManager.getInstance()
                 .setSortMethod(SortUtil.SortMethod.SIZE);
 
-        List<String> list = CategoryManager.getInstance().getApkList();
-        Log.w("haha",list.toString());
-        Log.w("haha","================================");
+        CategoryManager.getInstance().getApkListUsingObservable()
+                .subscribe(apkList -> {
 
-        List<String> list2 = CategoryManager.getInstance().getDocList();
-        Log.w("haha",list2.toString());
-        Log.w("haha","================================");
-
-        List<String> list3 = CategoryManager.getInstance().getZipList();
-        Log.w("haha",list3.toString());
+                }, Throwable::printStackTrace);
     }
 
     @Override
@@ -127,7 +124,7 @@ public class FileCategoryFragment extends BaseLazyFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            //Log.v(LOG_TAG, "received broadcast: " + action.toString());
+            Log.v(TAG, "received broadcast: " + action.toString());
             // handle intents related to external storage
             if (action.equals(Intent.ACTION_MEDIA_SCANNER_FINISHED) || action.equals(Intent.ACTION_MEDIA_MOUNTED)
                     || action.equals(Intent.ACTION_MEDIA_UNMOUNTED)) {

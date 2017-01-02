@@ -12,6 +12,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 /**
  * Created by panruijie on 16/12/28.
  * Email : zquprj@gmail.com
@@ -86,6 +91,46 @@ public class DocManager {
             cursor.close();
 
         return mDocList;
+    }
+
+    public Observable<List<String>> getDocListUsingObservable(SortUtil.SortMethod sort){
+
+        Uri uri = MediaStore.Files.getContentUri("external");
+        String[] columns = new String[] {
+                MediaStore.Files.FileColumns._ID
+                , MediaStore.Files.FileColumns.DATA
+                , MediaStore.Files.FileColumns.SIZE
+                , MediaStore.Files.FileColumns.DATE_MODIFIED
+        };
+        String selection = getDocSelection();
+        String sortOrder = SortUtil.buildSortOrder(sort);
+
+        return Observable.create(new Observable.OnSubscribe<List<String>>(){
+
+            @Override
+            public void call(Subscriber<? super List<String>> subscriber) {
+                Cursor cursor = mContext.getContentResolver().query(
+                        uri,columns,selection,null,sortOrder
+                );
+
+                mDocList.clear();
+                if (cursor != null){
+                    cursor.moveToFirst();
+
+                    mDocList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
+                    while (cursor.moveToNext()){
+                        mDocList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
+                    }
+                }
+
+                if (cursor != null)
+                    cursor.close();
+
+                subscriber.onNext(mDocList);
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+
     }
 
     public List<String> getDocList(){

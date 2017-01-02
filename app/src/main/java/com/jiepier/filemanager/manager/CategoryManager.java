@@ -6,10 +6,12 @@ import com.jiepier.filemanager.util.SortUtil;
 
 import java.util.List;
 
+import rx.Observable;
+
 /**
  * Created by panruijie on 16/12/29.
  * Email : zquprj@gmail.com
- * 文件管理类
+ * 文件管理类 : 普通get方法线程阻塞、rx方法线程不阻塞
  */
 
 public class CategoryManager {
@@ -59,6 +61,10 @@ public class CategoryManager {
         return mApkManager.getApkListBySort(mSortMethod);
     }
 
+    public Observable<List<String>> getApkListUsingObservable(){
+        return mApkManager.getApkListUsingObservable(mSortMethod);
+    }
+
     public List<String> getApkListWithoutQuery(){
         return mApkManager.getApkList();
     }
@@ -67,12 +73,20 @@ public class CategoryManager {
         return mDocManager.getDocListBySort(mSortMethod);
     }
 
+    public Observable<List<String>> getDocListUsingObservable(){
+        return mDocManager.getDocListUsingObservable(mSortMethod);
+    }
+
     public List<String> getDocListWithoutQuery(){
         return mDocManager.getDocList();
     }
 
     public List<String> getZipList(){
         return mZipManager.getApkListBySort(mSortMethod);
+    }
+
+    public Observable<List<String>> getZipListUsingObservable(){
+        return mZipManager.getZipListUsingObservable(mSortMethod);
     }
 
     public List<String> getZipListWithoutQuery(){
