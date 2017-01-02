@@ -22,6 +22,8 @@
 
         <activity android:name=".ui.main.MainActivity" android:launchMode="singleTask"/>
 
+        <activity android:name=".ui.category.categorybottom.CategoryBottomActivity" />
+
         <activity android:name=".ui.about.AboutActivity"/>
 
         <activity android:name=".ui.setting.SettingActivity" />

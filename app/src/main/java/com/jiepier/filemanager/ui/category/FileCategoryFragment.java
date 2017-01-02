@@ -1,35 +1,23 @@
 package com.jiepier.filemanager.ui.category;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseLazyFragment;
-import com.jiepier.filemanager.manager.CategoryManager;
-import com.jiepier.filemanager.util.SortUtil;
 import com.jiepier.filemanager.widget.PowerProgressBar;
 import com.jiepier.filemanager.widget.ThemeColorIconView;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
-import rx.Observable;
-import rx.functions.Action1;
 
 /**
  * Created by JiePier on 16/12/7.
  */
 
-public class FileCategoryFragment extends BaseLazyFragment {
+public class FileCategoryFragment extends BaseLazyFragment implements FileCategoryContact.View{
 
-    private ScannerReceiver mScannerReceiver;
+    private FileCategoryPresenter mPresenter;
     private String TAG = getClass().getSimpleName();
     @BindView(R.id.memoryProgressbar)
     PowerProgressBar memoryProgressbar;
@@ -47,8 +35,6 @@ public class FileCategoryFragment extends BaseLazyFragment {
     ThemeColorIconView itemZip;
     @BindView(R.id.item_apk)
     ThemeColorIconView itemApk;
-    @BindView(R.id.activity_main)
-    LinearLayout activityMain;
 
     @Override
     protected int getLayoutId() {
@@ -68,22 +54,16 @@ public class FileCategoryFragment extends BaseLazyFragment {
     @Override
     protected void initData() {
 
-        mScannerReceiver = new ScannerReceiver();
+/*        mScannerReceiver = new ScannerReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
         intentFilter.addAction(Intent.ACTION_MEDIA_MOUNTED);
         intentFilter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
         intentFilter.addDataScheme("file");
-        getActivity().registerReceiver(mScannerReceiver, intentFilter);
+        getActivity().registerReceiver(mScannerReceiver, intentFilter);*/
 
-        CategoryManager.init(getContext());
-        CategoryManager.getInstance()
-                .setSortMethod(SortUtil.SortMethod.SIZE);
-
-        CategoryManager.getInstance().getApkListUsingObservable()
-                .subscribe(apkList -> {
-
-                }, Throwable::printStackTrace);
+        mPresenter = new FileCategoryPresenter(getContext());
+        mPresenter.attachView(this);
     }
 
     @Override
@@ -101,25 +81,39 @@ public class FileCategoryFragment extends BaseLazyFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.memoryProgressbar:
+                mPresenter.clickMemoryProgressbar();
                 break;
             case R.id.storageProgressbar:
+                mPresenter.clickStorageProgressbar();
                 break;
             case R.id.item_music:
+                mPresenter.clickMusic();
                 break;
             case R.id.item_video:
+                mPresenter.clickVideo();
                 break;
             case R.id.item_picture:
+                mPresenter.clickPicture();
                 break;
             case R.id.item_document:
+                mPresenter.clickDoc();
                 break;
             case R.id.item_zip:
+                mPresenter.clickZip();
                 break;
             case R.id.item_apk:
+                mPresenter.clickApk();
                 break;
         }
     }
 
-    private class ScannerReceiver extends BroadcastReceiver {
+    @Override
+    public void onDestroy() {
+        mPresenter.detachView();
+        super.onDestroy();
+    }
+
+    /* private class ScannerReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -131,5 +125,5 @@ public class FileCategoryFragment extends BaseLazyFragment {
                 //notifyFileChanged();
             }
         }
-    }
+    }*/
 }

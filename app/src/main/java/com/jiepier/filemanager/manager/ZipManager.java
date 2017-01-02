@@ -123,6 +123,6 @@ public class ZipManager {
     }
 
     public List<String> getZipList(){
-        return mZipList;
+            return mZipList;
     }
 }

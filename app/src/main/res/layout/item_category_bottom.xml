@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/item_height"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentTop="true"
+    android:background="@drawable/item_click_bg"
+    android:gravity="center_vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/row_image"
+        android:layout_width="@dimen/item_height"
+        android:layout_height="@dimen/item_height"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@null"
+        android:cropToPadding="true"
+        android:padding="@dimen/item_icon_padding"
+        android:scaleType="centerCrop"
+        android:src="@drawable/type_unknown" />
+
+    <LinearLayout
+        android:id="@+id/detail_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/bottom_view"
+        android:layout_toRightOf="@id/row_image"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/item_default_padding"
+        android:paddingTop="@dimen/item_default_padding">
+
+        <TextView
+            android:id="@+id/top_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:textAllCaps="false"
+            android:textColor="?android:textColorPrimary"
+            android:fontFamily="sans-serif-light"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/dateview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:paddingTop="1dp"
+            android:singleLine="true"
+            android:textAllCaps="false"
+            android:textColor="@color/gray"
+            android:fontFamily="sans-serif-light"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/bottom_view"
+        android:layout_width="70dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:ellipsize="end"
+        android:gravity="right|center_vertical"
+        android:paddingRight="@dimen/item_default_padding"
+        android:singleLine="true"
+        android:textColor="@color/gray"
+        android:fontFamily="sans-serif-light"
+        android:textSize="12sp" />
+
+    <com.jiepier.filemanager.widget.CheckCircleView
+        android:id="@+id/iv_check"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

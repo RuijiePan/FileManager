@@ -52,6 +52,10 @@ public class CategoryManager {
         return sInstance;
     }
 
+    public SortUtil.SortMethod getSortMethod() {
+        return this.mSortMethod;
+    }
+
     public CategoryManager setSortMethod(SortUtil.SortMethod mSortMethod) {
         this.mSortMethod = mSortMethod;
         return this;

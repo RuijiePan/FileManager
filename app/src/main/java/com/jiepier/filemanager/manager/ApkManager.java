@@ -26,7 +26,6 @@ import rx.schedulers.Schedulers;
 
 public class ApkManager {
 
-
     private static ApkManager sInstance;
     private Context mContext;
     private ArrayList<String> mApkList;

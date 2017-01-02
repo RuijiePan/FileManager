@@ -78,6 +78,7 @@
     <string name="scrollToTop">Scroll To Top</string>
     <string name="waitForOpen">Please wait for open</string>
 
+
     <!-- directory info dialog -->
     <string name="location">Location:</string>
     <string name="total">Total space:</string>
@@ -123,7 +124,13 @@
     <string name="picture">Picture</string>
     <string name="document">Document</string>
     <!--<string name="zip">Zip</string>-->
-    <string name="download">Download</string>
+    <string name="apk">APK</string>
+    <string name="apk_manager">Apk Manager</string>
+    <string name="music_manager">Music Manager</string>
+    <string name="video_manager">Video Manager</string>
+    <string name="document_manager">Document Manager</string>
+    <string name="zip_manager">Zip Manager</string>
+    <string name="picture_manager">Picture Manager</string>
 
     <!-- setting -->
     <string name="settings_general_settings">General Setting</string>
