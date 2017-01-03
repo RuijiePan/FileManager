@@ -54,14 +54,6 @@ public class FileCategoryFragment extends BaseLazyFragment implements FileCatego
     @Override
     protected void initData() {
 
-/*        mScannerReceiver = new ScannerReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
-        intentFilter.addAction(Intent.ACTION_MEDIA_MOUNTED);
-        intentFilter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
-        intentFilter.addDataScheme("file");
-        getActivity().registerReceiver(mScannerReceiver, intentFilter);*/
-
         mPresenter = new FileCategoryPresenter(getContext());
         mPresenter.attachView(this);
     }
@@ -112,18 +104,4 @@ public class FileCategoryFragment extends BaseLazyFragment implements FileCatego
         mPresenter.detachView();
         super.onDestroy();
     }
-
-    /* private class ScannerReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            Log.v(TAG, "received broadcast: " + action.toString());
-            // handle intents related to external storage
-            if (action.equals(Intent.ACTION_MEDIA_SCANNER_FINISHED) || action.equals(Intent.ACTION_MEDIA_MOUNTED)
-                    || action.equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
-                //notifyFileChanged();
-            }
-        }
-    }*/
 }

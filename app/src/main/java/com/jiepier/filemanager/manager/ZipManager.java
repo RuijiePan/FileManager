@@ -30,7 +30,7 @@ public class ZipManager {
     public static ZipManager getInstance(){
 
         if (sInstance == null){
-            throw new IllegalStateException("You must be init first");
+            throw new IllegalStateException("You must be init ZipManager first");
         }
         return sInstance;
     }
@@ -46,7 +46,7 @@ public class ZipManager {
             sInstance = new ZipManager(context);
     }
 
-    public List<String> getApkListBySort(SortUtil.SortMethod sort){
+    public List<String> getZipListBySort(SortUtil.SortMethod sort){
 
         Uri uri = MediaStore.Files.getContentUri("external");
 
@@ -82,40 +82,12 @@ public class ZipManager {
 
     public Observable<List<String>> getZipListUsingObservable(SortUtil.SortMethod sort){
 
-        Uri uri = MediaStore.Files.getContentUri("external");
-
-        String[] columns = new String[] {
-                MediaStore.Files.FileColumns._ID
-                , MediaStore.Files.FileColumns.DATA
-                , MediaStore.Files.FileColumns.SIZE
-                , MediaStore.Files.FileColumns.DATE_MODIFIED
-        };
-        String selection =  "(" + MediaStore.Files.FileColumns.MIME_TYPE +
-                " == '" + "application/zip" + "')";
-        String sortOrder = SortUtil.buildSortOrder(sort);
-
         return Observable.create(new Observable.OnSubscribe<List<String>>(){
 
             @Override
             public void call(Subscriber<? super List<String>> subscriber) {
-                Cursor cursor = mContext.getContentResolver().query(
-                        uri,columns,selection,null,sortOrder
-                );
 
-                mZipList.clear();
-                if (cursor != null){
-                    cursor.moveToFirst();
-
-                    mZipList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
-                    while (cursor.moveToNext()){
-                        mZipList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
-                    }
-                }
-
-                if (cursor != null)
-                    cursor.close();
-
-                subscriber.onNext(mZipList);
+                subscriber.onNext(getZipListBySort(sort));
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());

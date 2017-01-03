@@ -77,7 +77,7 @@
     <string name="createFolder">Create Folder</string>
     <string name="scrollToTop">Scroll To Top</string>
     <string name="waitForOpen">Please wait for open</string>
-
+    <string name="loading">Loading...</string>
 
     <!-- directory info dialog -->
     <string name="location">Location:</string>

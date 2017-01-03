@@ -5,9 +5,11 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.RefreshEvent;
+import com.jiepier.filemanager.event.TypeEvent;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.RootCommands;
 import com.jiepier.filemanager.util.RxBus.RxBus;
@@ -96,6 +98,7 @@ public final class RenameTask extends AsyncTask<String, Void, List<String>> {
                     Toast.LENGTH_LONG).show();
             RxBus.getDefault().post(new CleanChoiceEvent());
             RxBus.getDefault().post(new RefreshEvent());
+        RxBus.getDefault().post(new TypeEvent(AppConstant.REFRESH));
         if (activity != null && !failed.isEmpty()) {
             Toast.makeText(activity, activity.getString(R.string.cantopenfile),
                     Toast.LENGTH_SHORT).show();

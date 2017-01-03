@@ -5,8 +5,10 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.event.RefreshEvent;
+import com.jiepier.filemanager.event.TypeEvent;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 import com.jiepier.filemanager.util.ZipUtils;
 
@@ -81,5 +83,6 @@ public final class ZipTask extends AsyncTask<String, Void, List<String>> {
             }
         }
         RxBus.getDefault().post(new RefreshEvent());
+        RxBus.getDefault().post(new TypeEvent(AppConstant.REFRESH));
     }
 }

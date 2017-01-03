@@ -2,18 +2,24 @@ package com.jiepier.filemanager.task;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.blankj.utilcode.utils.FileUtils;
+import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
+import com.jiepier.filemanager.event.BroadcastEvent;
 import com.jiepier.filemanager.event.RefreshEvent;
+import com.jiepier.filemanager.event.TypeEvent;
 import com.jiepier.filemanager.util.ClipBoard;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.MediaStoreUtils;
 import com.jiepier.filemanager.util.RxBus.RxBus;
+import com.jiepier.filemanager.util.Settings;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -94,6 +100,7 @@ public final class PasteTask extends AsyncTask<String, Void, List<String>> {
         super.onPostExecute(failed);
         this.finish(failed);
         RxBus.getDefault().post(new RefreshEvent());
+        RxBus.getDefault().post(new BroadcastEvent());
     }
 
     @Override
@@ -110,18 +117,20 @@ public final class PasteTask extends AsyncTask<String, Void, List<String>> {
         final Activity activity = this.activity.get();
 
         if (ClipBoard.isMove()) {
-            if (success)
+            if (success) {
                 Toast.makeText(activity,
                         activity.getString(R.string.movesuccsess),
                         Toast.LENGTH_SHORT).show();
+            }
             else
                 Toast.makeText(activity, activity.getString(R.string.movefail),
                         Toast.LENGTH_SHORT).show();
         } else {
-            if (success)
+            if (success) {
                 Toast.makeText(activity,
                         activity.getString(R.string.copysuccsess),
                         Toast.LENGTH_SHORT).show();
+            }
             else
                 Toast.makeText(activity, activity.getString(R.string.copyfail),
                         Toast.LENGTH_SHORT).show();
@@ -139,4 +148,5 @@ public final class PasteTask extends AsyncTask<String, Void, List<String>> {
             }
         }
     }
+
 }

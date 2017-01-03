@@ -6,9 +6,12 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
+import com.jiepier.filemanager.base.App;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.RefreshEvent;
+import com.jiepier.filemanager.event.TypeEvent;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 
@@ -89,5 +92,7 @@ public final class DeleteTask extends AsyncTask<String, Void, List<String>> {
 
         RxBus.getDefault().post(new CleanChoiceEvent());
         RxBus.getDefault().post(new RefreshEvent());
+        RxBus.getDefault().post(new TypeEvent(AppConstant.REFRESH));
+        RxBus.getDefault().post(new TypeEvent(AppConstant.CLEAN_CHOICE));
     }
 }

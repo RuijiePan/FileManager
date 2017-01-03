@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.v7.view.ActionMode;
 import android.util.Log;
-import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -146,7 +146,7 @@ public class MainActivity extends BaseDrawerActivity implements
     @Override
     public void cretaeActionMode() {
         if (mActionMode == null){
-            mActionMode = startActionMode(this);
+            mActionMode = startSupportActionMode(this);
             StatusBarUtil.setColor(this, ResourceUtil.getThemeColor(this), 0);
         }
     }

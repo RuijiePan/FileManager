@@ -13,7 +13,19 @@ public class AppConstant {
     public static final String PICTURE = "PICTURE";
     public static final String DOC = "DOC";
     public static final String ZIP = "ZIP";
+    public static final String UNZIP = "UNZIP";
+    public static final String COPY = "COPY";
+    public static final String MOVE = "MOVE";
     public static final String APK = "APK";
+    public static final String PATH = "PATH";
+
+    public static final String DIALOG_TAG = "DIALOG_TAG";
+
+    public static final int CLEAN_CHOICE = 1;
+    public static final int CLEAN_ACTIONMODE = 2;
+    public static final int REFRESH = 3;
+    public static final int SELECT_ALL = 4;
+    public static final int REFRESH_Broadcast = 6;
 
     public static final int MUSIC_INDEX = 1;
     public static final int VIDEO_INDEX = 2;

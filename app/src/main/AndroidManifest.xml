@@ -11,6 +11,7 @@
         android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:exported="true"
         android:theme="@style/BaseAppThemeLight">
         <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>

@@ -2,11 +2,14 @@ package com.jiepier.filemanager.ui.category.categorybottom;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 
 import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
-import com.jiepier.filemanager.base.App;
-import com.jiepier.filemanager.base.BaseActivity;
+import com.jiepier.filemanager.ui.actionmode.ActionModeActivity;
+import com.jiepier.filemanager.util.ClipBoard;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 
@@ -15,7 +18,7 @@ import butterknife.BindView;
  * Email : zquprj@gmail.com
  */
 
-public class CategoryBottomActivity extends BaseActivity{
+public class CategoryBottomActivity extends ActionModeActivity{
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -35,15 +38,13 @@ public class CategoryBottomActivity extends BaseActivity{
     }
 
     @Override
-    public void initUiAndListener() {
-
+    public void init() {
         int index = getIntent().getIntExtra(AppConstant.INDEX,AppConstant.APK_INDEX);
 
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content,CategoryBottomFragment.newInstance(index))
                 .commit();
-
 
         switch (index){
             case AppConstant.DOC_INDEX:

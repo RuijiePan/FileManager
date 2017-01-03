@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    android:id="@+id/mode"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/actionmove"
+        android:icon="@drawable/ic_content_cut_white_24dp"
+        app:showAsAction="ifRoom"
+        android:title="@string/move" />
+    <item
+        android:id="@+id/actioncopy"
+        android:icon="@drawable/ic_library_books_white_24dp"
+        app:showAsAction="ifRoom"
+        android:title="@string/copy" />
+    <item
+        android:id="@+id/actionrename"
+        android:icon="?attr/action_edit"
+        app:showAsAction="ifRoom"
+        android:title="@string/rename" />
+    <item
+        android:id="@+id/actiondelete"
+        android:icon="?attr/action_delete"
+        app:showAsAction="ifRoom"
+        android:title="@string/delete" />
+    <item
+        android:id="@+id/actionshare"
+        android:icon="?attr/action_share"
+        app:showAsAction="ifRoom"
+        android:title="@string/share" />
+    <item
+        android:id="@+id/actionzip"
+        android:icon="?attr/action_zip"
+        app:showAsAction="ifRoom"
+        android:title="@string/multizip" />
+    <item
+        android:id="@+id/actionall"
+        app:showAsAction="never"
+        android:title="@string/selectall" />
+
+</menu>

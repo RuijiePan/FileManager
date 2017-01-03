@@ -5,9 +5,12 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
+import com.jiepier.filemanager.event.TypeEvent;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.MediaStoreUtils;
+import com.jiepier.filemanager.util.RxBus.RxBus;
 import com.jiepier.filemanager.util.ZipUtils;
 
 import java.io.File;
@@ -82,9 +85,11 @@ public final class UnzipTask extends AsyncTask<File, Void, List<String>> {
 
         final Activity activity = this.activity.get();
 
-        if (failed.isEmpty())
+        if (failed.isEmpty()) {
             Toast.makeText(activity, activity.getString(R.string.extractionsuccess),
                     Toast.LENGTH_SHORT).show();
+            RxBus.getDefault().post(new TypeEvent(AppConstant.REFRESH));
+        }
 
         if (activity != null && !failed.isEmpty()) {
             Toast.makeText(activity, activity.getString(R.string.cantopenfile),

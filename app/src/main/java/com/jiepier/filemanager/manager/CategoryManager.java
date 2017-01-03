@@ -86,7 +86,7 @@ public class CategoryManager {
     }
 
     public List<String> getZipList(){
-        return mZipManager.getApkListBySort(mSortMethod);
+        return mZipManager.getZipListBySort(mSortMethod);
     }
 
     public Observable<List<String>> getZipListUsingObservable(){
