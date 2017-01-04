@@ -19,6 +19,7 @@ public class AppConstant {
     public static final String MOVE = "MOVE";
     public static final String APK = "APK";
     public static final String PATH = "PATH";
+    public static final String DEFAULT_SCAN_PATH = "DEFAULT_SCAN_PATH";
 
     public static final String DIALOG_TAG = "DIALOG_TAG";
 

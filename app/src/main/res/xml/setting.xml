@@ -25,6 +25,11 @@
         android:key="pDefaultDir"
         android:summary="/sdcard/"
         android:title="@string/defaultdir"/>
+
+    <Preference
+        android:key="pDefaultScanDir"
+        android:summary="/sdcard/"
+        android:title="@string/default_sacn_dir"/>
   </PreferenceCategory>
 
 </PreferenceScreen>

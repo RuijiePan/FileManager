@@ -51,8 +51,10 @@ public class SettingActivity extends BaseActivity implements FolderChooserDialog
 
         RxBus.getDefault().add(this,RxBus.getDefault()
                 .IoToUiObservable(ChangeDefaultDirEvent.class)
-                .subscribe(event -> {
+                .map(ChangeDefaultDirEvent::getType)
+                .subscribe(type -> {
                     new FolderChooserDialog.Builder(this)
+                            .tag(type)
                             .chooseButton(R.string.md_choose_label)  // changes label of the choose button
                             .initialPath(Settings.getDefaultDir())  // changes initial path, defaults to external storage directory
                             .cancelButton(R.string.cancel)
@@ -74,7 +76,9 @@ public class SettingActivity extends BaseActivity implements FolderChooserDialog
 
     @Override
     public void onFolderSelection(@NonNull FolderChooserDialog dialog, @NonNull File folder) {
-        RxBus.getDefault().post(new NewDirEvent(folder.getAbsolutePath()));
+
+        String type = dialog.getTag();
+        RxBus.getDefault().post(new NewDirEvent(type,folder.getAbsolutePath()));
     }
 
 }

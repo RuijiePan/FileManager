@@ -183,7 +183,7 @@ public class MainPresenter implements MainContact.Presenter {
 
     @Override
     public void clickRename(String currentPath) {
-        Log.w("hahaMain",currentPath);
+
         DialogFragment renameDialog = RenameDialog.instantiate(currentPath,mList.get(0));
         mView.showDialog(renameDialog);
         RxBus.getDefault().post(new CleanActionModeEvent());

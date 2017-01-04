@@ -53,20 +53,13 @@ public class ActionModePresenter implements ActionModeContact.Presenter {
 
     private ActionModeContact.View mView;
     private CompositeSubscription mCompositeSubscription;
-    private DataManager mDataManager;
-    private String mType;
     private String[] mFiles;
     private List<String> mList;
-    private Context mContext;
-    private static final String ZIP = "zip";
-    private static final String UNZIP = "unzip";
     private String unZipPath = "";
 
     public ActionModePresenter(Context context){
 
-        mContext = context;
         mCompositeSubscription = new CompositeSubscription();
-        mDataManager = DataManager.getInstance();
 
         mCompositeSubscription.add(RxBus.getDefault()
                 .IoToUiObservable(ActionMutipeChoiceEvent.class)
@@ -101,7 +94,7 @@ public class ActionModePresenter implements ActionModeContact.Presenter {
                 .IoToUiObservable(ActionChoiceFolderEvent.class)
                 .subscribe(event -> {
                     unZipPath = event.getFilePath();
-                    mView.showFolderDialog(UNZIP);
+                    mView.showFolderDialog(AppConstant.UNZIP);
                 }, Throwable::printStackTrace));
 
     }
@@ -144,7 +137,7 @@ public class ActionModePresenter implements ActionModeContact.Presenter {
 
     @Override
     public void clickZip(String currentPath) {
-        mView.showFolderDialog(ZIP);
+        mView.showFolderDialog(AppConstant.ZIP);
     }
 
     @Override
@@ -169,10 +162,10 @@ public class ActionModePresenter implements ActionModeContact.Presenter {
     @Override
     public void folderSelect(FolderChooserDialog dialog, @NonNull File folder) {
         String tag = dialog.getTag();
-        if (tag.equals(ZIP)) {
+        if (tag.equals(AppConstant.ZIP)) {
             mView.startZipTask(folder.getAbsolutePath() + File.separator + UUIDUtil.createUUID() + ".zip",
                     mFiles);
-        }else if (tag.equals(UNZIP)){
+        }else if (tag.equals(AppConstant.UNZIP)){
             mView.startUnZipTask(new File(unZipPath),folder);
         }else if (tag.equals(AppConstant.MOVE)) {
             mView.executePaste(folder.getAbsolutePath());

@@ -7,9 +7,11 @@ package com.jiepier.filemanager.event;
 public class NewDirEvent {
 
     private String path;
+    private String type;
 
-    public NewDirEvent(String path){
+    public NewDirEvent(String type,String path){
         this.path = path;
+        this.type = type;
     }
 
     public String getPath() {
@@ -18,5 +20,13 @@ public class NewDirEvent {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

@@ -20,6 +20,7 @@
     <string name="createmsg">Set a period before the text to create hidden folder.</string>
     <string name="createnewfolder">Create new folder</string>
     <string name="defaultdir">Default directory</string>
+    <string name="default_sacn_dir">Default Sacn directory</string>
     <string name="delete">Delete</string>
     <string name="deletesuccess">Delete successful</string>
     <string name="deleting">Deleting</string>

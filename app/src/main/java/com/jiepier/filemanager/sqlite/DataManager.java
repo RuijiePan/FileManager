@@ -21,7 +21,7 @@ import rx.schedulers.Schedulers;
 
 public class DataManager implements CRUD{
 
-    public static DataManager sInstance;
+    private static DataManager sInstance;
     public static final String DOC = "doc";
     public static final String ZIP = "zip";
     public static final String APK = "apk";
@@ -40,7 +40,7 @@ public class DataManager implements CRUD{
         }
     }
 
-    public DataManager(Context context,int version){
+    private DataManager(Context context,int version){
 
         mDocHelper = new DBOpenHelper(context,"doc.db",null,version);
         mZipHelper = new DBOpenHelper(context,"zip.db",null,version);
@@ -81,8 +81,6 @@ public class DataManager implements CRUD{
 
     @Override
     public boolean deleteSQL(String type, String path) {
-
-        Log.w("haha",path);
 
         mDb = getSQLite(type);
         return mDb.delete(type,"path=?",new String[]{path}) > 0;

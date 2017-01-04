@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Environment;
 import android.util.Log;
 
 import com.blankj.utilcode.utils.AppUtils;
@@ -28,7 +29,7 @@ import rx.functions.Action1;
 
 public class App extends Application {
 
-    private static Context sContext;
+    public static Context sContext;
     private String TAG = getClass().getSimpleName();
 
     @Override
@@ -41,9 +42,11 @@ public class App extends Application {
 
         /*如果是第一次加载，那么数据库里没有数据，那么直接扫描获取数据，否则在主界面通过广播
                 扫描完之后再进行数据更新*/
-        if (SharedUtil.getBoolean(this,AppConstant.IS_FIRST,false)){
+        if (SharedUtil.getBoolean(this,AppConstant.IS_FIRST,true)){
             CategoryManager.getInstance().update();
-            SharedUtil.putBoolean(this,AppConstant.IS_FIRST,true);
+            SharedUtil.putString(this,AppConstant.DEFAULT_SCAN_PATH,
+                    Settings.getDefaultDir());
+            SharedUtil.putBoolean(this,AppConstant.IS_FIRST,false);
         }
 
     }

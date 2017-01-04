@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -58,4 +58,4 @@
             fab:fab_label="@string/createFolder" />
 
     </com.github.clans.fab.FloatingActionMenu>
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

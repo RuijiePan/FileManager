@@ -98,13 +98,11 @@ public class CategoryManager {
         getDocListUsingObservable()
                 .subscribe(list -> {
                     mDataManager.updateSQL(DataManager.DOC,list);
-                    //Log.w(TAG,mDataManager.select(DataManager.DOC).toString());
                 });
 
         getZipListUsingObservable()
                 .subscribe(list -> {
                     mDataManager.updateSQL(DataManager.ZIP,list);
-                    //Log.w("haha",list.toString());
                 });
 
         getApkListUsingObservable()

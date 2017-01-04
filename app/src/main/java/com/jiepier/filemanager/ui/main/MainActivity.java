@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
+import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.App;
 import com.jiepier.filemanager.base.BaseDrawerActivity;
@@ -32,6 +33,7 @@ import com.jiepier.filemanager.util.ResourceUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 import com.jiepier.filemanager.util.SettingPrefUtil;
 import com.jiepier.filemanager.util.Settings;
+import com.jiepier.filemanager.util.SharedUtil;
 import com.jiepier.filemanager.util.SortUtil;
 import com.jiepier.filemanager.util.StatusBarUtil;
 import com.jiepier.filemanager.util.ThemeUtil;
@@ -248,11 +250,13 @@ public class MainActivity extends BaseDrawerActivity implements
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
 
-            Log.w(TAG,System.currentTimeMillis()+"");
-            Log.w(TAG,action);
+            if (action.equals(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)) {
+                Log.w(TAG,"Start scan file");
+            }
             // handle intents related to external storage
-            if (action.equals(Intent.ACTION_MEDIA_SCANNER_FINISHED)) {
+            else if (action.equals(Intent.ACTION_MEDIA_SCANNER_FINISHED)) {
                 CategoryManager.getInstance().update();
+                Log.w(TAG,"Sacn finish");
             }
         }
     }
