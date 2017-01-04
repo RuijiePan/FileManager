@@ -7,6 +7,7 @@ package com.jiepier.filemanager.Constant;
 
 public class AppConstant {
 
+    public static final String IS_FIRST = "IS_FIRST";
     public static final String INDEX = "INDEX";
     public static final String MUSIC = "MUSIC";
     public static final String VIDEO = "VIDEO";

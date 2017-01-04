@@ -27,7 +27,7 @@ public class CategoryBottomContact {
 
         void clearSelect();
 
-        void setDataByObservable(Observable<List<String>> observable);
+        void setDataByObservable(Observable<ArrayList<String>> observable);
     }
 
     interface Presenter extends BasePresenter<View>{

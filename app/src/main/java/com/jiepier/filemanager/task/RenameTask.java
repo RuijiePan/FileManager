@@ -2,14 +2,18 @@ package com.jiepier.filemanager.task;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
+import com.jiepier.filemanager.base.App;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.event.TypeEvent;
+import com.jiepier.filemanager.manager.CategoryManager;
+import com.jiepier.filemanager.sqlite.SqlUtil;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.RootCommands;
 import com.jiepier.filemanager.util.RxBus.RxBus;
@@ -19,6 +23,8 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.functions.Action1;
 
 public final class RenameTask extends AsyncTask<String, Void, List<String>> {
 
@@ -60,12 +66,17 @@ public final class RenameTask extends AsyncTask<String, Void, List<String>> {
         try {
             if (FileUtil.renameTarget(path + File.separator + files[0], files[1])) {
                 succes = true;
+                SqlUtil.update(path + File.separator + files[0],
+                        path + File.separator + files[1]);
             } else {
                 if (Settings.rootAccess()) {
                     RootCommands.renameRootTarget(path, files[0], files[1]);
                     succes = true;
+                    SqlUtil.update(path + File.separator + files[0],
+                            path + File.separator + files[1]);
                 }
             }
+
         } catch (Exception e) {
             failed.add(files[1]);
             succes = false;
@@ -77,6 +88,8 @@ public final class RenameTask extends AsyncTask<String, Void, List<String>> {
     protected void onPostExecute(final List<String> failed) {
         super.onPostExecute(failed);
         this.finish(failed);
+        RxBus.getDefault().post(new TypeEvent(AppConstant.REFRESH));
+        RxBus.getDefault().post(new TypeEvent(AppConstant.CLEAN_CHOICE));
     }
 
     @Override
@@ -98,13 +111,13 @@ public final class RenameTask extends AsyncTask<String, Void, List<String>> {
                     Toast.LENGTH_LONG).show();
             RxBus.getDefault().post(new CleanChoiceEvent());
             RxBus.getDefault().post(new RefreshEvent());
-        RxBus.getDefault().post(new TypeEvent(AppConstant.REFRESH));
+            RxBus.getDefault().post(new TypeEvent(AppConstant.REFRESH));
         if (activity != null && !failed.isEmpty()) {
             Toast.makeText(activity, activity.getString(R.string.cantopenfile),
                     Toast.LENGTH_SHORT).show();
-            if (!activity.isFinishing()) {
+            /*if (!activity.isFinishing()) {
                 dialog.show();
-            }
+            }*/
         }
     }
 }

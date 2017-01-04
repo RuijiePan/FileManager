@@ -2,8 +2,6 @@ package com.jiepier.filemanager.task;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
@@ -12,14 +10,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.blankj.utilcode.utils.FileUtils;
 import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
-import com.jiepier.filemanager.event.BroadcastEvent;
 import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.event.TypeEvent;
+import com.jiepier.filemanager.sqlite.DataManager;
 import com.jiepier.filemanager.util.ClipBoard;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.MediaStoreUtils;
+import com.jiepier.filemanager.sqlite.SqlUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
-import com.jiepier.filemanager.util.Settings;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -77,12 +75,16 @@ public final class PasteTask extends AsyncTask<String, Void, List<String>> {
             String fileName = s.substring(s.lastIndexOf("/"), s.length());
             if (ClipBoard.isMove()) {
                 FileUtil.moveToDirectory(new File(s), new File(location, fileName), activity);
+                if (!new File(s).isDirectory()){
+                    SqlUtil.update(s,location+File.separator+fileName);
+                }
                 success = true;
             } else {
                 if (new File(s).isDirectory()){
                     success = FileUtils.copyDir(s,location+File.separator+fileName);
                 }else {
                     success = FileUtils.copyFile(new File(s),new File(location, fileName));
+                    SqlUtil.insert(location+File.separator+fileName);
                 }
                 //FileUtil.copyFile(new File(s), new File(location, fileName), activity);
             }
@@ -100,7 +102,7 @@ public final class PasteTask extends AsyncTask<String, Void, List<String>> {
         super.onPostExecute(failed);
         this.finish(failed);
         RxBus.getDefault().post(new RefreshEvent());
-        RxBus.getDefault().post(new BroadcastEvent());
+        RxBus.getDefault().post(new TypeEvent(AppConstant.REFRESH));
     }
 
     @Override

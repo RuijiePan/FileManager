@@ -56,11 +56,4 @@ public final class Settings {
         return Integer.parseInt(mPrefs.getString("sort", "1"));
     }
 
-    public static int getDefaultTheme() {
-        return mTheme;
-    }
-
-    public static void setDefaultTheme(int theme) {
-        mTheme = theme;
-    }
 }

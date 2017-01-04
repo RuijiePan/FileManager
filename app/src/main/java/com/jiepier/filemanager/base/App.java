@@ -1,8 +1,26 @@
 package com.jiepier.filemanager.base;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.util.Log;
 
+import com.blankj.utilcode.utils.AppUtils;
+import com.jiepier.filemanager.Constant.AppConstant;
+import com.jiepier.filemanager.manager.CategoryManager;
+import com.jiepier.filemanager.manager.DocManager;
+import com.jiepier.filemanager.sqlite.DataManager;
+import com.jiepier.filemanager.util.Settings;
+import com.jiepier.filemanager.util.SharedUtil;
+import com.jiepier.filemanager.util.SortUtil;
 import com.tbruyelle.rxpermissions.RxPermissions;
+
+import java.io.IOException;
+import java.util.List;
+
+import rx.functions.Action1;
 
 /**
  * Created by JiePier on 16/12/19.
@@ -10,9 +28,24 @@ import com.tbruyelle.rxpermissions.RxPermissions;
 
 public class App extends Application {
 
+    private static Context sContext;
+    private String TAG = getClass().getSimpleName();
+
     @Override
     public void onCreate() {
-        super.onCreate();
+
+        sContext = this;
+
+        CategoryManager.init(this);
+        Settings.updatePreferences(this);
+
+        /*如果是第一次加载，那么数据库里没有数据，那么直接扫描获取数据，否则在主界面通过广播
+                扫描完之后再进行数据更新*/
+        if (SharedUtil.getBoolean(this,AppConstant.IS_FIRST,false)){
+            CategoryManager.getInstance().update();
+            SharedUtil.putBoolean(this,AppConstant.IS_FIRST,true);
+        }
 
     }
+
 }

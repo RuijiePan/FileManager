@@ -31,10 +31,8 @@ public class DocManager {
     private HashSet<String> mDocMimeTypesSet = new HashSet<String>() {
         {
             add("text/plain");
-            add("text/plain");
             add("application/pdf");
             add("application/msword");
-            add("application/vnd.ms-excel");
             add("application/vnd.ms-excel");
         }
     };

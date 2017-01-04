@@ -59,7 +59,7 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
 
     @Override
     public void initUiAndListener() {
-        Settings.updatePreferences(this);
+
         new IconPreview(this);
 
         mSdCardFragment = new SDCardFragment();

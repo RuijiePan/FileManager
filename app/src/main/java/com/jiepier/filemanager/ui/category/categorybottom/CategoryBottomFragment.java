@@ -144,8 +144,7 @@ public class CategoryBottomFragment extends BaseFragment implements CategoryBott
     }
 
     @Override
-    public void setDataByObservable(Observable<List<String>> observable) {
-
+    public void setDataByObservable(Observable<ArrayList<String>> observable) {
         observable.subscribe(data -> {
             mAdapter.setData(data);
         });

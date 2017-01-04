@@ -2,6 +2,7 @@ package com.jiepier.filemanager.task;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -9,6 +10,7 @@ import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.event.TypeEvent;
+import com.jiepier.filemanager.sqlite.SqlUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 import com.jiepier.filemanager.util.ZipUtils;
 
@@ -51,6 +53,7 @@ public final class ZipTask extends AsyncTask<String, Void, List<String>> {
 
         try {
             ZipUtils.createZip(files, zipname);
+            SqlUtil.insert(zipname);
         } catch (Exception e) {
             failed.add(Arrays.toString(files));
         }

@@ -42,20 +42,11 @@ public abstract class ActionModeActivity extends BaseActivity implements
 
     protected ActionMode mActionMode;
     protected ActionModePresenter mPresenter;
-    private ScannerReceiver mScannerReceiver;
 
     @Override
     public void initUiAndListener(){
         mPresenter = new ActionModePresenter(this);
         mPresenter.attachView(this);
-
-        mScannerReceiver = new ScannerReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        intentFilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
-        intentFilter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
-        intentFilter.addDataScheme("file");
-        registerReceiver(mScannerReceiver, intentFilter);
 
         init();
     }
@@ -187,19 +178,6 @@ public abstract class ActionModeActivity extends BaseActivity implements
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.detachView();
-        unregisterReceiver(mScannerReceiver);
     }
 
-    private class ScannerReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-
-            // handle intents related to external storage
-            if (action.equals(Intent.ACTION_MEDIA_SCANNER_FINISHED)) {
-                RxBus.getDefault().post(new TypeEvent(AppConstant.REFRESH));
-            }
-        }
-    }
 }

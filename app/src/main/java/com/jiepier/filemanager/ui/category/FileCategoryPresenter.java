@@ -27,10 +27,6 @@ public class FileCategoryPresenter extends BaseRxPresenter implements FileCatego
         super();
         this.mContext = context;
 
-        CategoryManager.init(context);
-        CategoryManager.getInstance()
-                .setSortMethod(SortUtil.SortMethod.SIZE);
-
         CategoryManager.getInstance().getApkListUsingObservable()
                 .subscribe(apkList -> {
                     mApkList = (ArrayList) apkList;

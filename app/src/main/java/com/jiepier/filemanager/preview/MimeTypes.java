@@ -3,6 +3,7 @@ package com.jiepier.filemanager.preview;
 import android.webkit.MimeTypeMap;
 
 
+import com.blankj.utilcode.utils.FileUtils;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.util.FileUtil;
 
@@ -343,4 +344,21 @@ public final class MimeTypes {
         return mime != null && mimeTypeMatch("video/*", mime);
     }
 
+    public static boolean isDoc(File f){
+        final String mime = getMimeType(f);
+        return mime != null && (mime.equals("text/plain")
+                ||mime.equals("application/pdf")
+                ||mime.equals("application/msword")
+                ||mime.equals("application/vnd.ms-excel"));
+    }
+
+    public static boolean isApk(File f){
+        String path = FileUtils.getFileName(f);
+        return path.endsWith(".apk");
+    }
+
+    public static boolean isZip(File f){
+        String path = FileUtils.getFileName(f);
+        return path.endsWith(".zip");
+    }
 }

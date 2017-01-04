@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.base.App;
@@ -52,13 +53,13 @@ public class CategoryBottomPresenter implements CategoryBottomContact.Presenter{
                     }else if (type == AppConstant.REFRESH){
                         switch (mIndex){
                             case AppConstant.DOC_INDEX:
-                                mView.setDataByObservable(mCategoryManager.getDocListUsingObservable());
+                                mView.setDataByObservable(mCategoryManager.getDocList());
                                 break;
                             case AppConstant.ZIP_INDEX:
-                                mView.setDataByObservable(mCategoryManager.getZipListUsingObservable());
+                                mView.setDataByObservable(mCategoryManager.getZipList());
                                 break;
                             case AppConstant.APK_INDEX:
-                                mView.setDataByObservable(mCategoryManager.getApkListUsingObservable());
+                                mView.setDataByObservable(mCategoryManager.getApkList());
                                 break;
                         }
                     }else if (type == AppConstant.CLEAN_CHOICE){
@@ -66,14 +67,7 @@ public class CategoryBottomPresenter implements CategoryBottomContact.Presenter{
                     }
                 }, Throwable::printStackTrace));
 
-        mCompositeSubscription.add(RxBus.getDefault()
-                .IoToUiObservable(BroadcastEvent.class)
-                //.map(BroadcastEvent::getPath)
-                .subscribe(filePath -> {
-                    Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    scanIntent.setData(Uri.fromFile(new File(Settings.getDefaultDir())));
-                    context.sendBroadcast(scanIntent);
-                }, Throwable::printStackTrace));
+
     }
 
     @Override
@@ -84,20 +78,20 @@ public class CategoryBottomPresenter implements CategoryBottomContact.Presenter{
 
         switch (index){
             case AppConstant.DOC_INDEX:
-                mCategoryManager.getDocListUsingObservable().subscribe(strings -> {
-                    mView.setData((ArrayList<String>) mCategoryManager.getDocList());
+                mCategoryManager.getDocList().subscribe(list -> {
+                    mView.setData(list);
                     mView.dimissDialog();
                 });
                 break;
             case AppConstant.ZIP_INDEX:
-                mCategoryManager.getZipListUsingObservable().subscribe(strings -> {
-                    mView.setData((ArrayList<String>) mCategoryManager.getZipList());
+                mCategoryManager.getZipList().subscribe(list -> {
+                    mView.setData(list);
                     mView.dimissDialog();
                 });
                 break;
             case AppConstant.APK_INDEX:
-                mCategoryManager.getApkListUsingObservable().subscribe(strings -> {
-                    mView.setData((ArrayList<String>) mCategoryManager.getApkList());
+                mCategoryManager.getApkList().subscribe(list -> {
+                    mView.setData(list);
                     mView.dimissDialog();
                 });
                 break;

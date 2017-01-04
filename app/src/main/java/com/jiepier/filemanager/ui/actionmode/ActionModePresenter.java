@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 import com.blankj.utilcode.utils.FileUtils;
@@ -17,6 +18,7 @@ import com.jiepier.filemanager.event.ActionChoiceFolderEvent;
 import com.jiepier.filemanager.event.ActionModeTitleEvent;
 import com.jiepier.filemanager.event.ActionMutipeChoiceEvent;
 import com.jiepier.filemanager.event.AllChoiceEvent;
+import com.jiepier.filemanager.event.CategoryTypeEvent;
 import com.jiepier.filemanager.event.ChangeThemeEvent;
 import com.jiepier.filemanager.event.ChoiceFolderEvent;
 import com.jiepier.filemanager.event.CleanActionModeEvent;
@@ -24,6 +26,8 @@ import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.MutipeChoiceEvent;
 import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.event.TypeEvent;
+import com.jiepier.filemanager.manager.CategoryManager;
+import com.jiepier.filemanager.sqlite.DataManager;
 import com.jiepier.filemanager.task.PasteTaskExecutor;
 import com.jiepier.filemanager.util.ClipBoard;
 import com.jiepier.filemanager.util.FileUtil;
@@ -37,6 +41,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -48,6 +53,8 @@ public class ActionModePresenter implements ActionModeContact.Presenter {
 
     private ActionModeContact.View mView;
     private CompositeSubscription mCompositeSubscription;
+    private DataManager mDataManager;
+    private String mType;
     private String[] mFiles;
     private List<String> mList;
     private Context mContext;
@@ -59,6 +66,7 @@ public class ActionModePresenter implements ActionModeContact.Presenter {
 
         mContext = context;
         mCompositeSubscription = new CompositeSubscription();
+        mDataManager = DataManager.getInstance();
 
         mCompositeSubscription.add(RxBus.getDefault()
                 .IoToUiObservable(ActionMutipeChoiceEvent.class)
@@ -101,13 +109,13 @@ public class ActionModePresenter implements ActionModeContact.Presenter {
     @Override
     public void clickMove() {
         ClipBoard.cutMove(mFiles);
-        mView.showFolderDialog(AppConstant.PATH);
+        mView.showFolderDialog(AppConstant.MOVE);
     }
 
     @Override
     public void clickCopy() {
         ClipBoard.cutCopy(mFiles);
-        mView.showFolderDialog(AppConstant.PATH);
+        mView.showFolderDialog(AppConstant.COPY);
     }
 
     @Override
@@ -141,10 +149,16 @@ public class ActionModePresenter implements ActionModeContact.Presenter {
 
     @Override
     public void clickRename() {
+
+        String parentPath = FileUtils.getDirName(mFiles[0]);
+        if (parentPath.length()!=1)
+            parentPath = parentPath.substring(0,parentPath.length()-1);
+
         DialogFragment renameDialog = RenameDialog.instantiate(
-                FileUtils.getDirName(mFiles[0]),mList.get(0));
+                parentPath,mList.get(0));
         mView.showDialog(renameDialog);
         RxBus.getDefault().post(new TypeEvent(AppConstant.CLEAN_ACTIONMODE));
+
     }
 
     @Override
@@ -160,13 +174,14 @@ public class ActionModePresenter implements ActionModeContact.Presenter {
                     mFiles);
         }else if (tag.equals(UNZIP)){
             mView.startUnZipTask(new File(unZipPath),folder);
-        }else if (tag.equals(AppConstant.PATH)) {
+        }else if (tag.equals(AppConstant.MOVE)) {
+            mView.executePaste(folder.getAbsolutePath());
+        }else if (tag.equals(AppConstant.COPY)) {
             mView.executePaste(folder.getAbsolutePath());
         }
         mView.finishActionMode();
         RxBus.getDefault().post(new TypeEvent(AppConstant.CLEAN_ACTIONMODE));
         RxBus.getDefault().post(new TypeEvent(AppConstant.CLEAN_CHOICE));
-        RxBus.getDefault().post(new TypeEvent(AppConstant.REFRESH));
     }
 
     @Override
