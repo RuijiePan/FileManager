@@ -7,6 +7,8 @@ package com.jiepier.filemanager.util;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
+import com.jiepier.filemanager.R;
+
 /**
  * Created by prj on 2016/8/17.
  */
@@ -28,7 +30,7 @@ public class SnackbarUtil {
         // Snackbar中有一个可点击的文字，这里设置点击所触发的操作
         // 若监听不为空则执行监听的内容。
         if(listener != null){
-            mSnackbar.setAction("确定", new View.OnClickListener() {
+            mSnackbar.setAction(R.string.certain, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.onClick(v);

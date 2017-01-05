@@ -10,11 +10,13 @@ import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.MutipeChoiceEvent;
 import com.jiepier.filemanager.event.NewTabEvent;
 import com.jiepier.filemanager.event.RefreshEvent;
+import com.jiepier.filemanager.event.SnackBarEvent;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 
 import java.io.File;
 
+import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -55,6 +57,12 @@ public class CommonPresenter implements CommonContact.Presenter {
                         mView.allChoiceClick();
                     }
                 }, Throwable::printStackTrace));
+
+        mCompositeSubscription.add(RxBus.getDefault()
+                .IoToUiObservable(SnackBarEvent.class)
+                .subscribe(snackBarEvent -> {
+                    mView.showSnackBar(snackBarEvent.getContent());
+                }));
     }
 
     @Override

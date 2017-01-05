@@ -15,6 +15,8 @@ public interface CommonContact {
 
         void clearSelect();
 
+        void showSnackBar(String content);
+
         void refreshAdapter();
 
         void allChoiceClick();

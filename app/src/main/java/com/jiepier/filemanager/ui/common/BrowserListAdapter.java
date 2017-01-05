@@ -1,11 +1,8 @@
 package com.jiepier.filemanager.ui.common;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseAdapter;
@@ -13,7 +10,7 @@ import com.jiepier.filemanager.base.BaseViewHolder;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.SortUtils;
-import com.jiepier.filemanager.widget.IconPreview;
+import com.jiepier.filemanager.preview.IconPreview;
 
 import java.io.File;
 import java.text.DateFormat;

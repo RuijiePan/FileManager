@@ -20,6 +20,7 @@ import com.jiepier.filemanager.event.CleanActionModeEvent;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.MutipeChoiceEvent;
 import com.jiepier.filemanager.event.RefreshEvent;
+import com.jiepier.filemanager.event.SnackBarEvent;
 import com.jiepier.filemanager.task.PasteTaskExecutor;
 import com.jiepier.filemanager.task.UnzipTask;
 import com.jiepier.filemanager.task.ZipTask;
@@ -37,6 +38,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -102,6 +104,7 @@ public class MainPresenter implements MainContact.Presenter {
                     final String mSelected = context.getString(R.string._selected);
                     mView.setActionModeTitle(event.getCount()+mSelected);
                 },Throwable::printStackTrace));
+
     }
 
     @Override

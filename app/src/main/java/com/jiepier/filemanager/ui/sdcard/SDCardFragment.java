@@ -2,6 +2,7 @@ package com.jiepier.filemanager.ui.sdcard;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -12,6 +13,7 @@ import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseFragment;
 import com.jiepier.filemanager.base.BaseFragmentPagerAdapter;
 import com.jiepier.filemanager.event.NewTabEvent;
+import com.jiepier.filemanager.event.SnackBarEvent;
 import com.jiepier.filemanager.ui.common.CommonFragment;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
@@ -128,7 +130,7 @@ public class SDCardFragment extends BaseFragment {
             viewpager.setCurrentItem(mAdapter.getCount() - 1);
             return true;
         }else {
-            SnackbarUtil.show(viewpager, "确定退出吗？", 1, view -> getActivity().finish());
+            RxBus.getDefault().post(new SnackBarEvent(getString(R.string.sure_to_exit)));
         }
         return false;
     }

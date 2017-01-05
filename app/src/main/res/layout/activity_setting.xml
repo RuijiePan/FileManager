@@ -8,9 +8,15 @@
 
     <include layout="@layout/include_toolbar"/>
 
-    <FrameLayout
-        android:id="@+id/content"
-        android:padding="@dimen/activity_vertical_margin"
+    <io.codetail.widget.RevealLinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/content"
+            android:padding="@dimen/activity_vertical_margin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </io.codetail.widget.RevealLinearLayout>
+
 </LinearLayout>

@@ -9,7 +9,7 @@ import com.jiepier.filemanager.base.BaseAdapter;
 import com.jiepier.filemanager.base.BaseViewHolder;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.Settings;
-import com.jiepier.filemanager.widget.IconPreview;
+import com.jiepier.filemanager.preview.IconPreview;
 
 import java.io.File;
 import java.text.DateFormat;

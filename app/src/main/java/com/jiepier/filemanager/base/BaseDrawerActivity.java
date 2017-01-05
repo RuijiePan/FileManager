@@ -20,10 +20,9 @@ import com.jiepier.filemanager.ui.setting.SettingActivity;
 import com.jiepier.filemanager.ui.system.SystemFragment;
 import com.jiepier.filemanager.util.ResourceUtil;
 import com.jiepier.filemanager.util.SettingPrefUtil;
-import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.StatusBarUtil;
 import com.jiepier.filemanager.widget.ColorsDialog;
-import com.jiepier.filemanager.widget.IconPreview;
+import com.jiepier.filemanager.preview.IconPreview;
 
 import butterknife.BindView;
 
@@ -156,10 +155,12 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
                 case R.id.menu_setting:
                     Intent intent = new Intent(this, SettingActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(0,0);
                     break;
                 case R.id.menu_about:
                     intent = new Intent(this, AboutActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(0,0);
                     break;
                 case R.id.menu_theme:
                     ColorsDialog.launch(this).show(fm_v4,TAG_DIALOG);

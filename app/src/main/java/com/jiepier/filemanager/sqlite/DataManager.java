@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +67,15 @@ public class DataManager implements CRUD{
     }
 
     @Override
+    public Observable<Boolean> insertSQLUsingObservable(String type, String path) {
+
+        return Observable.create((Observable.OnSubscribe<Boolean>) subscriber -> {
+            subscriber.onNext(insertSQL(type,path));
+            subscriber.onCompleted();
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
     public boolean updateSQL(String type, List<String> list) {
 
         mDb = getSQLite(type);
@@ -80,10 +88,28 @@ public class DataManager implements CRUD{
     }
 
     @Override
+    public Observable<Boolean> updateSQLUsingObservable(String type, List<String> list) {
+
+        return Observable.create((Observable.OnSubscribe<Boolean>) subscriber -> {
+            subscriber.onNext(updateSQL(type,list));
+            subscriber.onCompleted();
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
     public boolean deleteSQL(String type, String path) {
 
         mDb = getSQLite(type);
         return mDb.delete(type,"path=?",new String[]{path}) > 0;
+    }
+
+    @Override
+    public Observable<Boolean> deleteSQLUsingObservable(String type, String path) {
+
+        return Observable.create((Observable.OnSubscribe<Boolean>) subscriber -> {
+            subscriber.onNext(deleteSQL(type,path));
+            subscriber.onCompleted();
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
@@ -94,6 +120,15 @@ public class DataManager implements CRUD{
         newValues.put("path",path);
 
         return mDb.update(type,newValues,"path=?",new String[]{orignalPath}) > 0;
+    }
+
+    @Override
+    public Observable<Boolean> updateSQLUsingObservable(String type,String orignalPath, String path) {
+
+        return Observable.create((Observable.OnSubscribe<Boolean>) subscriber -> {
+            subscriber.onNext(updateSQL(type,orignalPath,path));
+            subscriber.onCompleted();
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
@@ -118,6 +153,7 @@ public class DataManager implements CRUD{
             @Override
             public void call(Subscriber<? super ArrayList<String>> subscriber) {
                 mDb = getSQLite(type);
+
                 Cursor cursor = mDb.rawQuery("select path from "+type,null);
 
                 ArrayList<String> list = new ArrayList<>();

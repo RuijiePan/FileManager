@@ -1,34 +1,35 @@
 package com.jiepier.filemanager.ui.setting;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.widget.FrameLayout;
 
 import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseActivity;
 import com.jiepier.filemanager.event.ChangeDefaultDirEvent;
-import com.jiepier.filemanager.event.ChangeThemeEvent;
 import com.jiepier.filemanager.event.NewDirEvent;
+import com.jiepier.filemanager.util.AnimationUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 import com.jiepier.filemanager.util.Settings;
 
 import java.io.File;
 
 import butterknife.BindView;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import butterknife.ButterKnife;
+import io.codetail.widget.RevealLinearLayout;
 
 /**
  * Created by JiePier on 16/12/14.
  */
 
-public class SettingActivity extends BaseActivity implements FolderChooserDialog.FolderCallback{
+public class SettingActivity extends BaseActivity implements FolderChooserDialog.FolderCallback {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.content)
+    FrameLayout content;
 
     @Override
     public int initContentView() {
@@ -49,7 +50,9 @@ public class SettingActivity extends BaseActivity implements FolderChooserDialog
     public void initUiAndListener() {
         getFragmentManager().beginTransaction().replace(R.id.content, new SettingFragment()).commit();
 
-        RxBus.getDefault().add(this,RxBus.getDefault()
+        AnimationUtil.showCircularReveal(content, 0, 0, 2, 1500);
+
+        RxBus.getDefault().add(this, RxBus.getDefault()
                 .IoToUiObservable(ChangeDefaultDirEvent.class)
                 .map(ChangeDefaultDirEvent::getType)
                 .subscribe(type -> {
@@ -78,8 +81,14 @@ public class SettingActivity extends BaseActivity implements FolderChooserDialog
     public void onFolderSelection(@NonNull FolderChooserDialog dialog, @NonNull File folder) {
 
         String type = dialog.getTag();
-        RxBus.getDefault().post(new NewDirEvent(type,folder.getAbsolutePath()));
+        RxBus.getDefault().post(new NewDirEvent(type, folder.getAbsolutePath()));
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }
 

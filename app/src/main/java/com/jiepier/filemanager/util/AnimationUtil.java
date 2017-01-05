@@ -11,6 +11,7 @@ import io.codetail.animation.ViewAnimationUtils;
 /**
  * Created by prj on 2016/8/26.
  * CircularReveal动画效果，类似水波纹扩散
+ * 兼容4.0以上
  */
 
 public class AnimationUtil {

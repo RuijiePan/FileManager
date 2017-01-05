@@ -1,4 +1,4 @@
-package com.jiepier.filemanager.widget;
+package com.jiepier.filemanager.preview;
 
 import android.app.Activity;
 import android.content.Context;

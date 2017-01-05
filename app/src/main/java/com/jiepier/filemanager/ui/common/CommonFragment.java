@@ -3,23 +3,22 @@ package com.jiepier.filemanager.ui.common;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseAdapter;
 import com.jiepier.filemanager.base.BaseFragment;
 import com.jiepier.filemanager.event.ActionModeTitleEvent;
-import com.jiepier.filemanager.event.AllChoiceEvent;
 import com.jiepier.filemanager.event.CleanActionModeEvent;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.MutipeChoiceEvent;
-import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.SnackbarUtil;
@@ -30,13 +29,14 @@ import com.jiepier.filemanager.widget.CreateFolderDialog;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
  * Created by JiePier on 16/12/13.
  */
 
-public class CommonFragment extends BaseFragment implements CommonContact.View{
+public class CommonFragment extends BaseFragment implements CommonContact.View {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -48,15 +48,17 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
     FloatingActionMenu floatingMenu;
     @BindView(R.id.fab_scoll_top)
     FloatingActionButton fabScollTop;
+    @BindView(R.id.coordinatorLayout)
+    CoordinatorLayout coordinatorLayout;
     public static final String DIALOGTAG = "dialog_tag";
     private CommonPresenter mPresenter;
     private BrowserListAdapter mAdapter;
     private String path;
 
-    public static CommonFragment newInstance(String path){
+    public static CommonFragment newInstance(String path) {
         CommonFragment instance = new CommonFragment();
         Bundle args = new Bundle();
-        args.putString("path",path);
+        args.putString("path", path);
         instance.setArguments(args);
         return instance;
     }
@@ -93,7 +95,7 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
         mAdapter.setItemClickListner(new BaseAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                mPresenter.onItemClick(mAdapter.getData(position),path);
+                mPresenter.onItemClick(mAdapter.getData(position), path);
             }
 
             @Override
@@ -108,11 +110,11 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
 
             @Override
             public void onMultipeChoiceCancel() {
-                ToastUtil.showToast(getContext(),"退出多选模式");
+                ToastUtil.showToast(getContext(), "退出多选模式");
             }
         });
 
-        mPresenter = new CommonPresenter(getContext(),path);
+        mPresenter = new CommonPresenter(getContext(), path);
         mPresenter.attachView(this);
     }
 
@@ -126,12 +128,12 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
             case R.id.fab_create_file:
                 floatingMenu.close(true);
                 DialogFragment fileDialog = CreateFileDialog.create(path);
-                fileDialog.show(getActivity().getFragmentManager(),DIALOGTAG);
+                fileDialog.show(getActivity().getFragmentManager(), DIALOGTAG);
                 break;
             case R.id.fab_create_floder:
                 floatingMenu.close(true);
                 DialogFragment folderDialog = CreateFolderDialog.create(path);
-                folderDialog.show(getActivity().getFragmentManager(),DIALOGTAG);
+                folderDialog.show(getActivity().getFragmentManager(), DIALOGTAG);
                 break;
         }
     }
@@ -147,16 +149,21 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
     }
 
     @Override
+    public void showSnackBar(String content) {
+        SnackbarUtil.show(coordinatorLayout,content,0,view -> getActivity().finish());
+    }
+
+    @Override
     public void refreshAdapter() {
         mAdapter.refresh();
     }
 
     @Override
     public void allChoiceClick() {
-        if (mAdapter.getSelectedItemCount() == mAdapter.getItemCount()){
+        if (mAdapter.getSelectedItemCount() == mAdapter.getItemCount()) {
             mAdapter.clearSelections();
             RxBus.getDefault().post(new ActionModeTitleEvent(0));
-        }else {
+        } else {
             mAdapter.setAllSelections();
         }
     }
@@ -175,4 +182,5 @@ public class CommonFragment extends BaseFragment implements CommonContact.View{
         super.onDestroy();
         mPresenter.detachView();
     }
+
 }

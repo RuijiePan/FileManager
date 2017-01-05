@@ -10,11 +10,10 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.provider.DocumentFile;
 import android.widget.Toast;
 
-import com.blankj.utilcode.utils.FileUtils;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.preview.MimeTypes;
 import com.jiepier.filemanager.ui.main.MainActivity;
-import com.jiepier.filemanager.widget.IconPreview;
+import com.jiepier.filemanager.preview.IconPreview;
 
 import java.io.File;
 import java.io.FileInputStream;

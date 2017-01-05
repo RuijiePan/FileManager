@@ -36,6 +36,8 @@
     <string name="enter_name">Enter name</string>
     <string name="error">Error</string>
     <string name="exit">Exit</string>
+    <string name="certain">Certain</string>
+    <string name="sure_to_exit">Are you sure to exit?</string>
     <string name="extractto">Extract to</string>
     <string name="extractionsuccess">Package successfully extracted.</string>
     <string name="filecreated">File was created.</string>
