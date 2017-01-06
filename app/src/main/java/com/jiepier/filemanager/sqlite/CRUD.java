@@ -32,5 +32,7 @@ public interface CRUD {
 
     SQLiteDatabase getSQLite(String type);
 
-    Observable<ArrayList<String>> select(String type);
+    ArrayList<String> select(String type);
+
+    Observable<ArrayList<String>> selectUsingObservable(String type);
 }

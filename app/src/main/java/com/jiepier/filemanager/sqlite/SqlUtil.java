@@ -7,6 +7,9 @@ import com.jiepier.filemanager.sqlite.DataManager;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 
 import java.io.File;
+import java.util.ArrayList;
+
+import rx.Observable;
 
 /**
  * Created by panruijie on 17/1/4.
@@ -19,21 +22,26 @@ public class SqlUtil {
 
         String type = getType(path);
         if (type != null)
-            DataManager.getInstance().insertSQL(type,path);
+            DataManager.getInstance().insertSQLUsingObservable(type,path);
     }
 
     public static void update(String orignalPath,String path){
 
         String type = getType(path);
         if (type != null)
-            DataManager.getInstance().updateSQL(type,orignalPath,path);
+            DataManager.getInstance().updateSQLUsingObservable(type,orignalPath,path);
     }
 
     public static void delete(String path){
 
         String type = getType(path);
         if (type != null)
-            DataManager.getInstance().deleteSQL(type,path);
+            DataManager.getInstance().deleteSQLUsingObservable(type,path);
+    }
+
+    public static Observable<ArrayList<String>> select(String type){
+
+        return DataManager.getInstance().selectUsingObservable(type);
     }
 
     private static String getType(String path){

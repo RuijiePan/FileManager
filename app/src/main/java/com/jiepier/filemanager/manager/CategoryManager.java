@@ -1,19 +1,16 @@
 package com.jiepier.filemanager.manager;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.blankj.utilcode.utils.AppUtils;
-import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.sqlite.DataManager;
 import com.jiepier.filemanager.util.SortUtil;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
-import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by panruijie on 16/12/29.
@@ -69,16 +66,18 @@ public class CategoryManager {
         return this;
     }
 
+    //从数据库找
     public Observable<ArrayList<String>> getApkList(){
-        return mDataManager.select(DataManager.APK);
+        return mDataManager.selectUsingObservable(DataManager.APK);
     }
 
+    //从ContentProvicer找
     public Observable<List<String>> getApkListUsingObservable(){
         return mApkManager.getApkListUsingObservable(mSortMethod);
     }
 
     public Observable<ArrayList<String>> getDocList(){
-        return mDataManager.select(DataManager.DOC);
+        return mDataManager.selectUsingObservable(DataManager.DOC);
     }
 
     public Observable<List<String>> getDocListUsingObservable(){
@@ -86,7 +85,7 @@ public class CategoryManager {
     }
 
     public Observable<ArrayList<String>> getZipList(){
-        return mDataManager.select(DataManager.ZIP);
+        return mDataManager.selectUsingObservable(DataManager.ZIP);
     }
 
     public Observable<List<String>> getZipListUsingObservable(){
@@ -95,17 +94,21 @@ public class CategoryManager {
 
     public void update(){
 
+        //此处不应该在主线程执行数据库操作
         getDocListUsingObservable()
+                .observeOn(Schedulers.io())
                 .subscribe(list -> {
                     mDataManager.updateSQL(DataManager.DOC,list);
                 });
 
         getZipListUsingObservable()
+                .observeOn(Schedulers.io())
                 .subscribe(list -> {
                     mDataManager.updateSQL(DataManager.ZIP,list);
                 });
 
         getApkListUsingObservable()
+                .observeOn(Schedulers.io())
                 .subscribe(list -> {
                     mDataManager.updateSQL(DataManager.APK,list);
                 });

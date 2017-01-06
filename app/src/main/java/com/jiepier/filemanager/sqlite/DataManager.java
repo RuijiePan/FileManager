@@ -146,28 +146,33 @@ public class DataManager implements CRUD{
     }
 
     @Override
-    public Observable<ArrayList<String>> select(String type) {
+    public Observable<ArrayList<String>> selectUsingObservable(String type) {
 
         return Observable.create(new Observable.OnSubscribe<ArrayList<String>>(){
 
             @Override
             public void call(Subscriber<? super ArrayList<String>> subscriber) {
-                mDb = getSQLite(type);
-
-                Cursor cursor = mDb.rawQuery("select path from "+type,null);
-
-                ArrayList<String> list = new ArrayList<>();
-                if (cursor.moveToFirst()){
-                    do {
-                        String path = cursor.getString(cursor.getColumnIndex("path"));
-                        list.add(path);
-                    }while (cursor.moveToNext());
-                }
-
-                cursor.close();
-                subscriber.onNext(list);
+                subscriber.onNext(select(type));
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public ArrayList<String> select(String type) {
+
+        mDb = getSQLite(type);
+        Cursor cursor = mDb.rawQuery("select path from "+type,null);
+
+        ArrayList<String> list = new ArrayList<>();
+        if (cursor.moveToFirst()){
+            do {
+                String path = cursor.getString(cursor.getColumnIndex("path"));
+                list.add(path);
+            }while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return list;
     }
 }

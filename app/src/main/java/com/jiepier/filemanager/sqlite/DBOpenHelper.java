@@ -19,7 +19,6 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     private static final String DROP_DOC_SQL = "drop table if exists doc";
     private static final String DROP_ZIP_SQL = "drop table if exists zip";
     private static final String DROP_APK_SQL = "drop table if exists apk";
-    //final static String ADD_SQL = "alter table  student  add phone varchar null" ;
 
     public DBOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);

@@ -111,9 +111,8 @@ public class DocManager {
 
     private String getDocSelection() {
         StringBuilder selection = new StringBuilder();
-        Iterator<String> iter = mDocMimeTypesSet.iterator();
-        while(iter.hasNext()) {
-            selection.append("(" + MediaStore.Files.FileColumns.MIME_TYPE + "=='" + iter.next() + "') OR ");
+        for (String aMDocMimeTypesSet : mDocMimeTypesSet) {
+            selection.append("(" + MediaStore.Files.FileColumns.MIME_TYPE + "=='" + aMDocMimeTypesSet + "') OR ");
         }
         return  selection.substring(0, selection.lastIndexOf(")") + 1);
     }
