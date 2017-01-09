@@ -126,6 +126,8 @@
     <string name="video">Video</string>
     <string name="picture">Picture</string>
     <string name="document">Document</string>
+    <string name="memory">Memory</string>
+    <string name="storage">Storage</string>
     <!--<string name="zip">Zip</string>-->
     <string name="apk">APK</string>
     <string name="apk_manager">Apk Manager</string>

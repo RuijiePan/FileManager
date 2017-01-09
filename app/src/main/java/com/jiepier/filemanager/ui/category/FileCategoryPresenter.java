@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.jiepier.filemanager.Constant.AppConstant;
+import com.jiepier.filemanager.base.App;
 import com.jiepier.filemanager.base.BaseRxPresenter;
 import com.jiepier.filemanager.manager.CategoryManager;
 import com.jiepier.filemanager.ui.category.categorybottom.CategoryBottomActivity;
+import com.jiepier.filemanager.ui.category.memory.MemoryActivity;
 import com.jiepier.filemanager.util.SortUtil;
 
 import java.util.ArrayList;
@@ -45,7 +47,8 @@ public class FileCategoryPresenter extends BaseRxPresenter implements FileCatego
 
     @Override
     public void clickMemoryProgressbar() {
-
+        Intent intent = new Intent(mContext, MemoryActivity.class);
+        mContext.startActivity(intent);
     }
 
     @Override

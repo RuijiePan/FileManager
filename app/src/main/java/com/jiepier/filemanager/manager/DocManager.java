@@ -77,16 +77,21 @@ public class DocManager {
 
         mDocList.clear();
         if (cursor != null){
-            cursor.moveToFirst();
 
-            mDocList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
-            while (cursor.moveToNext()){
+            try {
+                cursor.moveToFirst();
+
                 mDocList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
+                while (cursor.moveToNext()) {
+                    mDocList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
+                }
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }finally {
+                cursor.close();
             }
         }
-
-        if (cursor != null)
-            cursor.close();
 
         return mDocList;
     }

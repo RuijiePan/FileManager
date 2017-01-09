@@ -66,16 +66,21 @@ public class ZipManager {
 
         mZipList.clear();
         if (cursor != null){
-            cursor.moveToFirst();
 
-            mZipList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
-            while (cursor.moveToNext()){
+            try {
+                cursor.moveToFirst();
+
                 mZipList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
+                while (cursor.moveToNext()) {
+                    mZipList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
+                }
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }finally {
+                cursor.close();
             }
         }
-
-        if (cursor != null)
-            cursor.close();
 
         return mZipList;
     }

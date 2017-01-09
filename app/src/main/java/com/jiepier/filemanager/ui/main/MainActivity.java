@@ -1,6 +1,7 @@
 package com.jiepier.filemanager.ui.main;
 
 import android.app.DialogFragment;
+import android.app.usage.UsageStatsManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
+import com.blankj.utilcode.utils.ProcessUtils;
+import com.jaredrummler.android.processes.AndroidProcesses;
+import com.jaredrummler.android.processes.models.AndroidAppProcess;
 import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.App;

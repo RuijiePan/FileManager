@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="@dimen/item_height"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentTop="true"
+    android:clickable="true"
+    android:background="@drawable/item_click_bg"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/left_image"
+        android:layout_width="@dimen/item_height"
+        android:layout_height="@dimen/item_height"
+        android:contentDescription="@null"
+        android:cropToPadding="true"
+        android:padding="@dimen/item_icon_padding"
+        android:scaleType="centerCrop"
+        android:src="@drawable/type_unknown" />
+
+    <LinearLayout
+        android:id="@+id/detail_content"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/item_default_padding"
+        android:paddingTop="@dimen/item_default_padding">
+
+        <TextView
+            android:id="@+id/center_textview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:textAllCaps="false"
+            android:textColor="?android:textColorPrimary"
+            android:fontFamily="sans-serif-light"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/right_checkbox"
+        android:checked="false"
+        android:paddingRight="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

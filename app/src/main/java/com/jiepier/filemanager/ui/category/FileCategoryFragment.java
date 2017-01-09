@@ -18,7 +18,6 @@ import butterknife.OnClick;
 public class FileCategoryFragment extends BaseLazyFragment implements FileCategoryContact.View{
 
     private FileCategoryPresenter mPresenter;
-    private String TAG = getClass().getSimpleName();
     @BindView(R.id.memoryProgressbar)
     PowerProgressBar memoryProgressbar;
     @BindView(R.id.storageProgressbar)

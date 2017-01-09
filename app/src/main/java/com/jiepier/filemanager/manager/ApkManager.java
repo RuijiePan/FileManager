@@ -67,16 +67,21 @@ public class ApkManager {
 
         mApkList.clear();
         if (cursor != null){
-            cursor.moveToFirst();
 
-            mApkList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
-            while (cursor.moveToNext()){
+            try {
+                cursor.moveToFirst();
+
                 mApkList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
+                while (cursor.moveToNext()){
+                    mApkList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }finally {
+                cursor.close();
             }
-        }
 
-        if (cursor != null)
-            cursor.close();
+        }
 
         return mApkList;
     }

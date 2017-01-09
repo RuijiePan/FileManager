@@ -1,13 +1,16 @@
 package com.jiepier.filemanager.manager;
 
+import android.app.ActivityManager;
 import android.content.Context;
 
 import com.blankj.utilcode.utils.AppUtils;
+import com.jiepier.filemanager.bean.AppProcessInfo;
 import com.jiepier.filemanager.sqlite.DataManager;
 import com.jiepier.filemanager.util.SortUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import rx.Observable;
 import rx.schedulers.Schedulers;
@@ -25,6 +28,7 @@ public class CategoryManager {
     private ApkManager mApkManager;
     private DocManager mDocManager;
     private ZipManager mZipManager;
+    private ProcessManager mProcessManager;
     private DataManager mDataManager;
     private SortUtil.SortMethod mSortMethod = SortUtil.SortMethod.DATE;
 
@@ -33,13 +37,14 @@ public class CategoryManager {
         ApkManager.init(context);
         DocManager.init(context);
         ZipManager.init(context);
+        ProcessManager.init(context);
         DataManager.init(context, AppUtils.getAppVersionCode(context));
 
         mApkManager = ApkManager.getInstance();
         mDocManager = DocManager.getInstance();
         mZipManager = ZipManager.getInstance();
+        mProcessManager = ProcessManager.getInstance();
         mDataManager = DataManager.getInstance();
-
     }
 
     public static void init(Context context){
@@ -90,6 +95,22 @@ public class CategoryManager {
 
     public Observable<List<String>> getZipListUsingObservable(){
         return mZipManager.getZipListUsingObservable(mSortMethod);
+    }
+
+    public Observable<List<AppProcessInfo>> getRunningAppList(){
+        return mProcessManager.getRunningAppListUsingObservable();
+    }
+
+    public Observable<Long> killAllRunningAppUsingObservable(){
+        return mProcessManager.killAllRunningAppUsingObservable();
+    }
+
+    public Observable<Long> killRunningAppUsingObservable(Set<String> packageNameSet){
+        return mProcessManager.killRunningAppUsingObservable(packageNameSet);
+    }
+
+    public Observable<Long> killRunningAppUsingObservable(String packageName){
+        return mProcessManager.killRunningAppUsingObservable(packageName);
     }
 
     public void update(){

@@ -3,10 +3,12 @@ package com.jiepier.filemanager.base;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -56,6 +58,12 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+    public BaseViewHolder setImageDrawable(int viewId, Drawable drawable){
+        ImageView imageView = getView(viewId);
+        imageView.setImageDrawable(drawable);
+        return this;
+    }
+
     public BaseViewHolder setImageResource(int viewId, int resourceId){
         ImageView imageView = getView(viewId);
         imageView.setImageResource(resourceId);
@@ -93,6 +101,12 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         }else {
             view.setVisibility(View.INVISIBLE);
         }
+        return this;
+    }
+
+    public BaseViewHolder setChceked(int viewId, boolean checked) {
+        View view = getView(viewId);
+        ((CheckBox)view).setChecked(checked);
         return this;
     }
 

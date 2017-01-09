@@ -9,19 +9,13 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.blankj.utilcode.utils.AppUtils;
+import com.blankj.utilcode.utils.Utils;
 import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.manager.CategoryManager;
 import com.jiepier.filemanager.manager.DocManager;
 import com.jiepier.filemanager.sqlite.DataManager;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.SharedUtil;
-import com.jiepier.filemanager.util.SortUtil;
-import com.tbruyelle.rxpermissions.RxPermissions;
-
-import java.io.IOException;
-import java.util.List;
-
-import rx.functions.Action1;
 
 /**
  * Created by JiePier on 16/12/19.
@@ -37,6 +31,7 @@ public class App extends Application {
 
         sContext = this;
 
+        Utils.init(this);
         CategoryManager.init(this);
         Settings.updatePreferences(this);
 
