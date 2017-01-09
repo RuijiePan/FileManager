@@ -3,6 +3,7 @@ package com.jiepier.filemanager.ui.category;
 import android.os.Bundle;
 import android.view.View;
 
+import com.blankj.utilcode.utils.AppUtils;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseLazyFragment;
 import com.jiepier.filemanager.widget.PowerProgressBar;
@@ -43,6 +44,8 @@ public class FileCategoryFragment extends BaseLazyFragment implements FileCatego
     @Override
     protected void initViews(View self, Bundle savedInstanceState) {
 
+        mPresenter = new FileCategoryPresenter(getContext());
+        mPresenter.attachView(this);
     }
 
     @Override
@@ -53,8 +56,6 @@ public class FileCategoryFragment extends BaseLazyFragment implements FileCatego
     @Override
     protected void initData() {
 
-        mPresenter = new FileCategoryPresenter(getContext());
-        mPresenter.attachView(this);
     }
 
     @Override

@@ -34,7 +34,7 @@ public class MemoryFragment extends BaseFragment implements MemoryContact.View {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_category_item;
+        return R.layout.fragment_memory;
     }
 
     @Override
