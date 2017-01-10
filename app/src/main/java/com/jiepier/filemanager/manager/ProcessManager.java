@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
+import com.blankj.utilcode.utils.AppUtils;
 import com.jaredrummler.android.processes.AndroidProcesses;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.bean.AppProcessInfo;
@@ -69,43 +70,45 @@ public class ProcessManager {
 
         for (ActivityManager.RunningAppProcessInfo info:AndroidProcesses.getRunningAppProcessInfo(mContext)){
 
-            abAppProcessInfo = new AppProcessInfo(info.processName,info.pid,info.uid);
+            if (!info.processName.equals(AppUtils.getAppPackageName(mContext))) {
+                abAppProcessInfo = new AppProcessInfo(info.processName, info.pid, info.uid);
 
-            try {
-                appInfo = mPackageManager.getApplicationInfo(info.processName, 0);
-                if ((appInfo.flags&ApplicationInfo.FLAG_SYSTEM)!=0){
-                    abAppProcessInfo.setSystem(true);
-                }else {
-                    abAppProcessInfo.setSystem(false);
-                }
-                Drawable icon = appInfo.loadIcon(mPackageManager)==null?
-                        mContext.getResources().getDrawable(R.mipmap.ic_launcher)
-                        :appInfo.loadIcon(mPackageManager);
-                String name = appInfo.loadLabel(mPackageManager).toString();
-                abAppProcessInfo.setIcon(icon);
-                abAppProcessInfo.setAppName(name);
+                try {
+                    appInfo = mPackageManager.getApplicationInfo(info.processName, 0);
+                    if ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+                        abAppProcessInfo.setSystem(true);
+                    } else {
+                        abAppProcessInfo.setSystem(false);
+                    }
+                    Drawable icon = appInfo.loadIcon(mPackageManager) == null ?
+                            mContext.getResources().getDrawable(R.mipmap.ic_launcher)
+                            : appInfo.loadIcon(mPackageManager);
+                    String name = appInfo.loadLabel(mPackageManager).toString();
+                    abAppProcessInfo.setIcon(icon);
+                    abAppProcessInfo.setAppName(name);
 
-            } catch (PackageManager.NameNotFoundException e) {
+                } catch (PackageManager.NameNotFoundException e) {
 
                 /*名字没找到，可能是应用的服务*/
-                if (info.processName.contains(":")){
-                    appInfo = getApplicationInfo(info.processName.split(":")[0]);
-                    if (appInfo!=null){
-                        Drawable icon = appInfo.loadIcon(mPackageManager);
-                        abAppProcessInfo.setIcon(icon);
-                    }else {
-                        abAppProcessInfo.setIcon(mContext.getResources().getDrawable(R.mipmap.ic_launcher));
+                    if (info.processName.contains(":")) {
+                        appInfo = getApplicationInfo(info.processName.split(":")[0]);
+                        if (appInfo != null) {
+                            Drawable icon = appInfo.loadIcon(mPackageManager);
+                            abAppProcessInfo.setIcon(icon);
+                        } else {
+                            abAppProcessInfo.setIcon(mContext.getResources().getDrawable(R.mipmap.ic_launcher));
+                        }
                     }
+                    abAppProcessInfo.setSystem(true);
+                    abAppProcessInfo.setAppName(info.processName);
                 }
-                abAppProcessInfo.setSystem(true);
-                abAppProcessInfo.setAppName(info.processName);
+
+                long memsize = mActivityManager.getProcessMemoryInfo(new int[]{info.pid})[0].getTotalPrivateDirty() * 1024;
+                abAppProcessInfo.setMemory(memsize);
+
+                if (!abAppProcessInfo.isSystem())
+                    tempList.add(abAppProcessInfo);
             }
-
-            long memsize = mActivityManager.getProcessMemoryInfo(new int[]{info.pid})[0].getTotalPrivateDirty() * 1024;
-            abAppProcessInfo.setMemory(memsize);
-
-            if (!abAppProcessInfo.isSystem())
-                tempList.add(abAppProcessInfo);
 
         }
 

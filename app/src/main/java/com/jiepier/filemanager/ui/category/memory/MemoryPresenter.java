@@ -3,6 +3,7 @@ package com.jiepier.filemanager.ui.category.memory;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.bean.AppProcessInfo;
 import com.jiepier.filemanager.manager.CategoryManager;
 
@@ -20,12 +21,14 @@ import rx.subscriptions.CompositeSubscription;
 public class MemoryPresenter implements MemoryContact.Presenter {
 
     private Context mContext;
+    private boolean mScanFinish;
     private CategoryManager mCategoryManager;
     private MemoryContact.View mView;
     private CompositeSubscription mCompositeSubscription;
 
     public MemoryPresenter(Context context){
         mContext = context;
+        mScanFinish = false;
         mCategoryManager = CategoryManager.getInstance();
         mCompositeSubscription = new CompositeSubscription();
     }
@@ -38,20 +41,26 @@ public class MemoryPresenter implements MemoryContact.Presenter {
         mCategoryManager.getRunningAppList()
                 .subscribe(appProcessInfos -> {
                     mView.dimissLoadingView();
+                    mView.showBoomView();
                     mView.setData(appProcessInfos);
+                    mScanFinish = true;
                 }, Throwable::printStackTrace);
     }
 
     @Override
     public void killRunningAppInfo(Set<String> set) {
 
+        if (!mScanFinish)
+            return;
+
         mView.showLoadingView();
 
         mCategoryManager.killRunningAppUsingObservable(set)
             .subscribe(memory -> {
                 mView.dimissLoadingView();
-                mView.showMemoryClean(memory);
-            });
+                mView.showMemoryClean(mContext.getString(R.string.clean)+":"+memory/1024/102+" M");
+                mView.notifityItem();
+            }, Throwable::printStackTrace);
     }
 
     @Override

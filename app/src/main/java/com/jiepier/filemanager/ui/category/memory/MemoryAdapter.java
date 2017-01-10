@@ -1,8 +1,10 @@
 package com.jiepier.filemanager.ui.category.memory;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
@@ -18,6 +20,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+
 /**
  * Created by panruijie on 17/1/9.
  * Email : zquprj@gmail.com
@@ -31,12 +37,15 @@ public class MemoryAdapter extends BaseAdapter<AppProcessInfo,BaseViewHolder>{
 
     public MemoryAdapter() {
         super(R.layout.item_memory_list);
+        mCheckBoxArray = new SparseBooleanArray();
+        mChooseSet = new HashSet<>();
     }
 
     @Override
     protected void convert(BaseViewHolder holder, AppProcessInfo item) {
 
         int position = holder.getLayoutPosition();
+
         holder.setImageDrawable(R.id.left_image,item.getIcon())
                 .setText(R.id.center_textview,item.getAppName())
                 .setChceked(R.id.right_checkbox,mCheckBoxArray.get(position));
@@ -74,14 +83,39 @@ public class MemoryAdapter extends BaseAdapter<AppProcessInfo,BaseViewHolder>{
     @Override
     public void add(List<AppProcessInfo> data) {
         super.add(data);
-        mCheckBoxArray = new SparseBooleanArray();
-        mChooseSet = new HashSet<>();
 
         for (int i=0;i<data.size();i++){
             AppProcessInfo info = data.get(i);
             mCheckBoxArray.put(i,true);
             mChooseSet.add(info.getProcessName());
         }
+    }
+
+    public void notifityItem(){
+
+        if (mData.size()==0)
+            return;
+
+        for (int i = mData.size()-1 ;i >= 0 ; i --){
+
+            if (mCheckBoxArray.get(i)) {
+                mData.remove(i);
+                notifyItemRemoved(i);
+            }
+        }
+
+        for (int i = 0;i<mData.size();i++){
+            if (mCheckBoxArray.get(i)){
+                mCheckBoxArray.put(i,false);
+                mChooseSet.remove(mData.get(i).getProcessName());
+            }
+        }
+
+        notifyDataSetChanged();
+    }
+
+    public Set<String> getChooseSet() {
+        return mChooseSet;
     }
 
     public SparseBooleanArray getCheckedArray(){

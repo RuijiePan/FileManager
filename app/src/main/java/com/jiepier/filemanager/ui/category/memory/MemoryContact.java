@@ -20,7 +20,11 @@ public class MemoryContact {
 
         void dimissLoadingView();
 
-        void showMemoryClean(long memory);
+        void notifityItem();
+
+        void showBoomView();
+
+        void showMemoryClean(String content);
 
         void setData(List<AppProcessInfo> list);
     }

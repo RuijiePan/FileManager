@@ -1,10 +1,12 @@
 package com.jiepier.filemanager.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -39,7 +41,7 @@ public class CheckCircleView extends View {
     public CheckCircleView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initPaint();
-        initBitmap();
+        initBitmap(context,attrs);
     }
 
 
@@ -64,8 +66,17 @@ public class CheckCircleView extends View {
         mBitmapPaint.setStyle(Paint.Style.STROKE);
     }
 
-    private void initBitmap() {
-        mBitmap = BitmapUtil.getBitmapFromRes(getContext(),R.drawable.ic_check_white_24dp);
+    private void initBitmap(Context context,AttributeSet attrs) {
+
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ThemeColorIconView);
+        Drawable icon = ta.getDrawable(R.styleable.ThemeColorIconView_icon);
+        ta.recycle();
+
+        if (icon == null)
+            mBitmap = BitmapUtil.getBitmapFromRes(getContext(),R.drawable.ic_check_white_24dp);
+        else
+            mBitmap = BitmapUtil.getBitmapFromDrawable(icon);
+
         mBitmapWidth = mBitmap.getWidth();
         mBitmapHeight = mBitmap.getHeight();
         mMatrix = new Matrix();
