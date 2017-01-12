@@ -2,6 +2,8 @@ package com.jiepier.filemanager.sqlite;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import com.jiepier.filemanager.bean.Music;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,7 @@ import rx.Observable;
 
 public interface CRUD {
 
+    //apk、word、zip接口
     boolean insertSQL(String type,String path);
 
     Observable<Boolean> insertSQLUsingObservable(String type,String path);
@@ -35,4 +38,23 @@ public interface CRUD {
     ArrayList<String> select(String type);
 
     Observable<ArrayList<String>> selectUsingObservable(String type);
+
+    //music接口
+    boolean insertMusicSQL(Music music);
+
+    Observable<Boolean> insertMusicSQLUsingObservable(Music music);
+
+    boolean deleteMusic(String path);
+
+    Observable<Boolean> deleteMusicSQLUsingObservable(String path);
+
+    boolean updateMusic(Music music,String newPath);
+
+    boolean updateMusic(List<Music> list);
+
+    Observable<Boolean> updateMusicSQLUsingObservable(Music music,String newPath);
+
+    ArrayList<Music> selectMusic();
+
+    Observable<ArrayList<Music>> selectMusicSQLUsingObservable();
 }

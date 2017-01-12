@@ -4,13 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.FileProvider;
 import android.support.v4.provider.DocumentFile;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.jiepier.filemanager.R;
+import com.jiepier.filemanager.bean.Music;
 import com.jiepier.filemanager.preview.MimeTypes;
 import com.jiepier.filemanager.ui.main.MainActivity;
 import com.jiepier.filemanager.preview.IconPreview;
@@ -36,6 +39,7 @@ public class FileUtil {
     private static final BigInteger MB_BI = KB_BI.multiply(KB_BI);
     private static final BigInteger GB_BI = KB_BI.multiply(MB_BI);
     private static final BigInteger TB_BI = KB_BI.multiply(GB_BI);
+    private static final String UNKNOWN = "unknown";
 
     // TODO: fix search with root
     private static void search_file(String dir, String fileName, ArrayList<String> n) {
@@ -551,5 +555,41 @@ public class FileUtil {
             e.printStackTrace();
             Toast.makeText(main, main.getString(R.string.error), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public static Music fileToMusic(File file) {
+        if (file.length() == 0)
+            return null;
+
+        MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
+        metadataRetriever.setDataSource(file.getAbsolutePath());
+
+        final int duration;
+
+        String keyDuration = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        // ensure the duration is a digit, otherwise return null song
+        if (keyDuration == null || !keyDuration.matches("\\d+")) return null;
+        duration = Integer.parseInt(keyDuration);
+
+        final String title = extractMetadata(metadataRetriever, MediaMetadataRetriever.METADATA_KEY_TITLE, file.getName());
+        final String artist = extractMetadata(metadataRetriever, MediaMetadataRetriever.METADATA_KEY_ARTIST, UNKNOWN);
+        final String album = extractMetadata(metadataRetriever, MediaMetadataRetriever.METADATA_KEY_ALBUM, UNKNOWN);
+
+        final Music music = new Music();
+        music.setTitle(title);
+        music.setArtist(artist);
+        music.setUrl(file.getAbsolutePath());
+        music.setAlbum(album);
+        music.setDuration(duration);
+        music.setSize((int) file.length());
+        return music;
+    }
+
+    private static String extractMetadata(MediaMetadataRetriever retriever, int key, String defaultValue) {
+        String value = retriever.extractMetadata(key);
+        if (TextUtils.isEmpty(value)) {
+            value = defaultValue;
+        }
+        return value;
     }
 }

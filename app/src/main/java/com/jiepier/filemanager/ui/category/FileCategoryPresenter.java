@@ -9,6 +9,7 @@ import com.jiepier.filemanager.base.BaseRxPresenter;
 import com.jiepier.filemanager.manager.CategoryManager;
 import com.jiepier.filemanager.ui.category.categorybottom.CategoryBottomActivity;
 import com.jiepier.filemanager.ui.category.memory.MemoryActivity;
+import com.jiepier.filemanager.ui.category.music.MusicActivity;
 import com.jiepier.filemanager.util.SortUtil;
 
 import java.util.ArrayList;
@@ -58,7 +59,8 @@ public class FileCategoryPresenter extends BaseRxPresenter implements FileCatego
 
     @Override
     public void clickMusic() {
-
+        Intent intent = new Intent(mContext, MusicActivity.class);
+        mContext.startActivity(intent);
     }
 
     @Override

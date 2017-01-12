@@ -90,8 +90,9 @@ public class BoomView extends View {
 
         //动态获取?attr/colorPrimary
         //在xml获取需要api>21以上
-        int themeColor = ThemeUtil.getThemeColor(getContext());
-        mPaint.setColor(themeColor);
+        TypedValue typedValue = new TypedValue();
+        getContext().getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        mPaint.setColor(typedValue.data);
 
         mBitmapPaint = new Paint();
         mBitmapPaint.setAntiAlias(true);
@@ -177,6 +178,11 @@ public class BoomView extends View {
         //画圆
         canvas.drawCircle(mBitmapWidth/2,mBitmapHeight/2,mCircleRadius,mPaint);
 
+        //画火箭
+        mMatrix.postTranslate(mDx,mDy);
+        canvas.drawBitmap(mBitmap,mMatrix,mBitmapPaint);
+        mMatrix.postTranslate(-mDx,-mDy);
+
         //画流星
         if (isAnimation) {
             canvas.save();
@@ -190,12 +196,6 @@ public class BoomView extends View {
             }
             canvas.restore();
         }
-
-        //画火箭
-        mMatrix.postTranslate(mDx,mDy);
-        canvas.drawBitmap(mBitmap,mMatrix,mBitmapPaint);
-        mMatrix.postTranslate(-mDx,-mDy);
-        mPaint.setXfermode(null);
 
         return output;
     }

@@ -2,9 +2,11 @@ package com.jiepier.filemanager.manager;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.util.Log;
 
 import com.blankj.utilcode.utils.AppUtils;
 import com.jiepier.filemanager.bean.AppProcessInfo;
+import com.jiepier.filemanager.bean.Music;
 import com.jiepier.filemanager.sqlite.DataManager;
 import com.jiepier.filemanager.util.SortUtil;
 
@@ -13,6 +15,8 @@ import java.util.List;
 import java.util.Set;
 
 import rx.Observable;
+import rx.Scheduler;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -25,6 +29,7 @@ public class CategoryManager {
 
     private String TAG = getClass().getSimpleName();
     private static CategoryManager sInstance;
+    private MusicManager mMusicManager;
     private ApkManager mApkManager;
     private DocManager mDocManager;
     private ZipManager mZipManager;
@@ -34,12 +39,14 @@ public class CategoryManager {
 
     private CategoryManager(Context context){
 
+        MusicManager.init(context);
         ApkManager.init(context);
         DocManager.init(context);
         ZipManager.init(context);
         ProcessManager.init(context);
         DataManager.init(context, AppUtils.getAppVersionCode(context));
 
+        mMusicManager = MusicManager.getInstance();
         mApkManager = ApkManager.getInstance();
         mDocManager = DocManager.getInstance();
         mZipManager = ZipManager.getInstance();
@@ -72,11 +79,19 @@ public class CategoryManager {
     }
 
     //从数据库找
+    public Observable<ArrayList<Music>> getMusicList(){
+        return mDataManager.selectMusicSQLUsingObservable();
+    }
+
+    //从ContentProvicer找
+    public Observable<ArrayList<Music>> getMusicListUsingObservable(){
+        return mMusicManager.getMusicListUsingObservable(mSortMethod);
+    }
+
     public Observable<ArrayList<String>> getApkList(){
         return mDataManager.selectUsingObservable(DataManager.APK);
     }
 
-    //从ContentProvicer找
     public Observable<List<String>> getApkListUsingObservable(){
         return mApkManager.getApkListUsingObservable(mSortMethod);
     }
@@ -116,6 +131,13 @@ public class CategoryManager {
     public void update(){
 
         //此处不应该在主线程执行数据库操作
+
+        getMusicListUsingObservable()
+                .observeOn(Schedulers.io())
+                .subscribe(musics -> {
+                    mDataManager.updateMusic(musics);
+                });
+
         getDocListUsingObservable()
                 .observeOn(Schedulers.io())
                 .subscribe(list -> {

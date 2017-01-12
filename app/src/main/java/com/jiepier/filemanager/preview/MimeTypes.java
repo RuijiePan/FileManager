@@ -361,4 +361,9 @@ public final class MimeTypes {
         String path = FileUtils.getFileName(f);
         return path.endsWith(".zip");
     }
+
+    public static boolean isMusic(File f){
+        final String REGEX = "(.*/)*.+\\.(mp3|m4a|ogg|wav|aac)$";
+        return f.getName().matches(REGEX);
+    }
 }

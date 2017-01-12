@@ -1,16 +1,12 @@
-package com.jiepier.filemanager.ui.category.categorybottom;
+package com.jiepier.filemanager.ui.category.music;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 
 import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
-import com.jiepier.filemanager.base.App;
 import com.jiepier.filemanager.ui.actionmode.ActionModeActivity;
-import com.jiepier.filemanager.util.ClipBoard;
-
-import java.util.ArrayList;
+import com.jiepier.filemanager.ui.category.categorybottom.CategoryBottomFragment;
 
 import butterknife.BindView;
 
@@ -19,14 +15,14 @@ import butterknife.BindView;
  * Email : zquprj@gmail.com
  */
 
-public class CategoryBottomActivity extends ActionModeActivity{
+public class MusicActivity extends ActionModeActivity{
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     @Override
     public int initContentView() {
-        return R.layout.activity_apk_manager;
+        return R.layout.activity_music_manager;
     }
 
     @Override
@@ -40,24 +36,13 @@ public class CategoryBottomActivity extends ActionModeActivity{
 
     @Override
     public void init() {
-        int index = getIntent().getIntExtra(AppConstant.INDEX,AppConstant.APK_INDEX);
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content,CategoryBottomFragment.newInstance(index))
+                .replace(R.id.content,new MusicFragment())
                 .commit();
 
-        switch (index){
-            case AppConstant.DOC_INDEX:
-                setTitle(AppConstant.DOC);
-                break;
-            case AppConstant.ZIP_INDEX:
-                setTitle(AppConstant.ZIP);
-                break;
-            case AppConstant.APK_INDEX:
-                setTitle(AppConstant.APK);
-                break;
-        }
+        setTitle(AppConstant.MUSIC);
     }
 
     @Override

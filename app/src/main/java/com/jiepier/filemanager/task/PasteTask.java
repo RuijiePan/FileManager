@@ -3,6 +3,7 @@ package com.jiepier.filemanager.task;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 
