@@ -166,6 +166,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.jakewharton:disklrucache:2.0.2'
 
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.6'
@@ -174,7 +175,6 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.9.1.0'
     compile 'com.afollestad.material-dialogs:commons:0.9.1.0'
 
-    compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.github.clans:fab:1.6.4'
     compile ('com.github.ozodrukh:CircularReveal:2.0.1@aar') {
         transitive = true;

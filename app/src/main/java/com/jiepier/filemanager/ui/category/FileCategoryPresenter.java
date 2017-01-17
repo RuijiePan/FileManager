@@ -65,7 +65,9 @@ public class FileCategoryPresenter extends BaseRxPresenter implements FileCatego
 
     @Override
     public void clickVideo() {
-
+        Intent intent = new Intent(mContext, CategoryBottomActivity.class);
+        intent.putExtra(AppConstant.INDEX,AppConstant.VIDEO_INDEX);
+        mContext.startActivity(intent);
     }
 
     @Override

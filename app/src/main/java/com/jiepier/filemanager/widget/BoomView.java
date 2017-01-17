@@ -132,7 +132,7 @@ public class BoomView extends View {
         super.onDraw(canvas);
 
         //将画布转移到底部中间，因为gravity失效了
-        canvas.translate(mWidth/2-mBitmapWidth/2,mHeight/10 * 9 - mBitmapHeight/2 - ROUND_WIDTH);
+        canvas.translate(mWidth/2-mBitmapWidth/2 - ROUND_WIDTH,mHeight/10 * 9 - mBitmapHeight/2);
 
         //创建圆形、火箭、流星雨混合bitmap。圆形作为dest，在此基础上叠加蒙板
         canvas.drawBitmap(cretaeComBitmap(),0,0,mPaint);

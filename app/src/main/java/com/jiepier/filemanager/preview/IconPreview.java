@@ -156,6 +156,7 @@ public class IconPreview {
         final boolean isImage = MimeTypes.isPicture(file);
         final boolean isVideo = MimeTypes.isVideo(file);
         final boolean isApk = file.getName().endsWith(".apk");
+
         Bitmap mBitmap = null;
         String path = file.getAbsolutePath();
 

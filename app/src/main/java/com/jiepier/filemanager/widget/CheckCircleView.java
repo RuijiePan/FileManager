@@ -44,7 +44,6 @@ public class CheckCircleView extends View {
         initBitmap(context,attrs);
     }
 
-
     private void initPaint() {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);

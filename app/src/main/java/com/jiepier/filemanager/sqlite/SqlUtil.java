@@ -66,15 +66,18 @@ public class SqlUtil {
 
     private static String getType(String path){
 
+        //按文件频率进行选择，文件最多放前面
         File f = new File(path);
-        if (MimeTypes.isApk(f)){
-            return DataManager.APK;
-        }else if (MimeTypes.isDoc(f)){
+        if (MimeTypes.isDoc(f)){
             return DataManager.DOC;
         }else if (MimeTypes.isZip(f)){
             return DataManager.ZIP;
         }else if (MimeTypes.isMusic(f)){
             return DataManager.MUSIC;
+        }else if (MimeTypes.isVideo(f)){
+            return DataManager.VIDEO;
+        }else if (MimeTypes.isApk(f)){
+            return DataManager.APK;
         }
 
         return null;

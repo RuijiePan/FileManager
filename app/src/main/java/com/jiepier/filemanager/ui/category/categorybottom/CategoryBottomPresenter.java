@@ -52,6 +52,9 @@ public class CategoryBottomPresenter implements CategoryBottomContact.Presenter{
                         mView.selectAll();
                     }else if (type == AppConstant.REFRESH){
                         switch (mIndex){
+                            case AppConstant.VIDEO_INDEX:
+                                mView.setDataByObservable(mCategoryManager.getVideoList());
+                                break;
                             case AppConstant.DOC_INDEX:
                                 mView.setDataByObservable(mCategoryManager.getDocList());
                                 break;
@@ -77,6 +80,12 @@ public class CategoryBottomPresenter implements CategoryBottomContact.Presenter{
         mView.showDialog();
 
         switch (index){
+            case AppConstant.VIDEO_INDEX:
+                mCategoryManager.getVideoList().subscribe(list -> {
+                    mView.setData(list);
+                    mView.dimissDialog();
+                });
+                break;
             case AppConstant.DOC_INDEX:
                 mCategoryManager.getDocList().subscribe(list -> {
                     mView.setData(list);

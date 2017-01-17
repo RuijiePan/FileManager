@@ -37,7 +37,6 @@ public class MemoryFragment extends BaseFragment implements MemoryContact.View {
     BoomView cleanView;
     private MemoryAdapter mAdapter;
     private MemoryPresenter mPresenter;
-    private String content;
 
     @Override
     protected int getLayoutId() {
@@ -53,7 +52,7 @@ public class MemoryFragment extends BaseFragment implements MemoryContact.View {
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mAdapter);
 
-        cleanView.setVisibility(View.VISIBLE);
+        //cleanView.setVisibility(View.VISIBLE);
         mPresenter = new MemoryPresenter(getContext());
         mPresenter.attachView(this);
     }

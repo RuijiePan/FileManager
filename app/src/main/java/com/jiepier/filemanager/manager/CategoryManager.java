@@ -30,6 +30,7 @@ public class CategoryManager {
     private String TAG = getClass().getSimpleName();
     private static CategoryManager sInstance;
     private MusicManager mMusicManager;
+    private VideoManager mVideoManager;
     private ApkManager mApkManager;
     private DocManager mDocManager;
     private ZipManager mZipManager;
@@ -40,6 +41,7 @@ public class CategoryManager {
     private CategoryManager(Context context){
 
         MusicManager.init(context);
+        VideoManager.init(context);
         ApkManager.init(context);
         DocManager.init(context);
         ZipManager.init(context);
@@ -47,6 +49,7 @@ public class CategoryManager {
         DataManager.init(context, AppUtils.getAppVersionCode(context));
 
         mMusicManager = MusicManager.getInstance();
+        mVideoManager = VideoManager.getInstance();
         mApkManager = ApkManager.getInstance();
         mDocManager = DocManager.getInstance();
         mZipManager = ZipManager.getInstance();
@@ -86,6 +89,14 @@ public class CategoryManager {
     //从ContentProvicer找
     public Observable<ArrayList<Music>> getMusicListUsingObservable(){
         return mMusicManager.getMusicListUsingObservable(mSortMethod);
+    }
+
+    public Observable<ArrayList<String>> getVideoList(){
+        return mDataManager.selectUsingObservable(DataManager.VIDEO);
+    }
+
+    public Observable<List<String>> getVideoListUsingObservable(){
+        return mVideoManager.getVideoListUsingObservable(mSortMethod);
     }
 
     public Observable<ArrayList<String>> getApkList(){
@@ -136,6 +147,12 @@ public class CategoryManager {
                 .observeOn(Schedulers.io())
                 .subscribe(musics -> {
                     mDataManager.updateMusic(musics);
+                });
+
+        getVideoListUsingObservable()
+                .observeOn(Schedulers.io())
+                .subscribe(list -> {
+                    mDataManager.updateSQL(DataManager.VIDEO,list);
                 });
 
         getDocListUsingObservable()

@@ -32,6 +32,7 @@ import rx.functions.Action1;
  * Created by panruijie on 17/1/2.
  * Email : zquprj@gmail.com
  * category底部doc、zip、apk三个fragment总和类
+ * viedo模块也包括
  */
 
 public class CategoryBottomFragment extends BaseFragment implements CategoryBottomContact.View{

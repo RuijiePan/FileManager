@@ -28,10 +28,14 @@ public class DataManager implements CRUD{
 
     private static DataManager sInstance;
     public static final String MUSIC = "music";
+    public static final String VIDEO = "video";
+    public static final String PICTURE = "picture";
     public static final String DOC = "doc";
     public static final String ZIP = "zip";
     public static final String APK = "apk";
     private DBOpenHelper mMusicHelper;
+    private DBOpenHelper mVideoHelper;
+    private DBOpenHelper mPictureHelper;
     private DBOpenHelper mDocHelper;
     private DBOpenHelper mZipHelper;
     private DBOpenHelper mApkHelper;
@@ -50,6 +54,8 @@ public class DataManager implements CRUD{
     private DataManager(Context context,int version){
 
         mMusicHelper = new DBOpenHelper(context,"music.db",null,version);
+        mVideoHelper = new DBOpenHelper(context,"video.db",null,version);
+        mPictureHelper = new DBOpenHelper(context,"picture.db",null,version);
         mDocHelper = new DBOpenHelper(context,"doc.db",null,version);
         mZipHelper = new DBOpenHelper(context,"zip.db",null,version);
         mApkHelper = new DBOpenHelper(context,"apk.db",null,version);
@@ -68,6 +74,10 @@ public class DataManager implements CRUD{
         switch (type){
             case MUSIC:
                 return mMusicHelper.getWritableDatabase();
+            case VIDEO:
+                return mVideoHelper.getWritableDatabase();
+            case PICTURE:
+                return mPictureHelper.getWritableDatabase();
             case DOC:
                 return mDocHelper.getWritableDatabase();
             case ZIP:
