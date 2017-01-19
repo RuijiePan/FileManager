@@ -6,11 +6,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.blankj.utilcode.utils.FileUtils;
+import com.jiepier.filemanager.base.App;
+import com.jiepier.filemanager.bean.ImageFolder;
 import com.jiepier.filemanager.bean.Music;
 import com.jiepier.filemanager.util.FileUtil;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import rx.Observable;
@@ -92,16 +97,23 @@ public class DataManager implements CRUD{
     @Override
     public boolean insertSQL(String type, String path) {
 
-        if (type.equals(MUSIC)){
-            Music music = FileUtil.fileToMusic(new File(path));
-            return insertMusicSQL(music);
-        }else {
+        if (type.equals(DOC)|type.equals(ZIP)
+                |type.equals(VIDEO)|type.equals(APK)){
+
             mDb = getSQLite(type);
             ContentValues newValues = new ContentValues();
             newValues.put("path", path);
             return mDb.insert(type, null, newValues) > 0;
-        }
 
+        }else if (type.equals(PICTURE)){
+
+            return insertPictureSQL(path);
+        }else if (type.equals(MUSIC)){
+
+            Music music = FileUtil.fileToMusic(new File(path));
+            return insertMusicSQL(music);
+        }
+        return false;
     }
 
     @Override
@@ -152,12 +164,19 @@ public class DataManager implements CRUD{
     @Override
     public boolean deleteSQL(String type, String path) {
 
-        if (type.equals(MUSIC)){
-            return deleteMusic(path);
-        }else {
+        if (type.equals(DOC)|type.equals(ZIP)
+                |type.equals(VIDEO)|type.equals(APK)){
+
             mDb = getSQLite(type);
             return mDb.delete(type, "path=?", new String[]{path}) > 0;
+
+        }else if (type.equals(PICTURE)){
+            return deletePictureSQL(path);
+        }else if (type.equals(MUSIC)){
+            return deleteMusic(path);
         }
+
+        return false;
     }
 
     @Override
@@ -175,16 +194,21 @@ public class DataManager implements CRUD{
     @Override
     public boolean updateSQL(String type, String orignalPath, String path) {
 
-        if (type.equals(MUSIC)){
-            Music music = FileUtil.fileToMusic(new File(orignalPath));
-            return updateMusic(music,path);
-        }else {
+        if (type.equals(DOC)|type.equals(ZIP)
+                |type.equals(VIDEO)|type.equals(APK)){
             mDb = getSQLite(type);
             ContentValues newValues = new ContentValues();
             newValues.put("path", path);
 
             return mDb.update(type, newValues, "path=?", new String[]{orignalPath}) > 0;
+        }else if (type.equals(PICTURE)){
+            return updatePictureSQL(orignalPath,path);
+        }else if (type.equals(MUSIC)){
+            Music music = FileUtil.fileToMusic(new File(orignalPath));
+            return updateMusic(music,path);
         }
+
+        return false;
     }
 
     @Override
@@ -374,6 +398,234 @@ public class DataManager implements CRUD{
             @Override
             public void call(Subscriber<? super ArrayList<Music>> subscriber) {
                 subscriber.onNext(selectMusic());
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public boolean insertPictureSQL(String path) {
+
+        mDb = getSQLite(PICTURE);
+        ImageFolder imageFolder = selectPictureFloder(path);
+        if (imageFolder != null){
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("count",imageFolder.getCount()+1);
+
+            return mDb.update(PICTURE, contentValues, "dir=?", new String[]{imageFolder.getDir()}) > 0;
+        }else {
+            imageFolder = new ImageFolder();
+            imageFolder.setCount(1);
+            imageFolder.setFirstImagePath(path);
+            imageFolder.setDir(FileUtils.getDirName(new File(path)));
+
+            ContentValues newValues = new ContentValues();
+            newValues.put("dir",imageFolder.getDir());
+            newValues.put("firstImagePath",imageFolder.getFirstImagePath());
+            newValues.put("name",imageFolder.getName());
+            newValues.put("count",imageFolder.getCount());
+
+            return mDb.insert(PICTURE,null,newValues)>0;
+        }
+    }
+
+    @Override
+    public boolean insertPictureSQL(ImageFolder imageFolder) {
+
+        mDb = getSQLite(PICTURE);
+
+        ContentValues newValues = new ContentValues();
+        newValues.put("dir",imageFolder.getDir());
+        newValues.put("firstImagePath",imageFolder.getFirstImagePath());
+        newValues.put("name",imageFolder.getName());
+        newValues.put("count",imageFolder.getCount());
+
+        return mDb.insert(PICTURE,null,newValues)>0;
+    }
+
+    @Override
+    public Observable<Boolean> insertPictureSQLUsingObservable(String path) {
+
+        return Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                subscriber.onNext(insertPictureSQL(path));
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<Boolean> insertPictureSQLUsingObservable(ImageFolder imageFolder) {
+
+        return Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                subscriber.onNext(insertPictureSQL(imageFolder));
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public boolean deletePictureSQL(String path) {
+
+        mDb = getSQLite(PICTURE);
+        ImageFolder imageFolder = selectPictureFloder(path);
+
+        //刚好删了第一张图片并且不只一张，那么需要把第二张给替换成首张图片
+        if (imageFolder.getFirstImagePath().equals(path)&&imageFolder.getCount()!=1){
+            List<String> mImgs = Arrays.asList(new File(imageFolder.getDir()).list(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String filename) {
+                    return filename.endsWith(".jpg") || filename.endsWith(".png")
+                            || filename.endsWith(".jpeg");
+                }
+            }));
+            for (int i = 0;i<mImgs.size();i++){
+                if (!mImgs.get(i).equals(path)) {
+                    imageFolder.setFirstImagePath(mImgs.get(i));
+                    break;
+                }
+            }
+            imageFolder.setCount(imageFolder.getCount()-1);
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("firstImagePath",imageFolder.getFirstImagePath());
+            contentValues.put("count",imageFolder.getCount());
+            return mDb.update(PICTURE, contentValues, "dir=?", new String[]{imageFolder.getDir()}) > 0;
+        }else {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("count",imageFolder.getCount()-1);
+            return mDb.update(PICTURE, contentValues, "dir=?", new String[]{imageFolder.getDir()}) > 0;
+        }
+    }
+
+    @Override
+    public Observable<Boolean> deletePictureSQLUsingObservable(String path) {
+
+        return Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                subscriber.onNext(deletePictureSQL(path));
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public boolean updatePicture(List<ImageFolder> list) {
+
+        mDb = getSQLite(PICTURE);
+
+        try {
+            mDb.delete(PICTURE,null,null);
+
+            for (int i= 0; i<list.size() ;i++) {
+                insertPictureSQL(list.get(i));
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean updatePictureSQL(String oldPath, String newPath) {
+
+        return deletePictureSQL(oldPath)&&insertPictureSQL(newPath);
+    }
+
+
+    @Override
+    public Observable<Boolean> updatePictureSQLUsingObservable(String path, String newPath) {
+
+        return Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                subscriber.onNext(updatePictureSQL(path,newPath));
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public ArrayList<ImageFolder> selectPicture() {
+
+        mDb = getSQLite(PICTURE);
+
+        ArrayList<ImageFolder> list = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDb.rawQuery("select * from picture", null);
+
+            if (cursor.moveToFirst()){
+
+                do {
+                    String dir = cursor.getString(cursor.getColumnIndexOrThrow("dir"));
+                    String firstImagePath = cursor.getString(cursor.getColumnIndexOrThrow("firstImagePath"));
+                    int count = cursor.getInt(cursor.getColumnIndexOrThrow("count"));
+
+                    ImageFolder imageFolder = new ImageFolder();
+                    imageFolder.setFirstImagePath(firstImagePath);
+                    imageFolder.setDir(dir);
+                    imageFolder.setCount(count);
+                    list.add(imageFolder);
+                }while (cursor.moveToNext());
+
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if (cursor != null)
+                cursor.close();
+        }
+
+        return list;
+    }
+
+    @Override
+    public ImageFolder selectPictureFloder(String path) {
+
+        String dirPath = new File(path).getAbsolutePath();
+        mDb = getSQLite(PICTURE);
+
+        Cursor cursor = null;
+        try {
+            cursor = mDb.rawQuery("select * from picture where dir = "+dirPath,null);
+
+            if (cursor != null) {
+                ImageFolder imageFolder = new ImageFolder();
+                String dir = cursor.getString(cursor.getColumnIndexOrThrow("dir"));
+                String firstImagePath = cursor.getString(cursor.getColumnIndexOrThrow("firstImagePath"));
+                int count = cursor.getInt(cursor.getColumnIndexOrThrow("count"));
+
+                imageFolder.setDir(dir);
+                imageFolder.setFirstImagePath(firstImagePath);
+                imageFolder.setCount(count);
+                return imageFolder;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if (cursor != null)
+            cursor.close();
+        }
+        return null;
+    }
+
+    @Override
+    public Observable<ArrayList<ImageFolder>> selectPictureSQLUsingObservable() {
+
+        return Observable.create(new Observable.OnSubscribe<ArrayList<ImageFolder>>() {
+            @Override
+            public void call(Subscriber<? super ArrayList<ImageFolder>> subscriber) {
+                subscriber.onNext(selectPicture());
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());

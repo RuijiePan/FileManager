@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.jiepier.filemanager.R;
+import com.jiepier.filemanager.bean.ImageFolder;
 import com.jiepier.filemanager.bean.Music;
 import com.jiepier.filemanager.preview.MimeTypes;
 import com.jiepier.filemanager.ui.main.MainActivity;
@@ -21,6 +22,7 @@ import com.jiepier.filemanager.preview.IconPreview;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -591,5 +593,30 @@ public class FileUtil {
             value = defaultValue;
         }
         return value;
+    }
+
+    public static ImageFolder getImageFolder(String path){
+
+        File parentFile = new File(path).getParentFile();
+        if (parentFile == null)
+            return null;
+
+        String dirPath = new File(path).getAbsolutePath();
+
+        ImageFolder imageFolder = new ImageFolder();
+        imageFolder.setDir(dirPath);
+        imageFolder.setFirstImagePath(path);
+
+        int picSize = parentFile.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File file, String filename) {
+                return filename.endsWith(".jpg")
+                        || filename.endsWith(".png")
+                        || filename.endsWith(".jpeg");
+            }
+        }).length;
+        imageFolder.setCount(picSize);
+
+        return imageFolder;
     }
 }

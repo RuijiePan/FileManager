@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.blankj.utilcode.utils.AppUtils;
 import com.jiepier.filemanager.bean.AppProcessInfo;
+import com.jiepier.filemanager.bean.ImageFolder;
 import com.jiepier.filemanager.bean.Music;
 import com.jiepier.filemanager.sqlite.DataManager;
 import com.jiepier.filemanager.util.SortUtil;
@@ -31,6 +32,7 @@ public class CategoryManager {
     private static CategoryManager sInstance;
     private MusicManager mMusicManager;
     private VideoManager mVideoManager;
+    private PictureManager mPictureManager;
     private ApkManager mApkManager;
     private DocManager mDocManager;
     private ZipManager mZipManager;
@@ -42,6 +44,7 @@ public class CategoryManager {
 
         MusicManager.init(context);
         VideoManager.init(context);
+        PictureManager.init(context);
         ApkManager.init(context);
         DocManager.init(context);
         ZipManager.init(context);
@@ -50,6 +53,7 @@ public class CategoryManager {
 
         mMusicManager = MusicManager.getInstance();
         mVideoManager = VideoManager.getInstance();
+        mPictureManager = PictureManager.getInstance();
         mApkManager = ApkManager.getInstance();
         mDocManager = DocManager.getInstance();
         mZipManager = ZipManager.getInstance();
@@ -97,6 +101,14 @@ public class CategoryManager {
 
     public Observable<List<String>> getVideoListUsingObservable(){
         return mVideoManager.getVideoListUsingObservable(mSortMethod);
+    }
+
+    public Observable<ArrayList<ImageFolder>> getPictureList(){
+        return mDataManager.selectPictureSQLUsingObservable();
+    }
+
+    public Observable<ArrayList<ImageFolder>> getPictureListUsingObservable(){
+        return mPictureManager.getPictureListUsingObservable(mSortMethod);
     }
 
     public Observable<ArrayList<String>> getApkList(){
@@ -153,6 +165,12 @@ public class CategoryManager {
                 .observeOn(Schedulers.io())
                 .subscribe(list -> {
                     mDataManager.updateSQL(DataManager.VIDEO,list);
+                });
+
+        getPictureListUsingObservable()
+                .observeOn(Schedulers.io())
+                .subscribe(pictures->{
+                    mDataManager.updatePicture(pictures);
                 });
 
         getDocListUsingObservable()

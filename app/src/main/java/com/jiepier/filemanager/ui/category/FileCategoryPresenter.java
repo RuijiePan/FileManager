@@ -10,6 +10,7 @@ import com.jiepier.filemanager.manager.CategoryManager;
 import com.jiepier.filemanager.ui.category.categorybottom.CategoryBottomActivity;
 import com.jiepier.filemanager.ui.category.memory.MemoryActivity;
 import com.jiepier.filemanager.ui.category.music.MusicActivity;
+import com.jiepier.filemanager.ui.category.picture.PictureActivity;
 import com.jiepier.filemanager.util.SortUtil;
 
 import java.util.ArrayList;
@@ -86,7 +87,8 @@ public class FileCategoryPresenter extends BaseRxPresenter implements FileCatego
 
     @Override
     public void clickPicture() {
-
+        Intent intent = new Intent(mContext, PictureActivity.class);
+        mContext.startActivity(intent);
     }
 
     @Override

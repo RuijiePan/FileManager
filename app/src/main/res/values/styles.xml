@@ -149,4 +149,8 @@
         <attr name="sidebarRadius" format="dimension"/>
         <attr name="sidebarBallRadius" format="dimension"/>
     </declare-styleable>
+
+    <style name="listDivider">
+        <item name="divider">@drawable/divider_bg</item>
+    </style>
 </resources>

@@ -3,6 +3,8 @@ package com.jiepier.filemanager.base;
 import android.app.Application;
 import android.content.Context;
 
+import com.blankj.utilcode.utils.AppUtils;
+import com.blankj.utilcode.utils.ScreenUtils;
 import com.blankj.utilcode.utils.Utils;
 import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
@@ -21,6 +23,8 @@ import com.jiepier.filemanager.util.imageloader.policy.ReversePolicy;
 public class App extends Application {
 
     public static Context sContext;
+    public static int sHeight;
+    public static int sWidth;
     private String TAG = getClass().getSimpleName();
 
     @Override
@@ -41,13 +45,16 @@ public class App extends Application {
             SharedUtil.putBoolean(this,AppConstant.IS_FIRST,false);
         }
 
-        ImageLoaderConfig config = new ImageLoaderConfig()
+        sWidth = ScreenUtils.getScreenWidth();
+        sHeight = ScreenUtils.getScreenHeight();
+
+        /*ImageLoaderConfig config = new ImageLoaderConfig()
                 .setLoadingPlaceholder(R.drawable.image_loading)
                 .setNotFoundPlaceholder(R.drawable.image_load_failure)
                 .setCache(new MemoryCache())
                 .setThreadCount(4)
                 .setLoadPolicy(new ReversePolicy());
-        ImageLoader.getInstance().init(config);
+        ImageLoader.getInstance().init(config);*/
     }
 
     public static Context getAppContext(){

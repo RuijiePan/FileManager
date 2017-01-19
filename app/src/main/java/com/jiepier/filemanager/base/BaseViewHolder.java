@@ -12,6 +12,10 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.jiepier.filemanager.R;
+
 /**
  * Created by panruijiesx on 2016/11/14.
  */
@@ -49,6 +53,24 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     public BaseViewHolder setText(int viewId, @StringRes int strId) {
         TextView view = getView(viewId);
         view.setText(strId);
+        return this;
+    }
+
+    public BaseViewHolder loadLocal(int viewId, String path){
+        ImageView imageView = getView(viewId);
+
+        Glide.with(App.getAppContext())
+                .load("file://"+path)
+                .centerCrop()
+                .override(250,250)
+                //禁止磁盘缓存
+                .diskCacheStrategy( DiskCacheStrategy.NONE )
+                //禁止内存缓存
+                //.skipMemoryCache( true )
+                .placeholder(R.drawable.image_loading)
+                .error(R.drawable.image_load_failure)
+                .into(imageView);
+
         return this;
     }
 
