@@ -52,4 +52,5 @@ public class PictureActivity extends BaseActivity {
     protected boolean isApplyStatusBarColor() {
         return true;
     }
+
 }

@@ -68,6 +68,11 @@ public abstract class BaseAdapter<T,K extends BaseViewHolder> extends RecyclerVi
         convert(holder , mData.get(position));
     }
 
+    public void setData(List<T> data){
+        this.mData = data;
+        notifyDataSetChanged();
+    }
+
     public void add(List<T> data){
         this.mData.addAll(data);
         notifyDataSetChanged();

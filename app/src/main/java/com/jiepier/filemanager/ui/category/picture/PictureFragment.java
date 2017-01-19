@@ -79,9 +79,15 @@ public class PictureFragment extends BaseFragment implements PictureContact.View
     @Override
     public void setData(ArrayList<ImageFolder> list) {
 
-        for (ImageFolder folder:list){
+        /*for (ImageFolder folder:list){
             Log.w(TAG,folder.getDir());
-        }
+        }*/
         mAdapter.setData(list);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
     }
 }

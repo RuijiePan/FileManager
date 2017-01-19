@@ -32,8 +32,7 @@ public class PictureAdapter extends BaseAdapter<ImageFolder,BaseViewHolder> {
 
         View view = holder.getView(R.id.root);
         view.setLayoutParams(new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,App.sWidth/2
-        ));
+                App.sWidth/2,App.sWidth/2));
 
         holder.loadLocal(R.id.iv_firstImageView,item.getFirstImagePath())
                 .setText(R.id.tv_dir_name,item.getName())
