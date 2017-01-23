@@ -5,7 +5,9 @@ import android.support.annotation.NonNull;
 
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.bean.AppProcessInfo;
+import com.jiepier.filemanager.event.UpdateMemoryInfoEvent;
 import com.jiepier.filemanager.manager.CategoryManager;
+import com.jiepier.filemanager.util.RxBus.RxBus;
 
 import java.util.List;
 import java.util.Set;
@@ -60,6 +62,7 @@ public class MemoryPresenter implements MemoryContact.Presenter {
                 mView.dimissLoadingView();
                 mView.showMemoryClean(mContext.getString(R.string.clean)+":"+memory/1024/102+" M");
                 mView.notifityItem();
+                RxBus.getDefault().post(new UpdateMemoryInfoEvent());
             }, Throwable::printStackTrace);
     }
 

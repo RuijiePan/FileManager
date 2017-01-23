@@ -7,14 +7,9 @@ import com.blankj.utilcode.utils.AppUtils;
 import com.blankj.utilcode.utils.ScreenUtils;
 import com.blankj.utilcode.utils.Utils;
 import com.jiepier.filemanager.Constant.AppConstant;
-import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.manager.CategoryManager;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.SharedUtil;
-import com.jiepier.filemanager.util.imageloader.cache.MemoryCache;
-import com.jiepier.filemanager.util.imageloader.config.ImageLoaderConfig;
-import com.jiepier.filemanager.util.imageloader.core.ImageLoader;
-import com.jiepier.filemanager.util.imageloader.policy.ReversePolicy;
 
 /**
  * Created by JiePier on 16/12/19.
@@ -48,13 +43,6 @@ public class App extends Application {
         sWidth = ScreenUtils.getScreenWidth();
         sHeight = ScreenUtils.getScreenHeight();
 
-        /*ImageLoaderConfig config = new ImageLoaderConfig()
-                .setLoadingPlaceholder(R.drawable.image_loading)
-                .setNotFoundPlaceholder(R.drawable.image_load_failure)
-                .setCache(new MemoryCache())
-                .setThreadCount(4)
-                .setLoadPolicy(new ReversePolicy());
-        ImageLoader.getInstance().init(config);*/
     }
 
     public static Context getAppContext(){

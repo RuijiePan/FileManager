@@ -61,8 +61,8 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
         Glide.with(App.getAppContext())
                 .load("file://"+path)
-                .centerCrop()
                 .override(250,250)
+                .centerCrop()
                 //禁止磁盘缓存
                 .diskCacheStrategy( DiskCacheStrategy.NONE )
                 //禁止内存缓存

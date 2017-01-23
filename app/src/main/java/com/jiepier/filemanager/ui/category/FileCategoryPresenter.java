@@ -2,26 +2,41 @@ package com.jiepier.filemanager.ui.category;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.base.App;
 import com.jiepier.filemanager.base.BaseRxPresenter;
+import com.jiepier.filemanager.event.UpdateMemoryInfoEvent;
 import com.jiepier.filemanager.manager.CategoryManager;
 import com.jiepier.filemanager.ui.category.categorybottom.CategoryBottomActivity;
 import com.jiepier.filemanager.ui.category.memory.MemoryActivity;
 import com.jiepier.filemanager.ui.category.music.MusicActivity;
 import com.jiepier.filemanager.ui.category.picture.PictureActivity;
+import com.jiepier.filemanager.util.FormatUtil;
+import com.jiepier.filemanager.util.RxBus.RxBus;
 import com.jiepier.filemanager.util.SortUtil;
 
 import java.util.ArrayList;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func2;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by panruijie on 17/1/2.
  * Email : zquprj@gmail.com
  */
 
-public class FileCategoryPresenter extends BaseRxPresenter implements FileCategoryContact.Presenter {
+public class FileCategoryPresenter implements FileCategoryContact.Presenter {
 
+    private FileCategoryContact.View mView;
+    private CategoryManager mCategoryManager;
+    private CompositeSubscription mCompositeSubscription;
+    private String TAG = getClass().getSimpleName();
     private Context mContext;
     private ArrayList mApkList;
     private ArrayList mDocList;
@@ -30,21 +45,30 @@ public class FileCategoryPresenter extends BaseRxPresenter implements FileCatego
     public FileCategoryPresenter(Context context){
         super();
         this.mContext = context;
+        mCategoryManager = CategoryManager.getInstance();
+        mCompositeSubscription = new CompositeSubscription();
 
-        CategoryManager.getInstance().getApkListUsingObservable()
+        mCategoryManager.getApkListUsingObservable()
                 .subscribe(apkList -> {
                     mApkList = (ArrayList) apkList;
                 }, Throwable::printStackTrace);
 
-        CategoryManager.getInstance().getDocListUsingObservable()
+        mCategoryManager.getDocListUsingObservable()
                 .subscribe(docList -> {
                     mDocList = (ArrayList) docList;
                 }, Throwable::printStackTrace);
 
-        CategoryManager.getInstance().getZipListUsingObservable()
+        mCategoryManager.getZipListUsingObservable()
                 .subscribe(zipList -> {
                     mZipList = (ArrayList) zipList;
                 }, Throwable::printStackTrace);
+
+        mCompositeSubscription.add(RxBus.getDefault()
+                .IoToUiObservable(UpdateMemoryInfoEvent.class)
+                .observeOn(Schedulers.io())
+                .subscribe(updateMemoryInfoEvent -> {
+                    updateMemoryInfo();
+                }, Throwable::printStackTrace));
     }
 
     @Override
@@ -56,6 +80,24 @@ public class FileCategoryPresenter extends BaseRxPresenter implements FileCatego
     @Override
     public void clickStorageProgressbar() {
 
+    }
+
+    @Override
+    public void updateMemoryInfo() {
+
+        mCategoryManager.getAvaliableMemoryUsingObservable()
+                .zipWith(mCategoryManager.getTotalMemoryUsingObservable(),
+                        (avaliable, total) -> {
+                            long usedMemory = total - avaliable;
+                            mView.setMemoryProgress(usedMemory*100/total);
+                            return FormatUtil.formatFileSize(usedMemory).toString()+"/"+
+                                    FormatUtil.formatFileSize(total).toString();
+                        })
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(memory -> {
+                    mView.setMemoryText(memory);
+                }, Throwable::printStackTrace);
     }
 
     @Override
@@ -96,5 +138,18 @@ public class FileCategoryPresenter extends BaseRxPresenter implements FileCatego
         Intent intent = new Intent(mContext, CategoryBottomActivity.class);
         intent.putExtra(AppConstant.INDEX,AppConstant.ZIP_INDEX);
         mContext.startActivity(intent);
+    }
+
+    @Override
+    public void attachView(@NonNull FileCategoryContact.View view) {
+        mView = view;
+    }
+
+    @Override
+    public void detachView() {
+        this.mView = null;
+        if (mCompositeSubscription.isUnsubscribed())
+            this.mCompositeSubscription.unsubscribe();
+        this.mCompositeSubscription = null;
     }
 }

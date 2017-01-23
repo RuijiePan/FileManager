@@ -49,12 +49,13 @@ public class FileCategoryFragment extends BaseLazyFragment implements FileCatego
     }
 
     @Override
-    protected void initListeners() {
-
+    protected void initData() {
+        mPresenter.updateMemoryInfo();
     }
 
     @Override
-    protected void initData() {
+    protected void initListeners() {
+
 
     }
 
@@ -100,8 +101,19 @@ public class FileCategoryFragment extends BaseLazyFragment implements FileCatego
     }
 
     @Override
+    public void setMemoryProgress(float progress) {
+        memoryProgressbar.setProgress(progress);
+    }
+
+    @Override
+    public void setMemoryText(String memory) {
+        memoryProgressbar.setCenterText(memory);
+    }
+
+    @Override
     public void onDestroy() {
         mPresenter.detachView();
         super.onDestroy();
     }
+
 }

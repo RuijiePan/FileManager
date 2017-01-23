@@ -7,7 +7,6 @@ import android.provider.MediaStore;
 
 import com.jiepier.filemanager.bean.ImageFolder;
 import com.jiepier.filemanager.util.SortUtil;
-import com.jiepier.filemanager.util.imageloader.core.ImageLoader;
 
 import java.io.File;
 import java.io.FilenameFilter;

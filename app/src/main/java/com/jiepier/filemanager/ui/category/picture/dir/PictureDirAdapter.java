@@ -21,6 +21,8 @@ import java.util.List;
 
 public class PictureDirAdapter extends BaseAdapter<String,BaseViewHolder>{
 
+    private OnItemClickListener mListener;
+
     public PictureDirAdapter(Context context) {
         super(R.layout.item_image);
         this.mContext = context;
@@ -34,5 +36,23 @@ public class PictureDirAdapter extends BaseAdapter<String,BaseViewHolder>{
                 App.sWidth/3, App.sWidth/3));
 
         holder.loadLocal(R.id.image,item);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (mListener != null)
+                mListener.OnItemClick(holder.getLayoutPosition());
+        });
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mListener = listener;
+    }
+
+    public interface OnItemClickListener{
+
+        void OnItemClick(int position);
+    }
+
+    public List<String> getData(){
+        return mData;
     }
 }

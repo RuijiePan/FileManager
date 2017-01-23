@@ -32,6 +32,8 @@
 
         <activity android:name=".ui.category.picture.dir.PictureDirActivity"/>
 
+        <activity android:name=".ui.category.picture.detail.PictureDetailActivity"/>
+
         <activity android:name=".ui.category.categorybottom.CategoryBottomActivity" />
 
         <activity android:name=".ui.about.AboutActivity"/>

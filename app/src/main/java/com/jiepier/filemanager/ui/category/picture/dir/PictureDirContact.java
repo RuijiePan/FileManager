@@ -30,5 +30,6 @@ public class PictureDirContact {
 
         void getData();
 
+        void onItemClick(int position,List<String> data);
     }
 }

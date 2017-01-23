@@ -1,9 +1,14 @@
 package com.jiepier.filemanager.ui.category.picture.dir;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.PluralsRes;
+import android.util.Log;
 
 import com.jiepier.filemanager.ui.category.picture.PicturePresenter;
+import com.jiepier.filemanager.ui.category.picture.detail.PictureDetailActivity;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -24,13 +29,16 @@ import rx.subscriptions.CompositeSubscription;
 
 public class PictureDirPresenter implements PictureDirContact.Presenter{
 
+    private String TAG = getClass().getSimpleName();
     private CompositeSubscription mCompositeSubscription;
     private PictureDirContact.View mView;
     private File mDirFile;
     private String mPath;
     private List<String> mList;
+    private Context mContext;
 
-    public PictureDirPresenter(String path){
+    public PictureDirPresenter(Context context,String path){
+        mContext = context;
         mPath = path;
         mDirFile = new File(path);
         mList = new ArrayList<>();
@@ -67,6 +75,19 @@ public class PictureDirPresenter implements PictureDirContact.Presenter{
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()));
 
+    }
+
+    @Override
+    public void onItemClick(int position,List<String> data) {
+        Intent intent = new Intent(mContext, PictureDetailActivity.class);
+        intent.putExtra(PictureDetailActivity.EXTRA_IMAGE_POSITION,position);
+
+        ArrayList<String> list = new ArrayList<>();
+        for (int i = 0 ;i <data.size() ;i++){
+            list.add(data.get(i));
+        }
+        intent.putStringArrayListExtra(PictureDetailActivity.EXTRA_IMAGE_URLS, list);
+        mContext.startActivity(intent);
     }
 
     @Override

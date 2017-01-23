@@ -76,7 +76,7 @@ public class PictureDirFragment extends BaseFragment implements PictureDirContac
         recyclerView.addItemDecoration(new DividerGridItemDecoration(getContext()));
         recyclerView.setAdapter(mAdapter);
 
-        mPresenter = new PictureDirPresenter(dirPath);
+        mPresenter = new PictureDirPresenter(getContext(),dirPath);
         mPresenter.attachView(this);
         mPresenter.getData();
     }
@@ -84,6 +84,9 @@ public class PictureDirFragment extends BaseFragment implements PictureDirContac
     @Override
     protected void initListeners() {
 
+        mAdapter.setOnItemClickListener(position -> {
+            mPresenter.onItemClick(position,mAdapter.getData());
+        });
     }
 
     @Override

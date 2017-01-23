@@ -12,13 +12,18 @@ public interface FileCategoryContact {
 
     interface View extends BaseView{
 
+        void setMemoryProgress(float progress);
+
+        void setMemoryText(String memory);
     }
 
-    interface Presenter extends BasePresenter{
+    interface Presenter extends BasePresenter<View>{
 
         void clickMemoryProgressbar();
 
         void clickStorageProgressbar();
+
+        void updateMemoryInfo();
 
         void clickMusic();
 

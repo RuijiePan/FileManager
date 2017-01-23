@@ -36,6 +36,7 @@ public class CategoryManager {
     private ApkManager mApkManager;
     private DocManager mDocManager;
     private ZipManager mZipManager;
+    private MemoryManager mMemoryManager;
     private ProcessManager mProcessManager;
     private DataManager mDataManager;
     private SortUtil.SortMethod mSortMethod = SortUtil.SortMethod.DATE;
@@ -48,6 +49,7 @@ public class CategoryManager {
         ApkManager.init(context);
         DocManager.init(context);
         ZipManager.init(context);
+        MemoryManager.init(context);
         ProcessManager.init(context);
         DataManager.init(context, AppUtils.getAppVersionCode(context));
 
@@ -57,6 +59,7 @@ public class CategoryManager {
         mApkManager = ApkManager.getInstance();
         mDocManager = DocManager.getInstance();
         mZipManager = ZipManager.getInstance();
+        mMemoryManager = MemoryManager.getInstance();
         mProcessManager = ProcessManager.getInstance();
         mDataManager = DataManager.getInstance();
     }
@@ -133,6 +136,14 @@ public class CategoryManager {
 
     public Observable<List<String>> getZipListUsingObservable(){
         return mZipManager.getZipListUsingObservable(mSortMethod);
+    }
+
+    public Observable<Long> getTotalMemoryUsingObservable(){
+        return mMemoryManager.getTotalMemoryUsingObservable();
+    }
+
+    public Observable<Long> getAvaliableMemoryUsingObservable(){
+        return mMemoryManager.getAvaliableMemoryUsingObservable();
     }
 
     public Observable<List<AppProcessInfo>> getRunningAppList(){
