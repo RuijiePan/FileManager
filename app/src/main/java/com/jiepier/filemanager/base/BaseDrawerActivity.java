@@ -17,7 +17,7 @@ import com.jiepier.filemanager.ui.about.AboutActivity;
 import com.jiepier.filemanager.ui.sdcard.SDCardFragment;
 import com.jiepier.filemanager.ui.category.FileCategoryFragment;
 import com.jiepier.filemanager.ui.setting.SettingActivity;
-import com.jiepier.filemanager.ui.system.SystemFragment;
+import com.jiepier.filemanager.ui.advertisement.AdvertisementFragment;
 import com.jiepier.filemanager.util.ResourceUtil;
 import com.jiepier.filemanager.util.SettingPrefUtil;
 import com.jiepier.filemanager.util.StatusBarUtil;
@@ -49,7 +49,7 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
     private ActionBarDrawerToggle mDrawerToggle;
     protected SDCardFragment mSdCardFragment;
     private FileCategoryFragment mFileCategoryFragment;
-    private SystemFragment mSystemFragment;
+    private AdvertisementFragment mAdvertisementFragment;
 
     @Override
     public int initContentView() {
@@ -63,7 +63,7 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
 
         mSdCardFragment = new SDCardFragment();
         mFileCategoryFragment = new FileCategoryFragment();
-        mSystemFragment = new SystemFragment();
+        mAdvertisementFragment = new AdvertisementFragment();
         addFragment();
         transformFragment(SDCARD);
 
@@ -110,10 +110,10 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
                 .add(R.id.flContentRoot, mFileCategoryFragment,CATEGORY)
                 .commit();
         fm.beginTransaction()
-                .add(R.id.flContentRoot,mSystemFragment,SYSTEM)
+                .add(R.id.flContentRoot, mAdvertisementFragment,SYSTEM)
                 .commit();
         fm.beginTransaction().hide(mFileCategoryFragment).commit();
-        fm.beginTransaction().hide(mSystemFragment).commit();
+        fm.beginTransaction().hide(mAdvertisementFragment).commit();
 
     }
 
@@ -126,14 +126,14 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
             if (TAG.equals(CATEGORY))
                 fm.beginTransaction().show(mFileCategoryFragment).commit();
             if (TAG.equals(SYSTEM))
-                fm.beginTransaction().show(mSystemFragment).commit();
+                fm.beginTransaction().show(mAdvertisementFragment).commit();
 
             if (OLDTAG.equals(SDCARD))
                 fm.beginTransaction().hide(mSdCardFragment).commit();
             if (OLDTAG.equals(CATEGORY))
                 fm.beginTransaction().hide(mFileCategoryFragment).commit();
             if (OLDTAG.equals(SYSTEM))
-                fm.beginTransaction().hide(mSystemFragment).commit();
+                fm.beginTransaction().hide(mAdvertisementFragment).commit();
 
         }
         OLDTAG = TAG;

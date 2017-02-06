@@ -2,6 +2,7 @@ package com.jiepier.filemanager.ui.category.picture.dir;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -30,10 +31,6 @@ public class PictureDirAdapter extends BaseAdapter<String,BaseViewHolder>{
 
     @Override
     protected void convert(BaseViewHolder holder, String item) {
-
-        View view = holder.getView(R.id.root);
-        view.setLayoutParams(new RelativeLayout.LayoutParams(
-                App.sWidth/3, App.sWidth/3));
 
         holder.loadLocal(R.id.image,item);
 

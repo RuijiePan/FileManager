@@ -30,10 +30,6 @@ public class PictureAdapter extends BaseAdapter<ImageFolder,BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder holder, ImageFolder item) {
 
-        View view = holder.getView(R.id.root);
-        view.setLayoutParams(new RelativeLayout.LayoutParams(
-                App.sWidth/2,App.sWidth/2));
-
         holder.loadLocal(R.id.iv_firstImageView,item.getFirstImagePath())
                 .setText(R.id.tv_dir_name,item.getName())
                 .setText(R.id.tv_count,"("+item.getCount()+")");

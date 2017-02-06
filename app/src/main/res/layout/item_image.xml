@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
+<com.jiepier.filemanager.widget.SquareRelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/shape_about_card">
 
     <ImageView
@@ -15,4 +15,4 @@
         android:scaleType="centerCrop"
         android:src="@drawable/ic_prj"/>
 
-</RelativeLayout>
+</com.jiepier.filemanager.widget.SquareRelativeLayout>
