@@ -64,7 +64,7 @@ public class AdvertisementFragment extends BaseFragment implements AdListener {
     @Override
     protected void initData() {
         mNativeAd = AdManager.getInstance(getContext()).getNativeAd();
-        mNativeAd.loadAd();
+        //mNativeAd.loadAd();
     }
 
     @Override

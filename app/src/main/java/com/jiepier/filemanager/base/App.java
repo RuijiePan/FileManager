@@ -3,7 +3,6 @@ package com.jiepier.filemanager.base;
 import android.app.Application;
 import android.content.Context;
 
-import com.blankj.utilcode.utils.AppUtils;
 import com.blankj.utilcode.utils.ScreenUtils;
 import com.blankj.utilcode.utils.Utils;
 import com.jiepier.filemanager.Constant.AppConstant;
@@ -18,7 +17,7 @@ import com.jiepier.filemanager.util.SharedUtil;
 
 public class App extends Application {
 
-    public static Context sContext;
+    public static App sContext;
     public static int sHeight;
     public static int sWidth;
     private String TAG = getClass().getSimpleName();
@@ -40,11 +39,11 @@ public class App extends Application {
 
         /*如果是第一次加载，那么数据库里没有数据，那么直接扫描获取数据，否则在主界面通过广播
                 扫描完之后再进行数据更新*/
-        if (SharedUtil.getBoolean(this,AppConstant.IS_FIRST,true)){
+        if (SharedUtil.getBoolean(this, AppConstant.IS_FIRST, true)) {
             CategoryManager.getInstance().update();
-            SharedUtil.putString(this,AppConstant.DEFAULT_SCAN_PATH,
+            SharedUtil.putString(this, AppConstant.DEFAULT_SCAN_PATH,
                     Settings.getDefaultDir());
-            SharedUtil.putBoolean(this,AppConstant.IS_FIRST,false);
+            SharedUtil.putBoolean(this, AppConstant.IS_FIRST, false);
         }
 
         sWidth = ScreenUtils.getScreenWidth();
@@ -52,7 +51,7 @@ public class App extends Application {
 
     }
 
-    public static Context getAppContext(){
+    public static Context getAppContext() {
         return sContext;
     }
 }

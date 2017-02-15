@@ -30,7 +30,7 @@ public class Music implements Parcelable {
         this.size = size;
     }
 
-    public Music(int id,String title, String album, String artist, String url, int duration, int size) {
+    public Music(int id, String title, String album, String artist, String url, int duration, int size) {
         this.id = id;
         this.title = title;
         this.album = album;

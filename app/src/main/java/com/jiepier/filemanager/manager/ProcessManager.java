@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import com.blankj.utilcode.utils.AppUtils;
 import com.jaredrummler.android.processes.AndroidProcesses;
@@ -34,13 +33,13 @@ public class ProcessManager {
 
     private static ProcessManager sInstance;
     private Context mContext;
-    private List<AppProcessInfo> tempList;
+    private List<AppProcessInfo> mTempList;
     private List<AppProcessInfo> mRunningProcessList;
     private PackageManager mPackageManager;
     private ActivityManager mActivityManager;
     private ActivityManager.MemoryInfo mMemoryInfo;
 
-    private ProcessManager(Context context){
+    private ProcessManager(Context context) {
         this.mContext = context;
         mRunningProcessList = new ArrayList<>();
         mPackageManager = mContext.getPackageManager();
@@ -48,27 +47,28 @@ public class ProcessManager {
         mMemoryInfo = new ActivityManager.MemoryInfo();
     }
 
-    public static void init(Context context){
+    public static void init(Context context) {
 
-        if (sInstance == null)
+        if (sInstance == null) {
             sInstance = new ProcessManager(context);
+        }
     }
 
-    public static ProcessManager getInstance(){
+    public static ProcessManager getInstance() {
 
-        if (sInstance == null){
+        if (sInstance == null) {
             throw new IllegalStateException("You must be init ProcessManager first");
         }
         return sInstance;
     }
 
-    public List<AppProcessInfo> getRunningProcessList(){
+    public List<AppProcessInfo> getRunningProcessList() {
 
-        tempList = new ArrayList<>();
+        mTempList = new ArrayList<>();
         ApplicationInfo appInfo = null;
         AppProcessInfo abAppProcessInfo = null;
 
-        for (ActivityManager.RunningAppProcessInfo info:AndroidProcesses.getRunningAppProcessInfo(mContext)){
+        for (ActivityManager.RunningAppProcessInfo info:AndroidProcesses.getRunningAppProcessInfo(mContext)) {
 
             if (!info.processName.equals(AppUtils.getAppPackageName(mContext))) {
                 abAppProcessInfo = new AppProcessInfo(info.processName, info.pid, info.uid);
@@ -106,24 +106,25 @@ public class ProcessManager {
                 long memsize = mActivityManager.getProcessMemoryInfo(new int[]{info.pid})[0].getTotalPrivateDirty() * 1024;
                 abAppProcessInfo.setMemory(memsize);
 
-                if (!abAppProcessInfo.isSystem())
-                    tempList.add(abAppProcessInfo);
+                if (!abAppProcessInfo.isSystem()) {
+                    mTempList.add(abAppProcessInfo);
+                }
             }
 
         }
 
         //APP去重
         ComparatorApp comparator = new ComparatorApp();
-        Collections.sort(tempList,comparator);
+        Collections.sort(mTempList, comparator);
         int lastUid = 0;
         int index = -1;
         mRunningProcessList.clear();
 
-        for (AppProcessInfo info:tempList){
+        for (AppProcessInfo info:mTempList) {
             if (lastUid == info.getUid()){
-                AppProcessInfo nowInfo = tempList.get(index);
-                mRunningProcessList.get(index).setMemory(nowInfo.getMemory()+info.getMemory());
-            }else {
+                AppProcessInfo nowInfo = mTempList.get(index);
+                mRunningProcessList.get(index).setMemory(nowInfo.getMemory() + info.getMemory());
+            } else {
                 index++;
                 mRunningProcessList.add(info);
                 lastUid = info.getUid();
@@ -133,7 +134,7 @@ public class ProcessManager {
         return mRunningProcessList;
     }
 
-    public ApplicationInfo getApplicationInfo( String processName) {
+    public ApplicationInfo getApplicationInfo(String processName) {
         if (processName == null) {
             return null;
         }
@@ -147,9 +148,9 @@ public class ProcessManager {
         return null;
     }
 
-    public Observable<List<AppProcessInfo>> getRunningAppListUsingObservable(){
+    public Observable<List<AppProcessInfo>> getRunningAppListUsingObservable() {
 
-        return Observable.create(new Observable.OnSubscribe<List<AppProcessInfo>>(){
+        return Observable.create(new Observable.OnSubscribe<List<AppProcessInfo>>() {
 
             @Override
             public void call(Subscriber<? super List<AppProcessInfo>> subscriber) {
@@ -160,11 +161,11 @@ public class ProcessManager {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public List<AppProcessInfo> getRunningAppList(){
+    public List<AppProcessInfo> getRunningAppList() {
         return mRunningProcessList;
     }
 
-    public long killAllRunningApp(){
+    public long killAllRunningApp() {
 
         long beforeMemory = 0;
         long endMemory = 0;
@@ -172,7 +173,7 @@ public class ProcessManager {
         mActivityManager.getMemoryInfo(mMemoryInfo);
         beforeMemory = mMemoryInfo.availMem;
 
-        for (AppProcessInfo info:getRunningProcessList()){
+        for (AppProcessInfo info:getRunningProcessList()) {
             killBackgroundProcesses(info.getProcessName());
         }
 
@@ -182,7 +183,7 @@ public class ProcessManager {
         return endMemory - beforeMemory;
     }
 
-    public long killRunningApp(String processName){
+    public long killRunningApp(String processName) {
 
         long beforeMemory = 0;
         long endMemory = 0;
@@ -192,7 +193,7 @@ public class ProcessManager {
 
         try {
             killBackgroundProcesses(processName);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -202,26 +203,26 @@ public class ProcessManager {
         return endMemory - beforeMemory;
     }
 
-    public void killBackgroundProcesses(String processName){
+    public void killBackgroundProcesses(String processName) {
 
         String packageName = null;
         try {
-            if (!processName.contains(":")){
+            if (!processName.contains(":")) {
                 packageName = processName;
-            }else {
+            } else {
                 packageName = processName.split(":")[0];
             }
 
             mActivityManager.killBackgroundProcesses(packageName);
 
-        }catch (Exception e){
+        } catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    public Observable<Long>  killAllRunningAppUsingObservable(){
+    public Observable<Long>  killAllRunningAppUsingObservable() {
 
-        return Observable.create(new Observable.OnSubscribe<Long>(){
+        return Observable.create(new Observable.OnSubscribe<Long>() {
 
             @Override
             public void call(Subscriber<? super Long> subscriber) {
@@ -231,9 +232,9 @@ public class ProcessManager {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<Long> killRunningAppUsingObservable(Set<String> packageNameSet){
+    public Observable<Long> killRunningAppUsingObservable(Set<String> packageNameSet) {
 
-        return Observable.create(new Observable.OnSubscribe<Long>(){
+        return Observable.create(new Observable.OnSubscribe<Long>() {
 
             @Override
             public void call(Subscriber<? super Long> subscriber) {
@@ -249,9 +250,9 @@ public class ProcessManager {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<Long>  killRunningAppUsingObservable(String packageName){
+    public Observable<Long>  killRunningAppUsingObservable(String packageName) {
 
-        return Observable.create(new Observable.OnSubscribe<Long>(){
+        return Observable.create(new Observable.OnSubscribe<Long>() {
 
             @Override
             public void call(Subscriber<? super Long> subscriber) {

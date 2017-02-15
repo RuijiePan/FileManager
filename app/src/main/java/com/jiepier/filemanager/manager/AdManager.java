@@ -15,10 +15,10 @@ public class AdManager {
     private Context mContext;
     private NativeAd mNativeAd;
 
-    public static AdManager getInstance(Context context){
+    public static AdManager getInstance(Context context) {
 
-        if (sInstance == null){
-            synchronized (AdManager.class){
+        if (sInstance == null) {
+            synchronized (AdManager.class) {
                 if (sInstance == null)
                     sInstance = new AdManager(context);
             }
@@ -27,24 +27,24 @@ public class AdManager {
         return sInstance;
     }
 
-    public AdManager(Context context){
+    public AdManager(Context context) {
 
         this.mContext = context.getApplicationContext();
 
     }
 
-    public AdManager setAdId(String AdId){
+    public AdManager setAdId(String AdId) {
 
         if (sInstance == null)
             throw new IllegalStateException("You must be getInstacne AdManager first");
 
-        mNativeAd = new NativeAd(mContext,AdId);
+        mNativeAd = new NativeAd(mContext, AdId);
         return sInstance;
     }
 
-    public NativeAd getNativeAd(){
+    public NativeAd getNativeAd() {
 
-        if (mNativeAd!=null)
+        if (mNativeAd != null)
             return mNativeAd;
 
         throw new IllegalStateException("NativeAd is null,please check it first");

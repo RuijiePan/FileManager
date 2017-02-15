@@ -1,13 +1,9 @@
 package com.jiepier.filemanager.ui.setting;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
@@ -15,21 +11,16 @@ import com.jiepier.filemanager.base.App;
 import com.jiepier.filemanager.event.ChangeDefaultDirEvent;
 import com.jiepier.filemanager.event.NewDirEvent;
 import com.jiepier.filemanager.util.RxBus.RxBus;
-import com.jiepier.filemanager.util.SettingPrefUtil;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.SharedUtil;
 import com.jiepier.filemanager.util.ToastUtil;
-import com.jiepier.filemanager.widget.ColorsDialog;
-
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by JiePier on 16/12/7.
  */
 
 public class SettingFragment extends PreferenceFragment
-        implements Preference.OnPreferenceClickListener{
+        implements Preference.OnPreferenceClickListener {
 
     private String TAG = getClass().getSimpleName();
     private Preference pDefaultDir;
@@ -54,18 +45,18 @@ public class SettingFragment extends PreferenceFragment
         pDefaultDir.setOnPreferenceClickListener(this);
 
         pDefaultDir.setSummary(Settings.getDefaultDir());
-        pDefaultScanDir.setSummary(SharedUtil.getString(App.sContext,AppConstant.DEFAULT_SCAN_PATH));
+        pDefaultScanDir.setSummary(SharedUtil.getString(App.sContext, AppConstant.DEFAULT_SCAN_PATH));
 
-        RxBus.getDefault().add(this,RxBus.getDefault()
+        RxBus.getDefault().add(this, RxBus.getDefault()
                 .IoToUiObservable(NewDirEvent.class)
                 .subscribe(event -> {
                     if (event.getType().equals("pDefaultDir")) {
                         Settings.setDefaultDir(event.getPath());
                         pDefaultDir.setSummary(event.getPath());
-                    }else {
+                    } else {
                         SharedUtil.putString(App.sContext
-                                ,AppConstant.DEFAULT_SCAN_PATH
-                                ,event.getPath());
+                                , AppConstant.DEFAULT_SCAN_PATH
+                                , event.getPath());
                         pDefaultScanDir.setSummary(event.getPath());
                     }
                 }, Throwable::printStackTrace));
@@ -73,14 +64,14 @@ public class SettingFragment extends PreferenceFragment
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        if ("pDefaultDir".equals(preference.getKey())){
+        if ("pDefaultDir".equals(preference.getKey())) {
             RxBus.getDefault().post(new ChangeDefaultDirEvent("pDefaultDir"));
-        }else if ("pDefaultScanDir".equals(preference.getKey())){
+        } else if ("pDefaultScanDir".equals(preference.getKey())) {
             RxBus.getDefault().post(new ChangeDefaultDirEvent("pDefaultScanDir"));
-        }else if ("pAutoUpdate".equals(preference.getKey())){
-            ToastUtil.showToast(getActivity(),"auto update : "+ pAutoUpdate.isChecked());
-        }else if ("pNotification".equals(preference.getKey())){
-            ToastUtil.showToast(getActivity(),"notification : "+ pNotification.isChecked());
+        } else if ("pAutoUpdate".equals(preference.getKey())) {
+            ToastUtil.showToast(getActivity(), "auto update : " + pAutoUpdate.isChecked());
+        } else if ("pNotification".equals(preference.getKey())) {
+            ToastUtil.showToast(getActivity(), "notification : " + pNotification.isChecked());
         }
         return true;
     }

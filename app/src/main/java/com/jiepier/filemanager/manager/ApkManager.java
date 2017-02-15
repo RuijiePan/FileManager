@@ -3,9 +3,7 @@ package com.jiepier.filemanager.manager;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Looper;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import com.jiepier.filemanager.util.SortUtil;
 
@@ -14,7 +12,6 @@ import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -30,26 +27,27 @@ public class ApkManager {
     private Context mContext;
     private ArrayList<String> mApkList;
 
-    private ApkManager(Context context){
+    private ApkManager(Context context) {
         this.mContext = context;
         mApkList = new ArrayList<>();
     }
 
-    public static void init(Context context){
+    public static void init(Context context) {
 
-        if (sInstance == null)
+        if (sInstance == null) {
             sInstance = new ApkManager(context);
+        }
     }
 
-    public static ApkManager getInstance(){
+    public static ApkManager getInstance() {
 
-        if (sInstance == null){
+        if (sInstance == null) {
             throw new IllegalStateException("You must be init ApkManager first");
         }
         return sInstance;
     }
 
-    public List<String> getApkListBySort(SortUtil.SortMethod sort){
+    public List<String> getApkListBySort(SortUtil.SortMethod sort) {
 
         Uri uri = MediaStore.Files.getContentUri("external");
         String[] columns = new String[] {
@@ -62,22 +60,22 @@ public class ApkManager {
         String sortOrder = SortUtil.buildSortOrder(sort);
 
         Cursor cursor = mContext.getContentResolver().query(
-            uri,columns,selection,null,sortOrder
+            uri, columns, selection, null, sortOrder
         );
 
         mApkList.clear();
-        if (cursor != null){
+        if (cursor != null) {
 
             try {
                 cursor.moveToFirst();
 
                 mApkList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
-                while (cursor.moveToNext()){
+                while (cursor.moveToNext()) {
                     mApkList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 cursor.close();
             }
 
@@ -86,9 +84,9 @@ public class ApkManager {
         return mApkList;
     }
 
-    public Observable<List<String>> getApkListUsingObservable(SortUtil.SortMethod sort){
+    public Observable<List<String>> getApkListUsingObservable(SortUtil.SortMethod sort) {
 
-        return Observable.create(new Observable.OnSubscribe<List<String>>(){
+        return Observable.create(new Observable.OnSubscribe<List<String>>() {
 
             @Override
             public void call(Subscriber<? super List<String>> subscriber) {
@@ -99,7 +97,7 @@ public class ApkManager {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public List<String> getApkList(){
+    public List<String> getApkList() {
         return mApkList;
     }
 }
