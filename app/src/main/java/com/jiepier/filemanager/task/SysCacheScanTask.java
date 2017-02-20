@@ -44,7 +44,7 @@ public class SysCacheScanTask extends AsyncTask<Void, Void, Void> {
         List<ApplicationInfo> installedPackages = pm.getInstalledApplications(PackageManager.GET_GIDS);
 
         IPackageStatsObserver.Stub observer = new PackageStatsObserver();
-        mTotalCount = 0;
+        mTotalCount = installedPackages.size();
         mSysCaches = new ArrayList<>();
         mAppNames = new HashMap<>();
 

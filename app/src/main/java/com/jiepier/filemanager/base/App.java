@@ -8,6 +8,8 @@ import com.blankj.utilcode.utils.Utils;
 import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.manager.AdManager;
 import com.jiepier.filemanager.manager.CategoryManager;
+import com.jiepier.filemanager.manager.CleanManager;
+import com.jiepier.filemanager.manager.ScanManager;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.SharedUtil;
 
@@ -31,6 +33,9 @@ public class App extends Application {
         Utils.init(this);
         //初始化category各个模块需要的单例
         CategoryManager.init(this);
+        //初始化扫描、清理管理类
+        ScanManager.init(this);
+        CleanManager.init(this);
         //初始化文件初始路径和各种Preferences参数
         Settings.updatePreferences(this);
         //初始化facebook广告

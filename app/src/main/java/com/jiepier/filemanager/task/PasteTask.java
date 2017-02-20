@@ -3,9 +3,7 @@ package com.jiepier.filemanager.task;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Toast;
-
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.blankj.utilcode.utils.FileUtils;
@@ -13,11 +11,10 @@ import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.event.TypeEvent;
-import com.jiepier.filemanager.sqlite.DataManager;
+import com.jiepier.filemanager.sqlite.SqlUtil;
 import com.jiepier.filemanager.util.ClipBoard;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.MediaStoreUtils;
-import com.jiepier.filemanager.sqlite.SqlUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 
 import java.io.File;
@@ -47,10 +44,11 @@ public final class PasteTask extends AsyncTask<String, Void, List<String>> {
         if (activity != null) {
             this.dialog = new MaterialDialog.Builder(activity).progress(true, 0).build();
 
-            if (ClipBoard.isMove())
+            if (ClipBoard.isMove()) {
                 this.dialog.setContent(activity.getString(R.string.moving));
-            else
+            } else {
                 this.dialog.setContent(activity.getString(R.string.copying));
+            }
 
             this.dialog.setCancelable(true);
             this.dialog
@@ -76,24 +74,25 @@ public final class PasteTask extends AsyncTask<String, Void, List<String>> {
             String fileName = s.substring(s.lastIndexOf("/"), s.length());
             if (ClipBoard.isMove()) {
                 FileUtil.moveToDirectory(new File(s), new File(location, fileName), activity);
-                if (!new File(s).isDirectory()){
-                    SqlUtil.update(s,location+File.separator+fileName);
+                if (!new File(s).isDirectory()) {
+                    SqlUtil.update(s, location + File.separator + fileName);
                 }
                 success = true;
             } else {
-                if (new File(s).isDirectory()){
-                    success = FileUtils.copyDir(s,location+File.separator+fileName);
-                }else {
-                    success = FileUtils.copyFile(new File(s),new File(location, fileName));
-                    SqlUtil.insert(location+File.separator+fileName);
+                if (new File(s).isDirectory()) {
+                    success = FileUtils.copyDir(s, location + File.separator + fileName);
+                } else {
+                    success = FileUtils.copyFile(new File(s), new File(location, fileName));
+                    SqlUtil.insert(location + File.separator + fileName);
                 }
                 //FileUtil.copyFile(new File(s), new File(location, fileName), activity);
             }
         }
 
         if (location.canRead()) {
-            for (File file : location.listFiles())
+            for (File file : location.listFiles()) {
                 MediaStoreUtils.addFileToMediaStore(file.getPath(), activity);
+            }
         }
         return failed;
     }
@@ -124,19 +123,19 @@ public final class PasteTask extends AsyncTask<String, Void, List<String>> {
                 Toast.makeText(activity,
                         activity.getString(R.string.movesuccsess),
                         Toast.LENGTH_SHORT).show();
-            }
-            else
+            } else {
                 Toast.makeText(activity, activity.getString(R.string.movefail),
                         Toast.LENGTH_SHORT).show();
+            }
         } else {
             if (success) {
                 Toast.makeText(activity,
                         activity.getString(R.string.copysuccsess),
                         Toast.LENGTH_SHORT).show();
-            }
-            else
+            } else {
                 Toast.makeText(activity, activity.getString(R.string.copyfail),
                         Toast.LENGTH_SHORT).show();
+            }
         }
 
         ClipBoard.unlock();

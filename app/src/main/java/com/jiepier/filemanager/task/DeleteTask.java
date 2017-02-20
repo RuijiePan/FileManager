@@ -8,7 +8,6 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
-import com.jiepier.filemanager.base.App;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.event.TypeEvent;
@@ -36,7 +35,7 @@ public final class DeleteTask extends AsyncTask<String, Void, List<String>> {
 
         if (activity != null) {
             this.dialog = new MaterialDialog.Builder(activity)
-                    .progress(true,0)
+                    .progress(true, 0)
                     .content(activity.getString(R.string.deleting))
                     .cancelable(true)
                     .build();

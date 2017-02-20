@@ -4,14 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import com.jiepier.filemanager.bean.ImageFolder;
 import com.jiepier.filemanager.manager.CategoryManager;
-import com.jiepier.filemanager.manager.PictureManager;
 import com.jiepier.filemanager.ui.category.picture.dir.PictureDirActivity;
 
-import java.util.ArrayList;
-
-import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -49,7 +44,7 @@ public class PicturePresenter implements PictureContact.Presenter {
     @Override
     public void onItemClick(String dirPath) {
         Intent intent = new Intent(mContext, PictureDirActivity.class);
-        intent.putExtra("dirPath",dirPath);
+        intent.putExtra("dirPath", dirPath);
         mContext.startActivity(intent);
     }
 

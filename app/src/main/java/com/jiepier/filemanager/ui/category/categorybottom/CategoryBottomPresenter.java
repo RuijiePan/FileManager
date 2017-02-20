@@ -1,29 +1,18 @@
 package com.jiepier.filemanager.ui.category.categorybottom;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.jiepier.filemanager.Constant.AppConstant;
-import com.jiepier.filemanager.base.App;
 import com.jiepier.filemanager.event.ActionChoiceFolderEvent;
-import com.jiepier.filemanager.event.BroadcastEvent;
-import com.jiepier.filemanager.event.ChoiceFolderEvent;
-import com.jiepier.filemanager.event.NewTabEvent;
 import com.jiepier.filemanager.event.TypeEvent;
-import com.jiepier.filemanager.manager.ApkManager;
 import com.jiepier.filemanager.manager.CategoryManager;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 import com.jiepier.filemanager.util.Settings;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
-import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -31,7 +20,7 @@ import rx.subscriptions.CompositeSubscription;
  * Email : zquprj@gmail.com
  */
 
-public class CategoryBottomPresenter implements CategoryBottomContact.Presenter{
+public class CategoryBottomPresenter implements CategoryBottomContact.Presenter {
 
     private Context mContext;
     private CategoryManager mCategoryManager;
@@ -39,7 +28,7 @@ public class CategoryBottomPresenter implements CategoryBottomContact.Presenter{
     private CategoryBottomContact.View mView;
     private int mIndex;
 
-    public CategoryBottomPresenter(Context context){
+    public CategoryBottomPresenter(Context context) {
         this.mContext = context;
         mCompositeSubscription = new CompositeSubscription();
         mCategoryManager = CategoryManager.getInstance();
@@ -48,10 +37,10 @@ public class CategoryBottomPresenter implements CategoryBottomContact.Presenter{
                 .IoToUiObservable(TypeEvent.class)
                 .map(TypeEvent::getType)
                 .subscribe(type -> {
-                    if (type == AppConstant.SELECT_ALL){
+                    if (type == AppConstant.SELECT_ALL) {
                         mView.selectAll();
-                    }else if (type == AppConstant.REFRESH){
-                        switch (mIndex){
+                    } else if (type == AppConstant.REFRESH) {
+                        switch (mIndex) {
                             case AppConstant.VIDEO_INDEX:
                                 mView.setDataByObservable(mCategoryManager.getVideoList());
                                 break;
@@ -65,7 +54,7 @@ public class CategoryBottomPresenter implements CategoryBottomContact.Presenter{
                                 mView.setDataByObservable(mCategoryManager.getApkList());
                                 break;
                         }
-                    }else if (type == AppConstant.CLEAN_CHOICE){
+                    } else if (type == AppConstant.CLEAN_CHOICE) {
                         mView.clearSelect();
                     }
                 }, Throwable::printStackTrace));
@@ -79,7 +68,7 @@ public class CategoryBottomPresenter implements CategoryBottomContact.Presenter{
         mIndex = index;
         mView.showDialog();
 
-        switch (index){
+        switch (index) {
             case AppConstant.VIDEO_INDEX:
                 mCategoryManager.getVideoList().subscribe(list -> {
                     mView.setData(list);
@@ -112,10 +101,10 @@ public class CategoryBottomPresenter implements CategoryBottomContact.Presenter{
         File file = new File(path);
 
         //解压文件
-        if (FileUtil.isSupportedArchive(file)){
+        if (FileUtil.isSupportedArchive(file)) {
             RxBus.getDefault().post(new ActionChoiceFolderEvent(path, Settings.getDefaultDir()));
-        }else {
-            FileUtil.openFile(mContext,file);
+        } else {
+            FileUtil.openFile(mContext, file);
         }
 
     }
@@ -128,8 +117,9 @@ public class CategoryBottomPresenter implements CategoryBottomContact.Presenter{
     @Override
     public void detachView() {
         this.mView = null;
-        if (mCompositeSubscription.isUnsubscribed())
+        if (mCompositeSubscription.isUnsubscribed()) {
             this.mCompositeSubscription.unsubscribe();
+        }
         this.mCompositeSubscription = null;
     }
 

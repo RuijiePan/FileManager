@@ -34,21 +34,21 @@ public class PasteTaskExecutor implements View.OnClickListener {
         this.mExisting = new HashMap<>();
     }
 
-    public void start(){
+    public void start() {
         final String[] contents = ClipBoard.getClipBoardContents();
-        if (contents == null){
+        if (contents == null) {
             return;
         }
 
-        for (String path : contents){
+        for (String path : contents) {
             File file = new File(path);
 
-            if (file.exists()){
-                File oldFile = new File(mLocation,file.getName());
+            if (file.exists()) {
+                File oldFile = new File(mLocation, file.getName());
 
-                if (oldFile.exists()){
-                    mExisting.put(oldFile.getPath(),file.getPath());
-                }else {
+                if (oldFile.exists()) {
+                    mExisting.put(oldFile.getPath(), file.getPath());
+                } else {
                     mToProcess.add(file.getPath());
                 }
             }
@@ -59,21 +59,22 @@ public class PasteTaskExecutor implements View.OnClickListener {
 
     private void next() {
         Activity activity = mActivityReference.get();
-        if (activity != null){
-            if (mExisting.isEmpty()){
-                if (mToProcess.isEmpty())
+        if (activity != null) {
+            if (mExisting.isEmpty()) {
+                if (mToProcess.isEmpty()) {
                     ClipBoard.clear();
+                }
                 else {
                     String[] array =  new String[mToProcess.size()];
-                    for (int i=0 ; i<mToProcess.size() ; i++){
+                    for (int i = 0; i < mToProcess.size(); i++) {
                         array[i] = mToProcess.get(i);
                     }
 
                     mToProcess.toArray(array);
-                    PasteTask task = new PasteTask(activity,mLocation);
+                    PasteTask task = new PasteTask(activity, mLocation);
                     task.execute(array);
                 }
-            }else {
+            } else {
                 String key = mExisting.keySet().iterator().next();
                 current = mExisting.get(key);
                 mExisting.remove(key);

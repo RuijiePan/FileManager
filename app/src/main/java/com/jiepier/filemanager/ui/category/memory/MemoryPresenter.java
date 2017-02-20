@@ -4,15 +4,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.jiepier.filemanager.R;
-import com.jiepier.filemanager.bean.AppProcessInfo;
 import com.jiepier.filemanager.event.UpdateMemoryInfoEvent;
 import com.jiepier.filemanager.manager.CategoryManager;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 
-import java.util.List;
 import java.util.Set;
 
-import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -28,7 +25,7 @@ public class MemoryPresenter implements MemoryContact.Presenter {
     private MemoryContact.View mView;
     private CompositeSubscription mCompositeSubscription;
 
-    public MemoryPresenter(Context context){
+    public MemoryPresenter(Context context) {
         mContext = context;
         mScanFinish = false;
         mCategoryManager = CategoryManager.getInstance();
@@ -52,15 +49,16 @@ public class MemoryPresenter implements MemoryContact.Presenter {
     @Override
     public void killRunningAppInfo(Set<String> set) {
 
-        if (!mScanFinish)
+        if (!mScanFinish) {
             return;
+        }
 
         mView.showLoadingView();
 
         mCategoryManager.killRunningAppUsingObservable(set)
             .subscribe(memory -> {
                 mView.dimissLoadingView();
-                mView.showMemoryClean(mContext.getString(R.string.clean)+":"+memory/1024/102+" M");
+                mView.showMemoryClean(mContext.getString(R.string.clean) + ":" + (memory << 10) + " M");
                 mView.notifityItem();
                 RxBus.getDefault().post(new UpdateMemoryInfoEvent());
             }, Throwable::printStackTrace);
@@ -74,8 +72,9 @@ public class MemoryPresenter implements MemoryContact.Presenter {
     @Override
     public void detachView() {
         mView = null;
-        if (mCompositeSubscription.isUnsubscribed())
+        if (mCompositeSubscription.isUnsubscribed()) {
             this.mCompositeSubscription.unsubscribe();
+        }
         this.mCompositeSubscription = null;
     }
 }

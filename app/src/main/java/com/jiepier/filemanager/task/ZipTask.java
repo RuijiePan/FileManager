@@ -2,7 +2,6 @@ package com.jiepier.filemanager.task;
 
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -36,7 +35,7 @@ public final class ZipTask extends AsyncTask<String, Void, List<String>> {
 
         if (activity != null) {
             this.dialog = new MaterialDialog.Builder(activity)
-                    .progress(true,0)
+                    .progress(true, 0)
                     .content(activity.getString(R.string.packing))
                     .cancelable(true)
                     .build();

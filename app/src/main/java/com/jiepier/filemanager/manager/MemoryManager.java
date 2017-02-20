@@ -2,7 +2,6 @@ package com.jiepier.filemanager.manager;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -32,22 +31,22 @@ public class MemoryManager {
             sInstance = new MemoryManager(context);
     }
 
-    private MemoryManager(Context context){
+    private MemoryManager(Context context) {
 
         this.mContext = context;
         mActivityManager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
     }
 
-    public static MemoryManager getInstance(){
+    public static MemoryManager getInstance() {
 
-        if (sInstance == null){
+        if (sInstance == null) {
             throw new IllegalStateException("You must be init MemoryManager first");
         }
 
         return sInstance;
     }
 
-    public long getTotalMemory(){
+    public long getTotalMemory() {
 
         long totalMemory = 0L;
         FileReader fileReader = null;
@@ -55,7 +54,7 @@ public class MemoryManager {
 
         try {
             fileReader = new FileReader("/proc/meminfo");
-            bufferedReader = new BufferedReader(fileReader,4096);
+            bufferedReader = new BufferedReader(fileReader, 4096);
 
             String cat = bufferedReader.readLine();
 
@@ -65,29 +64,29 @@ public class MemoryManager {
                     Log.w(TAG,num);
                 }*/
 
-                if (arrays.length > 1){
+                if (arrays.length > 1) {
                     totalMemory = Long.parseLong(arrays[1]);
                 }
             }
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if (fileReader != null){
+        } finally {
+            if (fileReader != null) {
                 try {
                     fileReader.close();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
 
-            if (bufferedReader != null){
+            if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -96,7 +95,7 @@ public class MemoryManager {
         return totalMemory << 10;
     }
 
-    public Observable<Long> getTotalMemoryUsingObservable(){
+    public Observable<Long> getTotalMemoryUsingObservable() {
 
         return Observable.create(new Observable.OnSubscribe<Long>() {
             @Override
@@ -107,7 +106,7 @@ public class MemoryManager {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public long getAvaliableMemory(){
+    public long getAvaliableMemory() {
 
         ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
         mActivityManager.getMemoryInfo(memoryInfo);
@@ -115,7 +114,7 @@ public class MemoryManager {
         return memoryInfo.availMem ;
     }
 
-    public Observable<Long> getAvaliableMemoryUsingObservable(){
+    public Observable<Long> getAvaliableMemoryUsingObservable() {
 
         return Observable.create(new Observable.OnSubscribe<Long>() {
             @Override
