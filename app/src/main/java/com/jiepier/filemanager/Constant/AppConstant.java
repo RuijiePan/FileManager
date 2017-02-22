@@ -35,4 +35,7 @@ public class AppConstant {
     public static final int DOC_INDEX = 4;
     public static final int ZIP_INDEX = 5;
     public static final int APK_INDEX = 6;
+
+    public static final int TYPE_TITLE = 0;
+    public static final int TYPE_CHILD = 1;
 }

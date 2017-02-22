@@ -3,26 +3,21 @@ package com.jiepier.filemanager.ui.category;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.jiepier.filemanager.Constant.AppConstant;
-import com.jiepier.filemanager.base.App;
-import com.jiepier.filemanager.base.BaseRxPresenter;
 import com.jiepier.filemanager.event.UpdateMemoryInfoEvent;
 import com.jiepier.filemanager.manager.CategoryManager;
 import com.jiepier.filemanager.ui.category.categorybottom.CategoryBottomActivity;
 import com.jiepier.filemanager.ui.category.memory.MemoryActivity;
 import com.jiepier.filemanager.ui.category.music.MusicActivity;
 import com.jiepier.filemanager.ui.category.picture.PictureActivity;
+import com.jiepier.filemanager.ui.category.storage.StorageActivity;
 import com.jiepier.filemanager.util.FormatUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
-import com.jiepier.filemanager.util.SortUtil;
 
 import java.util.ArrayList;
 
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -79,7 +74,8 @@ public class FileCategoryPresenter implements FileCategoryContact.Presenter {
 
     @Override
     public void clickStorageProgressbar() {
-
+        Intent intent = new Intent(mContext, StorageActivity.class);
+        mContext.startActivity(intent);
     }
 
     @Override
@@ -89,8 +85,8 @@ public class FileCategoryPresenter implements FileCategoryContact.Presenter {
                 .zipWith(mCategoryManager.getTotalMemoryUsingObservable(),
                         (avaliable, total) -> {
                             long usedMemory = total - avaliable;
-                            mView.setMemoryProgress(usedMemory*100/total);
-                            return FormatUtil.formatFileSize(usedMemory).toString()+"/"+
+                            mView.setMemoryProgress(usedMemory * 100 / total);
+                            return FormatUtil.formatFileSize(usedMemory).toString() + "/" +
                                     FormatUtil.formatFileSize(total).toString();
                         })
                 .observeOn(Schedulers.io())
@@ -109,21 +105,21 @@ public class FileCategoryPresenter implements FileCategoryContact.Presenter {
     @Override
     public void clickVideo() {
         Intent intent = new Intent(mContext, CategoryBottomActivity.class);
-        intent.putExtra(AppConstant.INDEX,AppConstant.VIDEO_INDEX);
+        intent.putExtra(AppConstant.INDEX, AppConstant.VIDEO_INDEX);
         mContext.startActivity(intent);
     }
 
     @Override
     public void clickApk() {
         Intent intent = new Intent(mContext, CategoryBottomActivity.class);
-        intent.putExtra(AppConstant.INDEX,AppConstant.APK_INDEX);
+        intent.putExtra(AppConstant.INDEX, AppConstant.APK_INDEX);
         mContext.startActivity(intent);
     }
 
     @Override
     public void clickDoc() {
         Intent intent = new Intent(mContext, CategoryBottomActivity.class);
-        intent.putExtra(AppConstant.INDEX,AppConstant.DOC_INDEX);
+        intent.putExtra(AppConstant.INDEX, AppConstant.DOC_INDEX);
         mContext.startActivity(intent);
     }
 
@@ -136,7 +132,7 @@ public class FileCategoryPresenter implements FileCategoryContact.Presenter {
     @Override
     public void clickZip() {
         Intent intent = new Intent(mContext, CategoryBottomActivity.class);
-        intent.putExtra(AppConstant.INDEX,AppConstant.ZIP_INDEX);
+        intent.putExtra(AppConstant.INDEX, AppConstant.ZIP_INDEX);
         mContext.startActivity(intent);
     }
 
@@ -148,8 +144,9 @@ public class FileCategoryPresenter implements FileCategoryContact.Presenter {
     @Override
     public void detachView() {
         this.mView = null;
-        if (mCompositeSubscription.isUnsubscribed())
+        if (mCompositeSubscription.isUnsubscribed()) {
             this.mCompositeSubscription.unsubscribe();
+        }
         this.mCompositeSubscription = null;
     }
 }

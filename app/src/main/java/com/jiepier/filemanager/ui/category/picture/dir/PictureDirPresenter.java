@@ -2,18 +2,15 @@ package com.jiepier.filemanager.ui.category.picture.dir;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.annotation.PluralsRes;
-import android.util.Log;
 
-import com.jiepier.filemanager.ui.category.picture.PicturePresenter;
 import com.jiepier.filemanager.ui.category.picture.detail.PictureDetailActivity;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import rx.Observable;
@@ -27,7 +24,7 @@ import rx.subscriptions.CompositeSubscription;
  * Email : zquprj@gmail.com
  */
 
-public class PictureDirPresenter implements PictureDirContact.Presenter{
+public class PictureDirPresenter implements PictureDirContact.Presenter {
 
     private String TAG = getClass().getSimpleName();
     private CompositeSubscription mCompositeSubscription;
@@ -37,7 +34,7 @@ public class PictureDirPresenter implements PictureDirContact.Presenter{
     private List<String> mList;
     private Context mContext;
 
-    public PictureDirPresenter(Context context,String path){
+    public PictureDirPresenter(Context context, String path) {
         mContext = context;
         mPath = path;
         mDirFile = new File(path);
@@ -58,18 +55,22 @@ public class PictureDirPresenter implements PictureDirContact.Presenter{
                     @Override
                     public boolean accept(File dir, String filename) {
                         if (filename.endsWith(".jpg") || filename.endsWith(".png")
-                                || filename.endsWith(".jpeg"))
+                                || filename.endsWith(".jpeg")) {
                             return true;
+                        }
                         return false;
                     }
                 }));
 
                 //对获取到对路径进行拼接
-                for (int i = 0 ;i<mList.size();i++)
-                    mList.set(i,mPath +File.separator+ mList.get(i));
+                for (int i = 0; i < mList.size(); i++) {
+                    mList.set(i, mPath + File.separator + mList.get(i));
+                }
 
                 mView.setTotalCount(mList.size());
                 mView.dimissDialog();
+
+                Collections.reverse(mList);
                 subscriber.onNext(mList);
                 subscriber.onCompleted();
             }
@@ -78,12 +79,12 @@ public class PictureDirPresenter implements PictureDirContact.Presenter{
     }
 
     @Override
-    public void onItemClick(int position,List<String> data) {
+    public void onItemClick(int position, List<String> data) {
         Intent intent = new Intent(mContext, PictureDetailActivity.class);
-        intent.putExtra(PictureDetailActivity.EXTRA_IMAGE_POSITION,position);
+        intent.putExtra(PictureDetailActivity.EXTRA_IMAGE_POSITION, position);
 
         ArrayList<String> list = new ArrayList<>();
-        for (int i = 0 ;i <data.size() ;i++){
+        for (int i = 0; i < data.size(); i++) {
             list.add(data.get(i));
         }
         intent.putStringArrayListExtra(PictureDetailActivity.EXTRA_IMAGE_URLS, list);
@@ -98,8 +99,9 @@ public class PictureDirPresenter implements PictureDirContact.Presenter{
     @Override
     public void detachView() {
         this.mView = null;
-        if (mCompositeSubscription.isUnsubscribed())
+        if (mCompositeSubscription.isUnsubscribed()) {
             this.mCompositeSubscription.unsubscribe();
+        }
         this.mCompositeSubscription = null;
     }
 }

@@ -10,7 +10,7 @@ import android.os.RemoteException;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.App;
 import com.jiepier.filemanager.bean.JunkInfo;
-import com.jiepier.filemanager.task.callback.IScanCallBack;
+import com.jiepier.filemanager.task.callback.ISysScanCallBack;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
 
 /**
  * Created by panruijie on 2017/2/15.
@@ -26,20 +29,38 @@ import java.util.List;
 
 public class SysCacheScanTask extends AsyncTask<Void, Void, Void> {
 
-    private IScanCallBack mCallBack;
+    private ISysScanCallBack mCallBack;
     private int mScanCount;
     private int mTotalCount;
     private ArrayList<JunkInfo> mSysCaches;
     private HashMap<String, String> mAppNames;
     private long mTotalSize = 0L;
+    private boolean mIsOverTime = true;
 
-    public SysCacheScanTask(IScanCallBack callBack) {
+    public SysCacheScanTask(ISysScanCallBack callBack) {
         this.mCallBack = callBack;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        Observable.timer(30 * 1000, TimeUnit.SECONDS)
+                .subscribe(aLong -> {
+                    if (mIsOverTime) {
+                        mCallBack.onOverTime();
+                    }
+                });
     }
 
     @Override
     protected Void doInBackground(Void... params) {
         mCallBack.onBegin();
+
+        if (isCancelled()) {
+            mCallBack.onCancel();
+            return null;
+        }
+
         PackageManager pm = App.getAppContext().getPackageManager();
         List<ApplicationInfo> installedPackages = pm.getInstalledApplications(PackageManager.GET_GIDS);
 
@@ -54,6 +75,7 @@ public class SysCacheScanTask extends AsyncTask<Void, Void, Void> {
             getPackageInfo(info.packageName, observer);
         }
 
+        mIsOverTime = false;
         return null;
     }
 

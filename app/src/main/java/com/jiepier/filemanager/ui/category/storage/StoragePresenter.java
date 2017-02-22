@@ -3,14 +3,28 @@ package com.jiepier.filemanager.ui.category.storage;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.bean.AppProcessInfo;
 import com.jiepier.filemanager.bean.JunkInfo;
+import com.jiepier.filemanager.bean.JunkProcessInfo;
+import com.jiepier.filemanager.bean.JunkType;
+import com.jiepier.filemanager.event.CurrenScanJunkEvent;
+import com.jiepier.filemanager.event.ItemTotalJunkSizeEvent;
+import com.jiepier.filemanager.event.JunkDataEvent;
+import com.jiepier.filemanager.event.JunkDismissDialogEvent;
+import com.jiepier.filemanager.event.JunkShowDialogEvent;
+import com.jiepier.filemanager.event.TotalJunkSizeEvent;
 import com.jiepier.filemanager.manager.CleanManager;
 import com.jiepier.filemanager.manager.ProcessManager;
 import com.jiepier.filemanager.manager.ScanManager;
+import com.jiepier.filemanager.util.FormatUtil;
+import com.jiepier.filemanager.util.RxBus.RxBus;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -30,13 +44,58 @@ public class StoragePresenter implements StorageContact.Presenter {
     private CleanManager mCleanManager;
     private ProcessManager mProcessManager;
     private long mTotalJunkSize;
+    private boolean mOverScanFinish;
 
     public StoragePresenter(Context context) {
-        this.mContext = context;
+        this.mContext = context.getApplicationContext();
         mCompositeSubscription = new CompositeSubscription();
         mScanManger = ScanManager.getInstance();
         mCleanManager = CleanManager.getInstance();
         mProcessManager = ProcessManager.getInstance();
+
+        //生产者速度太快，加上sample对事件进行过滤。否则会出现rx.exceptions.MissingBackpressureException
+        mCompositeSubscription.add(RxBus.getDefault()
+                .toObservable(TotalJunkSizeEvent.class)
+                .sample(10, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(totalJunkSizeEvent -> {
+                    mView.setTotalJunk(totalJunkSizeEvent.getTotalSize());
+                }, Throwable::printStackTrace));
+
+        mCompositeSubscription.add(RxBus.getDefault()
+                .IoToUiObservable(CurrenScanJunkEvent.class)
+                .subscribe(event -> {
+                    if (event.getType() == CurrenScanJunkEvent.OVER_CACHE) {
+                        mView.setCurrenOverScanJunk(event.getJunkInfo());
+                    } else if (event.getType() == CurrenScanJunkEvent.SYS_CAHCE) {
+                        mView.setCurrenSysCacheScanJunk(event.getJunkInfo());
+                    }
+                }, Throwable::printStackTrace));
+
+        mCompositeSubscription.add(RxBus.getDefault()
+                .IoToUiObservable(ItemTotalJunkSizeEvent.class)
+                .subscribe(event -> {
+                    mView.setItemTotalJunk(event.getIndex(), event.getTotalSize());
+                }, Throwable::printStackTrace));
+
+        mCompositeSubscription.add(RxBus.getDefault()
+                .IoToUiObservable(JunkDataEvent.class)
+                .subscribe(junkDataEvent -> {
+                    mView.setData(junkDataEvent.getHashMap());
+                }, Throwable::printStackTrace));
+
+        mCompositeSubscription.add(RxBus.getDefault()
+                .IoToUiObservable(JunkShowDialogEvent.class)
+                .subscribe(event -> {
+                    mView.showDialog();
+                }, Throwable::printStackTrace));
+
+        mCompositeSubscription.add(RxBus.getDefault()
+                .IoToUiObservable(JunkDismissDialogEvent.class)
+                .subscribe(event -> {
+                    mView.dimissDialog(event.getIndex());
+                }, Throwable::printStackTrace));
     }
 
     @Override
@@ -47,57 +106,105 @@ public class StoragePresenter implements StorageContact.Presenter {
 
             @Override
             public void startScan() {
-                mView.showOverDialog();
-                mView.showSystemCacheDialog();
-                mView.showProcessDialog();
+                RxBus.getDefault().post(new JunkShowDialogEvent());
                 mTotalJunkSize = 0L;
+                mOverScanFinish = false;
             }
 
             @Override
-            public void isOverScanFinish() {
-                mView.dimissOverDialog();
+            public void isOverScanFinish(ArrayList<JunkInfo> apkList, ArrayList<JunkInfo> logList, ArrayList<JunkInfo> tempList, ArrayList<JunkInfo> bigFileList) {
+                RxBus.getDefault().post(new JunkDismissDialogEvent(JunkType.APK));
+                RxBus.getDefault().post(new JunkDismissDialogEvent(JunkType.LOG));
+                RxBus.getDefault().post(new JunkDismissDialogEvent(JunkType.TEMP));
+                RxBus.getDefault().post(new JunkDismissDialogEvent(JunkType.BIG_FILE));
+
+                RxBus.getDefault().post(new ItemTotalJunkSizeEvent(
+                        JunkType.APK, getFilterJunkSize(JunkType.APK, apkList)));
+                RxBus.getDefault().post(new ItemTotalJunkSizeEvent(
+                        JunkType.LOG, getFilterJunkSize(JunkType.LOG, logList)));
+                RxBus.getDefault().post(new ItemTotalJunkSizeEvent(
+                        JunkType.TEMP, getFilterJunkSize(JunkType.TEMP, tempList)));
+                RxBus.getDefault().post(new ItemTotalJunkSizeEvent(
+                        JunkType.BIG_FILE, getFilterJunkSize(JunkType.BIG_FILE, bigFileList)));
+
+                mOverScanFinish = true;
             }
 
             @Override
-            public void isSysCacheScanFinish() {
-                mView.dimissSystemCacheDialog();
+            public void isSysCacheScanFinish(ArrayList<JunkInfo> sysCacheList) {
+
+                RxBus.getDefault().post(new JunkDismissDialogEvent(JunkType.CACHE));
+                RxBus.getDefault().post(new ItemTotalJunkSizeEvent(
+                        JunkType.CACHE, getFilterJunkSize(JunkType.CACHE, sysCacheList)));
             }
 
             @Override
-            public void isProcessScanFinish() {
-                mView.dimissProcessDialog();
-            }
-
-            @Override
-            public void isAllScanFinish(ArrayList<JunkInfo> overList, ArrayList<JunkInfo> sysCacheList, ArrayList<AppProcessInfo> processList) {
-                mView.setData(overList, sysCacheList, processList);
-                for (JunkInfo junkInfo : overList) {
-                    mTotalJunkSize += junkInfo.getSize();
+            public void isProcessScanFinish(ArrayList<AppProcessInfo> processList) {
+                RxBus.getDefault().post(new JunkDismissDialogEvent(JunkType.PROCESS));
+                long size = 0L;
+                for (AppProcessInfo info : processList) {
+                    size += info.getMemory();
                 }
-                for (JunkInfo junkInfo : sysCacheList) {
-                    mTotalJunkSize += junkInfo.getSize();
-                }
-                for (AppProcessInfo appInfo : processList) {
-                    mTotalJunkSize += appInfo.getMemory();
-                }
-                mView.setTotalJunk(mTotalJunkSize);
+                mTotalJunkSize += size;
+                RxBus.getDefault().post(new ItemTotalJunkSizeEvent(JunkType.PROCESS, FormatUtil.formatFileSize(size).toString()));
+                RxBus.getDefault().post(new TotalJunkSizeEvent(FormatUtil.formatFileSize(mTotalJunkSize).toString()));
+            }
+
+            @Override
+            public void isAllScanFinish(HashMap<Integer, ArrayList<JunkProcessInfo>> hashMap) {
+                RxBus.getDefault().post(new JunkDataEvent(hashMap));
+                /*RxBus.getDefault().post(new ItemTotalJunkSizeEvent(JunkType.PROCESS, getJunkSize(hashMap.get(JunkType.PROCESS))));
+                RxBus.getDefault().post(new ItemTotalJunkSizeEvent(JunkType.PROCESS, getJunkSize(hashMap.get(JunkType.PROCESS))));
+                RxBus.getDefault().post(new ItemTotalJunkSizeEvent(JunkType.CACHE, getJunkSize(hashMap.get(JunkType.CACHE))));
+                RxBus.getDefault().post(new ItemTotalJunkSizeEvent(JunkType.APK, getJunkSize(hashMap.get(JunkType.APK))));
+                RxBus.getDefault().post(new ItemTotalJunkSizeEvent(JunkType.LOG, getJunkSize(hashMap.get(JunkType.LOG))));
+                RxBus.getDefault().post(new ItemTotalJunkSizeEvent(JunkType.TEMP, getJunkSize(hashMap.get(JunkType.TEMP))));
+                RxBus.getDefault().post(new ItemTotalJunkSizeEvent(JunkType.BIG_FILE, getJunkSize(hashMap.get(JunkType.BIG_FILE))));*/
             }
 
             @Override
             public void currentOverScanJunk(JunkInfo junkInfo) {
-                mView.setCurrenOverScanJunk(junkInfo);
+                mTotalJunkSize += junkInfo.getSize();
+                RxBus.getDefault().post(new CurrenScanJunkEvent(CurrenScanJunkEvent.OVER_CACHE, junkInfo));
+                RxBus.getDefault().post(new TotalJunkSizeEvent(FormatUtil.formatFileSize(mTotalJunkSize).toString()));
             }
 
             @Override
             public void currentSysCacheScanJunk(JunkInfo junkInfo) {
-                mView.setCurrenSysCacheScanJunk(junkInfo);
+                mTotalJunkSize += junkInfo.getSize();
+                if (mOverScanFinish) {
+                    RxBus.getDefault().post(new CurrenScanJunkEvent(CurrenScanJunkEvent.SYS_CAHCE, junkInfo));
+                }
+                RxBus.getDefault().post(new TotalJunkSizeEvent(FormatUtil.formatFileSize(mTotalJunkSize).toString()));
             }
         });
+    }
 
-        mProcessManager.getRunningAppListUsingObservable()
-                .subscribe(appProcessInfos -> {
-                    mView.setRunningAppData((ArrayList<AppProcessInfo>) appProcessInfos);
-                }, Throwable::printStackTrace);
+    private String getJunkSize(ArrayList<JunkProcessInfo> list) {
+
+        long size = 0L;
+        for (JunkProcessInfo info : list) {
+            if (info.getJunkInfo() != null && info.isCheck()) {
+                size += info.getJunkInfo().getSize();
+            } else if (info.getAppProcessInfo() != null) {
+                size += info.getAppProcessInfo().getMemory();
+            }
+        }
+        return FormatUtil.formatFileSize(size).toString();
+    }
+
+    private String getFilterJunkSize(int index, ArrayList<JunkInfo> list) {
+
+/*
+        if (index == JunkType.CACHE || index == JunkType.BIG_FILE)
+            return "0.00B";
+*/
+
+        long size = 0L;
+        for (JunkInfo info : list) {
+            size += info.getSize();
+        }
+        return FormatUtil.formatFileSize(size).toString();
     }
 
     @Override
@@ -122,6 +229,27 @@ public class StoragePresenter implements StorageContact.Presenter {
     }
 
     @Override
+    public void initAdapterData() {
+        ArrayList<MultiItemEntity> list = new ArrayList<>();
+        int title[] = {R.string.running_app, R.string.cache_junk, R.string.unuseful_apk,
+                R.string.temp_file, R.string.log, R.string.big_file};
+        int resourceId[] = {R.drawable.icon_process_white_24dp, R.drawable.icon_cache_white_24dp,
+                R.drawable.icon_apk_white_24dp, R.drawable.icon_temp_file_white_24dp,
+                R.drawable.icon_log_white_24dp, R.drawable.icon_big_file_white_24dp};
+        for (int i = 0; i < 6; i++) {
+            JunkType junkType = new JunkType();
+            junkType.setTitle(mContext.getString(title[i]))
+                    .setCheck(false)
+                    .setIconResourceId(resourceId[i])
+                    .setTotalSize("")
+                    .setProgressVisible(true);
+            list.add(junkType);
+        }
+
+        mView.setAdapterData(list);
+    }
+
+    @Override
     public void attachView(@NonNull StorageContact.View view) {
         this.mView = view;
     }
@@ -133,5 +261,7 @@ public class StoragePresenter implements StorageContact.Presenter {
             this.mCompositeSubscription.unsubscribe();
         }
         this.mCompositeSubscription = null;
+        //可能还没扫描完就退出了界面。任务还在后台跑呢。。。。
+        mScanManger.cancelScanTask();
     }
 }

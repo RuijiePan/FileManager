@@ -1,14 +1,19 @@
 package com.jiepier.filemanager.manager;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
 import com.jiepier.filemanager.bean.AppProcessInfo;
 import com.jiepier.filemanager.bean.JunkInfo;
+import com.jiepier.filemanager.bean.JunkProcessInfo;
+import com.jiepier.filemanager.bean.JunkType;
 import com.jiepier.filemanager.task.OverScanTask;
 import com.jiepier.filemanager.task.SysCacheScanTask;
 import com.jiepier.filemanager.task.callback.IScanCallBack;
+import com.jiepier.filemanager.task.callback.ISysScanCallBack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import rx.schedulers.Schedulers;
 
@@ -24,9 +29,13 @@ public class ScanManager {
     private OverScanTask mOverScanTask;
     private SysCacheScanTask mSysCacheScanTask;
     private ProcessManager mProcessManager;
-    private ArrayList<JunkInfo> mOverList;
+    private ArrayList<JunkInfo> mApkList;
+    private ArrayList<JunkInfo> mLogList;
+    private ArrayList<JunkInfo> mTempList;
+    private ArrayList<JunkInfo> mBigFileList;
     private ArrayList<JunkInfo> mSysCacheList;
     private ArrayList<AppProcessInfo> mProcessList;
+    private HashMap<Integer, ArrayList<JunkProcessInfo>> mHashMap;
     private boolean mIsOverScanFinish;
     private boolean mIsSystemScanFinish;
     private boolean mIsProcessScanFinsh;
@@ -36,9 +45,13 @@ public class ScanManager {
     private ScanManager(Context context) {
 
         mContext = context.getApplicationContext();
-        mOverList = new ArrayList<>();
+        mApkList = new ArrayList<>();
+        mLogList = new ArrayList<>();
+        mTempList = new ArrayList<>();
+        mBigFileList = new ArrayList<>();
         mSysCacheList = new ArrayList<>();
         mProcessList = new ArrayList<>();
+        mHashMap = new HashMap<>();
     }
 
     public static void init(Context context) {
@@ -80,18 +93,34 @@ public class ScanManager {
             }
 
             @Override
-            public void onFinish(ArrayList<JunkInfo> children) {
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onFinish(ArrayList<JunkInfo> apkList, ArrayList<JunkInfo> logList, ArrayList<JunkInfo> tempList, ArrayList<JunkInfo> bigFileList) {
                 mIsOverScanFinish = true;
-                mOverList = children;
+                mApkList = apkList;
+                mLogList = logList;
+                mTempList = tempList;
+                mBigFileList = bigFileList;
+
                 if (mScanListener != null) {
-                    mScanListener.isOverScanFinish();
+                    mScanListener.isOverScanFinish(mApkList, mLogList, mTempList, mBigFileList);
                     checkAllScanFinish();
                 }
+            }
+
+            @Override
+            public void onOverTime() {
+                cancelScanTask();
+                mIsOverScanFinish = true;
+                checkAllScanFinish();
             }
         });
         mOverScanTask.execute();
 
-        mSysCacheScanTask = new SysCacheScanTask(new IScanCallBack() {
+        mSysCacheScanTask = new SysCacheScanTask(new ISysScanCallBack() {
             @Override
             public void onBegin() {
                 mIsSystemScanFinish = false;
@@ -105,13 +134,25 @@ public class ScanManager {
             }
 
             @Override
+            public void onCancel() {
+
+            }
+
+            @Override
             public void onFinish(ArrayList<JunkInfo> children) {
-                mIsOverScanFinish = true;
+                mIsSystemScanFinish = true;
                 mSysCacheList = children;
                 if (mScanListener != null) {
-                    mScanListener.isSysCacheScanFinish();
+                    mScanListener.isSysCacheScanFinish(children);
                     checkAllScanFinish();
                 }
+            }
+
+            @Override
+            public void onOverTime() {
+                cancelScanTask();
+                mIsSystemScanFinish = true;
+                checkAllScanFinish();
             }
         });
         mSysCacheScanTask.execute();
@@ -124,7 +165,7 @@ public class ScanManager {
                     mIsProcessScanFinsh = true;
                     mProcessList = (ArrayList<AppProcessInfo>) appProcessInfos;
                     if (mScanListener != null) {
-                        mScanListener.isProcessScanFinish();
+                        mScanListener.isProcessScanFinish(mProcessList);
                         checkAllScanFinish();
                     }
                 });
@@ -136,7 +177,48 @@ public class ScanManager {
 
     private void checkAllScanFinish() {
         if (mIsOverScanFinish && mIsSystemScanFinish && mIsProcessScanFinsh) {
-            mScanListener.isAllScanFinish(mOverList, mSysCacheList, mProcessList);
+
+            //添加进程list
+            ArrayList<JunkProcessInfo> list = new ArrayList<>();
+            for (AppProcessInfo info : mProcessList) {
+                JunkProcessInfo junkProcessInfo = new JunkProcessInfo(info);
+                list.add(junkProcessInfo);
+            }
+            mHashMap.put(JunkType.PROCESS, list);
+            list.clear();
+
+            addJunkProcessList(mSysCacheList, JunkProcessInfo.CACHE);
+            addJunkProcessList(mApkList, JunkProcessInfo.APK);
+            addJunkProcessList(mLogList, JunkProcessInfo.LOG);
+            addJunkProcessList(mTempList, JunkProcessInfo.TEMP);
+            addJunkProcessList(mBigFileList, JunkProcessInfo.BIG_FILE);
+            mScanListener.isAllScanFinish(mHashMap);
+        }
+    }
+
+    private void addJunkProcessList(ArrayList<JunkInfo> list, int type) {
+
+        ArrayList<JunkProcessInfo> tempList = new ArrayList<>();
+        for (JunkInfo junkInfo : list) {
+            JunkProcessInfo junkProcessInfo = new JunkProcessInfo(junkInfo, type);
+            tempList.add(junkProcessInfo);
+        }
+        mHashMap.put(type, tempList);
+        tempList.clear();
+    }
+
+    public void cancelScanTask() {
+        //判断当前的异步任务是否为空，并且判断当前的异步任务的状态是否是运行状态{RUNNING(运行),PENDING(准备),FINISHED(完成)}
+        if (mOverScanTask != null && mOverScanTask.getStatus() == AsyncTask.Status.RUNNING) {
+            /**
+             *cancel(true) 取消当前的异步任务，传入的true,表示当中断异步任务时继续已经运行的线程的操作，
+             *但是为了线程的安全一般为让它继续设为true
+             * */
+            mOverScanTask.cancel(true);
+        }
+
+        if (mSysCacheScanTask != null && mSysCacheScanTask.getStatus() == AsyncTask.Status.RUNNING) {
+            mSysCacheScanTask.cancel(true);
         }
     }
 
@@ -144,13 +226,13 @@ public class ScanManager {
 
         void startScan();
 
-        void isOverScanFinish();
+        void isOverScanFinish(ArrayList<JunkInfo> apkList, ArrayList<JunkInfo> logList, ArrayList<JunkInfo> tempList, ArrayList<JunkInfo> bigFileList);
 
-        void isSysCacheScanFinish();
+        void isSysCacheScanFinish(ArrayList<JunkInfo> sysCacheList);
 
-        void isProcessScanFinish();
+        void isProcessScanFinish(ArrayList<AppProcessInfo> processList);
 
-        void isAllScanFinish(ArrayList<JunkInfo> overList, ArrayList<JunkInfo> sysCacheList, ArrayList<AppProcessInfo> mProcessInfo);
+        void isAllScanFinish(HashMap<Integer, ArrayList<JunkProcessInfo>> hashMap);
 
         void currentOverScanJunk(JunkInfo junkInfo);
 

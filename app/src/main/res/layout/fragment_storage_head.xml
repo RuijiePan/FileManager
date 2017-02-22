@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_head"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    android:background="?attr/colorPrimary">
+
+    <TextView
+        android:id="@+id/tv_progress"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:layout_alignParentBottom="true"
+        android:ellipsize="middle"
+        android:gravity="bottom"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:text="@string/wait_for_scan"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_total_size"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tv_progress"
+        android:layout_centerInParent="true"
+        android:gravity="center|top"
+        android:text="@string/clean_size"
+        android:textColor="@android:color/white"
+        android:textSize="60sp" />
+
+</RelativeLayout>
+

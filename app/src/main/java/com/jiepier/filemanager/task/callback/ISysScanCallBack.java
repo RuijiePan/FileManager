@@ -5,11 +5,11 @@ import com.jiepier.filemanager.bean.JunkInfo;
 import java.util.ArrayList;
 
 /**
- * Created by panruijie on 2017/2/15.
+ * Created by panruijie on 2017/2/22.
  * Email : zquprj@gmail.com
  */
 
-public interface IScanCallBack {
+public interface ISysScanCallBack {
 
     void onBegin();
 
@@ -17,8 +17,7 @@ public interface IScanCallBack {
 
     void onCancel();
 
-    void onFinish(ArrayList<JunkInfo> apkList, ArrayList<JunkInfo> logList,
-                  ArrayList<JunkInfo> tempList, ArrayList<JunkInfo> bigFileList);
+    void onFinish(ArrayList<JunkInfo> mChildren);
 
     void onOverTime();
 }

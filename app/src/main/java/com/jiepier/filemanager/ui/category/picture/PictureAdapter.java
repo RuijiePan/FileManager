@@ -1,16 +1,10 @@
 package com.jiepier.filemanager.ui.category.picture;
 
-import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import com.jiepier.filemanager.R;
-import com.jiepier.filemanager.base.App;
 import com.jiepier.filemanager.base.BaseAdapter;
 import com.jiepier.filemanager.base.BaseViewHolder;
 import com.jiepier.filemanager.bean.ImageFolder;
-import com.jiepier.filemanager.bean.Music;
 
 import java.util.List;
 
@@ -19,7 +13,7 @@ import java.util.List;
  * Email : zquprj@gmail.com
  */
 
-public class PictureAdapter extends BaseAdapter<ImageFolder,BaseViewHolder> {
+public class PictureAdapter extends BaseAdapter<ImageFolder, BaseViewHolder> {
 
     private OnItemClickListener mListener;
 
@@ -30,17 +24,18 @@ public class PictureAdapter extends BaseAdapter<ImageFolder,BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder holder, ImageFolder item) {
 
-        holder.loadLocal(R.id.iv_firstImageView,item.getFirstImagePath())
-                .setText(R.id.tv_dir_name,item.getName())
-                .setText(R.id.tv_count,"("+item.getCount()+")");
+        holder.loadLocal(R.id.iv_firstImageView, item.getFirstImagePath())
+                .setText(R.id.tv_dir_name, item.getName())
+                .setText(R.id.tv_count, "(" + item.getCount() + ")");
 
         holder.itemView.setOnClickListener(v -> {
-            if (mListener != null)
+            if (mListener != null) {
                 mListener.onItemClick(item.getDir());
+            }
         });
     }
 
-    public void setData(List<ImageFolder> data){
+    public void setData(List<ImageFolder> data) {
         mData = data;
         notifyDataSetChanged();
     }
@@ -49,7 +44,7 @@ public class PictureAdapter extends BaseAdapter<ImageFolder,BaseViewHolder> {
         this.mListener = listener;
     }
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
 
         void onItemClick(String dir);
     }

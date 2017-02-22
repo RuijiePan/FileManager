@@ -130,6 +130,19 @@
     <string name="document">Document</string>
     <string name="memory">Memory</string>
     <string name="storage">Storage</string>
+
+    <!-- storage -->
+    <string name="junk">Junk</string>
+    <string name="wait_for_scan">Waiting for scan…</string>
+    <string name="clean_size">0.00B</string>
+    <string name="total_found">Total found:</string>
+    <string name="running_app">Running App</string>
+    <string name="cache_junk">Cache Junk</string>
+    <string name="unuseful_apk">Unsueful Apk</string>
+    <string name="temp_file">Temp File</string>
+    <string name="log">Log</string>
+    <string name="big_file">Big File</string>
+
     <!--<string name="zip">Zip</string>-->
     <string name="apk">APK</string>
     <string name="apk_manager">Apk Manager</string>

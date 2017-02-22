@@ -1,11 +1,15 @@
 package com.jiepier.filemanager.ui.category.storage;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.jiepier.filemanager.base.BasePresenter;
 import com.jiepier.filemanager.base.BaseView;
 import com.jiepier.filemanager.bean.AppProcessInfo;
 import com.jiepier.filemanager.bean.JunkInfo;
+import com.jiepier.filemanager.bean.JunkProcessInfo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -21,30 +25,28 @@ public class StorageContact {
 
         void startCleanTask(ArrayList<JunkInfo> overList, ArrayList<JunkInfo> sysCacheList, Set<String> processList);
 
+        void initAdapterData();
     }
 
     interface View extends BaseView {
 
-        void showSystemCacheDialog();
+        void setAdapterData(List<MultiItemEntity> data);
 
-        void showProcessDialog();
+        void showDialog();
 
-        void showOverDialog();
-
-        void dimissSystemCacheDialog();
-
-        void dimissOverDialog();
-
-        void dimissProcessDialog();
+        void dimissDialog(int index);
 
         void setCurrenOverScanJunk(JunkInfo junk);
 
         void setCurrenSysCacheScanJunk(JunkInfo junk);
 
-        void setData(ArrayList<JunkInfo> overList, ArrayList<JunkInfo> sysCacheList, ArrayList<AppProcessInfo> mProcessList);
+        void setData(HashMap<Integer, ArrayList<JunkProcessInfo>> hashMap);
 
-        void setTotalJunk(long junkSize);
+        void setTotalJunk(String junkSize);
 
         void setRunningAppData(ArrayList<AppProcessInfo> list);
+
+        void setItemTotalJunk(int index, String junkSize);
+
     }
 }
