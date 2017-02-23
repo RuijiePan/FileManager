@@ -7,10 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
-import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,7 +16,6 @@ import android.view.View;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.util.ColorUtil;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,7 +28,7 @@ import java.util.List;
 public class WaveSideBarView extends View {
 
     //中间圆弧弧度
-    private static final double ANGLE = Math.PI * 45 /180;
+    private static final double ANGLE = Math.PI * 45 / 180;
     //上下部分圆弧弧度
     private static final double ANGLE_B = Math.PI * 90 / 180;
     // 当前选中的位置
@@ -87,7 +84,7 @@ public class WaveSideBarView extends View {
 
     public WaveSideBarView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context,attrs);
+        init(context, attrs);
     }
 
     private void init(Context context, AttributeSet attrs) {
@@ -100,7 +97,7 @@ public class WaveSideBarView extends View {
         mWaveTextSize = context.getResources().getDimensionPixelSize(R.dimen.wave_textSize_sidebar);
         mPadding = context.getResources().getDimensionPixelSize(R.dimen.textSize_sidebar_padding);
 
-        if (attrs != null){
+        if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.WaveSideBarView);
             mTextColor = a.getColor(R.styleable.WaveSideBarView_sidebarTextColor, mTextColor);
             mTextColorChoose = a.getColor(R.styleable.WaveSideBarView_sidebarChooseTextColor, mTextColorChoose);
@@ -145,8 +142,8 @@ public class WaveSideBarView extends View {
 
         mTextRectF.left = mPosX - mTextSize;
         mTextRectF.right = mPosX + mTextSize;
-        mTextRectF.top = mTextSize/2;
-        mTextRectF.bottom = mHeight - mTextSize/2;
+        mTextRectF.top = mTextSize / 2;
+        mTextRectF.bottom = mHeight - mTextSize / 2;
 
         mLettersPaint.reset();
         mLettersPaint.setStyle(Paint.Style.FILL);
@@ -177,7 +174,7 @@ public class WaveSideBarView extends View {
     private void drawWavePath(Canvas canvas) {
 
         mWavePath.reset();
-        mWavePath.moveTo(mWidth,mCenterY - 3 * mRadius);
+        mWavePath.moveTo(mWidth, mCenterY - 3 * mRadius);
 
         int controlTopY = mCenterY - 2 * mRadius;
         int endTopX = (int) (mWidth - mRadius * Math.cos(ANGLE) * mRatio);
@@ -194,7 +191,7 @@ public class WaveSideBarView extends View {
         mWavePath.quadTo(mWidth, controlBottomY, mWidth, controlBottomY + mRadius);
         mWavePath.close();
 
-        canvas.drawPath(mWavePath,mWavePaint);
+        canvas.drawPath(mWavePath, mWavePaint);
     }
 
     private void drawBallPath(Canvas canvas) {
@@ -206,7 +203,7 @@ public class WaveSideBarView extends View {
         mBallPath.addCircle(mBallCenterX, mCenterY, mBallRadius, Path.Direction.CW);
 
         //op操作符，api需要19
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             mBallPath.op(mWavePath, Path.Op.DIFFERENCE);
         }
 
@@ -240,7 +237,7 @@ public class WaveSideBarView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         mHeight = MeasureSpec.getSize(heightMeasureSpec);
         mWidth = getMeasuredWidth();
-        mItemHeight = (mHeight - mPadding)/mLetters.size();
+        mItemHeight = (mHeight - mPadding) / mLetters.size();
         mPosX = mWidth - 1.6f * mTextSize;
     }
 
@@ -253,10 +250,11 @@ public class WaveSideBarView extends View {
         int oldChoose = mChoose;
         int newChoose = (int) (y / mHeight * mLetters.size());
 
-        switch (event.getAction()){
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (x < mWidth - 2 * mRadius)
+                if (x < mWidth - 2 * mRadius) {
                     return false;
+                }
                 //当落点与之前的选择不一样时，要修改当前的落点字母。否则在没移动之前字母选择不变
                 if (oldChoose != newChoose) {
                     if (newChoose >= 0 && newChoose < mLetters.size()) {
@@ -273,10 +271,11 @@ public class WaveSideBarView extends View {
             case MotionEvent.ACTION_MOVE:
                 mCenterY = (int) y;
                 if (oldChoose != newChoose){
-                    if (newChoose > 0 && newChoose < mLetters.size()){
+                    if (newChoose > 0 && newChoose < mLetters.size()) {
                         mChoose = newChoose;
-                        if (mListener != null)
+                        if (mListener != null) {
                             mListener.onLetterChange(mLetters.get(newChoose));
+                        }
                     }
                 }
                 invalidate();

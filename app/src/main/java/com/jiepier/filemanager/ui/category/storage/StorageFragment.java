@@ -12,12 +12,11 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseFragment;
 import com.jiepier.filemanager.bean.AppProcessInfo;
+import com.jiepier.filemanager.bean.JunkGroup;
 import com.jiepier.filemanager.bean.JunkInfo;
-import com.jiepier.filemanager.bean.JunkProcessInfo;
 import com.jiepier.filemanager.widget.BoomView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -100,8 +99,8 @@ public class StorageFragment extends BaseFragment implements StorageContact.View
     }
 
     @Override
-    public void setData(HashMap<Integer, ArrayList<JunkProcessInfo>> hashMap) {
-        mAdapter.setData(hashMap);
+    public void setData(JunkGroup junkGroup) {
+        mAdapter.setData(junkGroup);
         mCleanView.setVisibility(View.VISIBLE);
     }
 

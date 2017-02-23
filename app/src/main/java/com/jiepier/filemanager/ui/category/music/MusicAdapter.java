@@ -43,44 +43,46 @@ public class MusicAdapter extends BaseAdapter<Music,BaseViewHolder> {
         File file = new File(music.getUrl());
         IconPreview.getFileIcon(file, holder.getView(R.id.row_image));
 
-        holder.setText(R.id.tv_music_list_title,music.getTitle())
+        holder.setText(R.id.tv_music_list_title, music.getTitle())
                 .setText(R.id.tv_music_list_time, TimeUtil.getTime(music.getDuration()))
-                .setText(R.id.tv_music_list_artist,music.getArtist())
-                .setText(R.id.tv_music_list_album,music.getAlbum());
+                .setText(R.id.tv_music_list_artist, music.getArtist())
+                .setText(R.id.tv_music_list_album, music.getAlbum());
 
         int position = holder.getLayoutPosition();
-        if (selectedItems.get(position, false)){
-            holder.setVisibility(R.id.iv_check,View.VISIBLE)
-                    .setVisibility(R.id.bottom_view,View.INVISIBLE);
-        }else {
-            holder.setVisibility(R.id.iv_check,View.GONE)
-                    .setVisibility(R.id.bottom_view,View.GONE);
+        if (selectedItems.get(position, false)) {
+            holder.setVisibility(R.id.iv_check, View.VISIBLE)
+                    .setVisibility(R.id.bottom_view, View.INVISIBLE);
+        } else {
+            holder.setVisibility(R.id.iv_check, View.GONE)
+                    .setVisibility(R.id.bottom_view, View.GONE);
         }
 
         holder.itemView.setOnClickListener(view -> {
             if (isLongClick) {
                 toggleSelection(position);
-                if (getSelectedItemCount()==0) {
+                if (getSelectedItemCount() == 0) {
                     isLongClick = false;
                     mListener.onMultipeChoiceCancel();
                 }
                 else {
                     mListener.onMultipeChoice(getSelectedFilesPath());
-                    if (getSelectedItemCount()==1)
+                    if (getSelectedItemCount() == 1) {
                         mListener.onMultipeChoiceStart();
+                    }
                 }
                 mListener.onMultipeChoice(getSelectedFilesPath());
-            }else {
+            } else {
                 mListener.onItemClick(position);
             }
         });
 
         holder.itemView.setOnLongClickListener(view -> {
             toggleSelection(position);
-            if (getSelectedItemCount()!=0) {
+            if (getSelectedItemCount() != 0) {
                 isLongClick = true;
-                if (getSelectedItemCount()==1)
+                if (getSelectedItemCount() == 1) {
                     mListener.onMultipeChoiceStart();
+                }
             }
             else {
                 isLongClick = false;
@@ -106,9 +108,9 @@ public class MusicAdapter extends BaseAdapter<Music,BaseViewHolder> {
         notifyDataSetChanged();
     }
 
-    public void setAllSelections(){
-        for (int i = 0;i < getItemCount();i++){
-            selectedItems.put(i,true);
+    public void setAllSelections() {
+        for (int i = 0; i < getItemCount(); i++) {
+            selectedItems.put(i, true);
         }
         mListener.onMultipeChoice(getSelectedFilesPath());
         notifyDataSetChanged();
@@ -126,7 +128,7 @@ public class MusicAdapter extends BaseAdapter<Music,BaseViewHolder> {
         return items;
     }
 
-    public List<String> getSelectedFilesPath(){
+    public List<String> getSelectedFilesPath() {
 
         List<Integer> items = new ArrayList<Integer>(selectedItems.size());
         for (int i = 0; i < selectedItems.size(); i++) {
@@ -134,13 +136,13 @@ public class MusicAdapter extends BaseAdapter<Music,BaseViewHolder> {
         }
 
         List<String> list = new ArrayList<>();
-        for (int i=0;i<items.size();i++){
+        for (int i = 0; i < items.size(); i++) {
             list.add(getData(items.get(i)).getUrl());
         }
         return list;
     }
 
-    public void isLongClick(boolean click){
+    public void isLongClick(boolean click) {
         isLongClick = click;
     }
 }

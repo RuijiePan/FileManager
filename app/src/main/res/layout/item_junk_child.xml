@@ -11,11 +11,11 @@
 
     <ImageView
         android:id="@+id/iv_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/icon_cache_blue_24dp" />
 
     <TextView
         android:id="@+id/tv_title"
@@ -23,6 +23,8 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:textColor="#64686a"
+        android:singleLine="true"
+        android:paddingRight="10dp"
         android:textSize="18sp"
         android:textStyle="bold" />
 

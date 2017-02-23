@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.jiepier.filemanager.bean.AppProcessInfo;
+import com.jiepier.filemanager.bean.JunkGroup;
 import com.jiepier.filemanager.bean.JunkInfo;
 import com.jiepier.filemanager.bean.JunkProcessInfo;
 import com.jiepier.filemanager.bean.JunkType;
@@ -13,7 +14,6 @@ import com.jiepier.filemanager.task.callback.IScanCallBack;
 import com.jiepier.filemanager.task.callback.ISysScanCallBack;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import rx.schedulers.Schedulers;
 
@@ -35,7 +35,7 @@ public class ScanManager {
     private ArrayList<JunkInfo> mBigFileList;
     private ArrayList<JunkInfo> mSysCacheList;
     private ArrayList<AppProcessInfo> mProcessList;
-    private HashMap<Integer, ArrayList<JunkProcessInfo>> mHashMap;
+    private JunkGroup mJunkGroup;
     private boolean mIsOverScanFinish;
     private boolean mIsSystemScanFinish;
     private boolean mIsProcessScanFinsh;
@@ -51,7 +51,7 @@ public class ScanManager {
         mBigFileList = new ArrayList<>();
         mSysCacheList = new ArrayList<>();
         mProcessList = new ArrayList<>();
-        mHashMap = new HashMap<>();
+        mJunkGroup = new JunkGroup();
     }
 
     public static void init(Context context) {
@@ -184,27 +184,39 @@ public class ScanManager {
                 JunkProcessInfo junkProcessInfo = new JunkProcessInfo(info);
                 list.add(junkProcessInfo);
             }
-            mHashMap.put(JunkType.PROCESS, list);
-            list.clear();
+            mJunkGroup.setProcessList(list);
 
-            addJunkProcessList(mSysCacheList, JunkProcessInfo.CACHE);
-            addJunkProcessList(mApkList, JunkProcessInfo.APK);
-            addJunkProcessList(mLogList, JunkProcessInfo.LOG);
-            addJunkProcessList(mTempList, JunkProcessInfo.TEMP);
-            addJunkProcessList(mBigFileList, JunkProcessInfo.BIG_FILE);
-            mScanListener.isAllScanFinish(mHashMap);
+            /*ArrayList<JunkProcessInfo> mJunkSysCacheList = getJunkProcessList(mSysCacheList, JunkType.CACHE);
+            ArrayList<JunkProcessInfo> mJunkApkCacheList = getJunkProcessList(mApkList, JunkType.APK);
+            ArrayList<JunkProcessInfo> mJunkLogCacheList = getJunkProcessList(mLogList, JunkType.LOG);
+            ArrayList<JunkProcessInfo> mJunkTempCacheList = getJunkProcessList(mTempList, JunkType.TEMP);
+            ArrayList<JunkProcessInfo> mJunkBigFileCacheList = getJunkProcessList(mBigFileList, JunkType.BIG_FILE);
+            mJunkGroup.setSysCacheList(mJunkSysCacheList)
+                    .setApkList(mJunkApkCacheList)
+                    .setLogList(mJunkLogCacheList)
+                    .setTempList(mJunkTempCacheList)
+                    .setBigFileList(mJunkBigFileCacheList);*/
+            mJunkGroup.setSysCacheList(getJunkProcessList(mSysCacheList, JunkType.CACHE))
+                    .setApkList(getJunkProcessList(mApkList, JunkType.APK))
+                    .setLogList(getJunkProcessList(mLogList, JunkType.LOG))
+                    .setTempList(getJunkProcessList(mTempList, JunkType.TEMP))
+                    .setBigFileList(getJunkProcessList(mBigFileList, JunkType.BIG_FILE));
+            mScanListener.isAllScanFinish(mJunkGroup);
+
         }
     }
 
-    private void addJunkProcessList(ArrayList<JunkInfo> list, int type) {
+    private ArrayList<JunkProcessInfo> getJunkProcessList(ArrayList<JunkInfo> list, int type) {
 
         ArrayList<JunkProcessInfo> tempList = new ArrayList<>();
         for (JunkInfo junkInfo : list) {
-            JunkProcessInfo junkProcessInfo = new JunkProcessInfo(junkInfo, type);
-            tempList.add(junkProcessInfo);
+            for (int i = 0; i < junkInfo.getChildren().size(); i++) {
+                JunkInfo info = junkInfo.getChildren().get(i);
+                JunkProcessInfo junkProcessInfo = new JunkProcessInfo(info, type);
+                tempList.add(junkProcessInfo);
+            }
         }
-        mHashMap.put(type, tempList);
-        tempList.clear();
+        return tempList;
     }
 
     public void cancelScanTask() {
@@ -232,7 +244,7 @@ public class ScanManager {
 
         void isProcessScanFinish(ArrayList<AppProcessInfo> processList);
 
-        void isAllScanFinish(HashMap<Integer, ArrayList<JunkProcessInfo>> hashMap);
+        void isAllScanFinish(JunkGroup junkGroup);
 
         void currentOverScanJunk(JunkInfo junkInfo);
 

@@ -1,35 +1,23 @@
 package com.jiepier.filemanager.ui.category.memory;
 
-import android.content.Context;
-import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.View;
-import android.view.animation.Animation;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseAdapter;
 import com.jiepier.filemanager.base.BaseViewHolder;
 import com.jiepier.filemanager.bean.AppProcessInfo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
 
 /**
  * Created by panruijie on 17/1/9.
  * Email : zquprj@gmail.com
  */
 
-public class MemoryAdapter extends BaseAdapter<AppProcessInfo,BaseViewHolder>{
+public class MemoryAdapter extends BaseAdapter<AppProcessInfo, BaseViewHolder> {
 
     private SparseBooleanArray mCheckBoxArray;
     private Set<String> mChooseSet;
@@ -46,19 +34,19 @@ public class MemoryAdapter extends BaseAdapter<AppProcessInfo,BaseViewHolder>{
 
         int position = holder.getLayoutPosition();
 
-        holder.setImageDrawable(R.id.left_image,item.getIcon())
-                .setText(R.id.center_textview,item.getAppName())
-                .setChceked(R.id.right_checkbox,mCheckBoxArray.get(position));
+        holder.setImageDrawable(R.id.left_image, item.getIcon())
+                .setText(R.id.center_textview, item.getAppName())
+                .setChceked(R.id.right_checkbox, mCheckBoxArray.get(position));
 
-        if (mListener != null){
-            ((CheckBox)holder.getView(R.id.right_checkbox))
+        if (mListener != null) {
+            ((CheckBox) holder.getView(R.id.right_checkbox))
                .setOnCheckedChangeListener((buttonView, isChecked) -> {
-                   if (isChecked){
-                       mCheckBoxArray.put(position,true);
+                   if (isChecked) {
+                       mCheckBoxArray.put(position, true);
                        mChooseSet.add(item.getProcessName());
                        mListener.check(position);
-                   }else {
-                       mCheckBoxArray.put(position,false);
+                   } else {
+                       mCheckBoxArray.put(position, false);
                        mChooseSet.remove(item.getProcessName());
                        mListener.unCheck(position);
                    }
@@ -66,13 +54,13 @@ public class MemoryAdapter extends BaseAdapter<AppProcessInfo,BaseViewHolder>{
         }
 
         holder.itemView.setOnClickListener(v -> {
-            if (mCheckBoxArray.get(position)){
-                mCheckBoxArray.put(position,false);
+            if (mCheckBoxArray.get(position)) {
+                mCheckBoxArray.put(position, false);
                 mChooseSet.remove(item.getProcessName());
                 mListener.unCheck(position);
                 notifyItemChanged(position);
-            }else {
-                mCheckBoxArray.put(position,true);
+            } else {
+                mCheckBoxArray.put(position, true);
                 mChooseSet.add(item.getProcessName());
                 mListener.check(position);
                 notifyItemChanged(position);
@@ -84,19 +72,20 @@ public class MemoryAdapter extends BaseAdapter<AppProcessInfo,BaseViewHolder>{
     public void add(List<AppProcessInfo> data) {
         super.add(data);
 
-        for (int i=0;i<data.size();i++){
+        for (int i = 0; i < data.size(); i++) {
             AppProcessInfo info = data.get(i);
-            mCheckBoxArray.put(i,true);
+            mCheckBoxArray.put(i, true);
             mChooseSet.add(info.getProcessName());
         }
     }
 
-    public void notifityItem(){
+    public void notifityItem() {
 
-        if (mData.size()==0)
+        if (mData.size() == 0) {
             return;
+        }
 
-        for (int i = mData.size()-1 ;i >= 0 ; i --){
+        for (int i = mData.size() - 1; i >= 0; i--) {
 
             if (mCheckBoxArray.get(i)) {
                 mData.remove(i);
@@ -104,9 +93,9 @@ public class MemoryAdapter extends BaseAdapter<AppProcessInfo,BaseViewHolder>{
             }
         }
 
-        for (int i = 0;i<mData.size();i++){
-            if (mCheckBoxArray.get(i)){
-                mCheckBoxArray.put(i,false);
+        for (int i = 0; i < mData.size(); i++) {
+            if (mCheckBoxArray.get(i)) {
+                mCheckBoxArray.put(i, false);
                 mChooseSet.remove(mData.get(i).getProcessName());
             }
         }
@@ -118,15 +107,15 @@ public class MemoryAdapter extends BaseAdapter<AppProcessInfo,BaseViewHolder>{
         return mChooseSet;
     }
 
-    public SparseBooleanArray getCheckedArray(){
+    public SparseBooleanArray getCheckedArray() {
         return mCheckBoxArray;
     }
 
-    public void setOnCheckBoxClickListener(OnCheckBoxClickListener listener){
+    public void setOnCheckBoxClickListener(OnCheckBoxClickListener listener) {
         mListener = listener;
     }
 
-    public interface OnCheckBoxClickListener{
+    public interface OnCheckBoxClickListener {
 
         void check(int position);
 

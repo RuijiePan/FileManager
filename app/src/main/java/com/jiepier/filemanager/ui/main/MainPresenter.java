@@ -1,14 +1,10 @@
 package com.jiepier.filemanager.ui.main;
 
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
-import android.view.Menu;
 
 import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 import com.jiepier.filemanager.R;
@@ -20,15 +16,8 @@ import com.jiepier.filemanager.event.CleanActionModeEvent;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.MutipeChoiceEvent;
 import com.jiepier.filemanager.event.RefreshEvent;
-import com.jiepier.filemanager.event.SnackBarEvent;
-import com.jiepier.filemanager.task.PasteTaskExecutor;
-import com.jiepier.filemanager.task.UnzipTask;
-import com.jiepier.filemanager.task.ZipTask;
 import com.jiepier.filemanager.util.ClipBoard;
-import com.jiepier.filemanager.util.FileUtil;
-import com.jiepier.filemanager.util.ResourceUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
-import com.jiepier.filemanager.util.StatusBarUtil;
 import com.jiepier.filemanager.util.UUIDUtil;
 import com.jiepier.filemanager.widget.DeleteFilesDialog;
 import com.jiepier.filemanager.widget.DirectoryInfoDialog;
@@ -38,7 +27,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -64,18 +52,18 @@ public class MainPresenter implements MainContact.Presenter {
 
                     mList = mutipeChoiceEvent.getList();
                     mFiles = new String[mList.size()];
-                    for (int i=0;i<mFiles.length;i++){
+                    for (int i = 0; i < mFiles.length; i++) {
                         mFiles[i] = mList.get(i);
                     }
 
                     mView.cretaeActionMode();
 
                     final String mSelected = context.getString(R.string._selected);
-                    mView.setActionModeTitle(mList.size()+mSelected);
+                    mView.setActionModeTitle(mList.size() + mSelected);
 
-                    if (mList.size() == 0)
+                    if (mList.size() == 0) {
                         mView.finishActionMode();
-
+                    }
                     mView.setChoiceCount(mList.size());
                 }, Throwable::printStackTrace));
 
@@ -96,14 +84,14 @@ public class MainPresenter implements MainContact.Presenter {
                 .IoToUiObservable(ChangeThemeEvent.class)
                 .subscribe(event-> {
                     mView.reload();
-                },Throwable::printStackTrace));
+                }, Throwable::printStackTrace));
 
         mCompositeSubscription.add(RxBus.getDefault()
                 .IoToUiObservable(ActionModeTitleEvent.class)
                 .subscribe(event-> {
                     final String mSelected = context.getString(R.string._selected);
-                    mView.setActionModeTitle(event.getCount()+mSelected);
-                },Throwable::printStackTrace));
+                    mView.setActionModeTitle(event.getCount() + mSelected);
+                }, Throwable::printStackTrace));
 
     }
 
@@ -115,8 +103,9 @@ public class MainPresenter implements MainContact.Presenter {
     @Override
     public void detachView() {
         this.mView = null;
-        if (mCompositeSubscription.isUnsubscribed())
+        if (mCompositeSubscription.isUnsubscribed()) {
             this.mCompositeSubscription.unsubscribe();
+        }
         this.mCompositeSubscription = null;
     }
 
@@ -187,7 +176,7 @@ public class MainPresenter implements MainContact.Presenter {
     @Override
     public void clickRename(String currentPath) {
 
-        DialogFragment renameDialog = RenameDialog.instantiate(currentPath,mList.get(0));
+        DialogFragment renameDialog = RenameDialog.instantiate(currentPath, mList.get(0));
         mView.showDialog(renameDialog);
         RxBus.getDefault().post(new CleanActionModeEvent());
     }
@@ -204,8 +193,8 @@ public class MainPresenter implements MainContact.Presenter {
         if (tag.equals(ZIP)) {
             mView.startZipTask(folder.getAbsolutePath() + File.separator + UUIDUtil.createUUID() + ".zip",
                     mFiles);
-        }else {
-            mView.startUnZipTask(new File(unZipPath),folder);
+        } else {
+            mView.startUnZipTask(new File(unZipPath), folder);
         }
         mView.finishActionMode();
         RxBus.getDefault().post(new CleanChoiceEvent());

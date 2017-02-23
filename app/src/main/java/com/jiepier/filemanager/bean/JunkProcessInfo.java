@@ -2,7 +2,6 @@ package com.jiepier.filemanager.bean;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.jiepier.filemanager.Constant.AppConstant;
-import com.jiepier.filemanager.R;
 
 /**
  * Created by panruijie on 2017/2/21.
@@ -17,35 +16,20 @@ public class JunkProcessInfo implements MultiItemEntity {
     public static final int TEMP = 3;
     public static final int LOG = 4;
     public static final int BIG_FILE = 5;
-
+    private int type;
     private JunkInfo junkInfo;
     private AppProcessInfo appProcessInfo;
-    private int iconResourceId;
     private boolean isCheck;
 
     public JunkProcessInfo(JunkInfo junkInfo, int type) {
         this.junkInfo = junkInfo;
-        if (type == CACHE) {
-            iconResourceId = R.drawable.icon_cache_white_24dp;
-            isCheck = false;
-        } else if (type == APK) {
-            iconResourceId = R.drawable.icon_apk_white_24dp;
-            isCheck = true;
-        } else if (type == TEMP) {
-            iconResourceId = R.drawable.icon_apk_white_24dp;
-            isCheck = true;
-        } else if (type == LOG) {
-            iconResourceId = R.drawable.icon_apk_white_24dp;
-            isCheck = true;
-        } else if (type == BIG_FILE) {
-            iconResourceId = R.drawable.icon_apk_white_24dp;
-            isCheck = false;
-        }
+        this.type = type;
     }
 
     public JunkProcessInfo(AppProcessInfo appProcessInfo) {
         this.appProcessInfo = appProcessInfo;
-        isCheck = true;
+        this.isCheck = true;
+        this.type = PROCESS;
     }
 
     public JunkProcessInfo(JunkInfo junkInfo, AppProcessInfo appProcessInfo) {
@@ -57,32 +41,35 @@ public class JunkProcessInfo implements MultiItemEntity {
         return junkInfo;
     }
 
-    public void setJunkInfo(JunkInfo junkInfo) {
+    public JunkProcessInfo setJunkInfo(JunkInfo junkInfo) {
         this.junkInfo = junkInfo;
+        return this;
     }
 
     public AppProcessInfo getAppProcessInfo() {
         return appProcessInfo;
     }
 
-    public void setAppProcessInfo(AppProcessInfo appProcessInfo) {
+    public JunkProcessInfo setAppProcessInfo(AppProcessInfo appProcessInfo) {
         this.appProcessInfo = appProcessInfo;
-    }
-
-    public int getIconResourceId() {
-        return iconResourceId;
-    }
-
-    public void setIconResourceId(int iconResourceId) {
-        this.iconResourceId = iconResourceId;
+        return this;
     }
 
     public boolean isCheck() {
         return isCheck;
     }
 
-    public void setCheck(boolean check) {
+    public JunkProcessInfo setCheck(boolean check) {
         isCheck = check;
+        return this;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     @Override

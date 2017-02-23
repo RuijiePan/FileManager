@@ -3,7 +3,6 @@ package com.jiepier.filemanager.widget;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -11,16 +10,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.PaintFlagsDrawFilter;
-import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.Xfermode;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,7 +24,6 @@ import android.view.animation.LinearInterpolator;
 
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.util.BitmapUtil;
-import com.jiepier.filemanager.util.ThemeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +60,7 @@ public class BoomView extends View {
     private OnAnimatorListener mAnimatorListener;
 
     public BoomView(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public BoomView(Context context, AttributeSet attrs) {
@@ -77,7 +70,7 @@ public class BoomView extends View {
     public BoomView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initPaint();
-        initBitmap(context,attrs);
+        initBitmap(context, attrs);
     }
 
 
@@ -110,21 +103,22 @@ public class BoomView extends View {
         mMeteorPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
     }
 
-    private void initBitmap(Context context,AttributeSet attrs) {
+    private void initBitmap(Context context, AttributeSet attrs) {
 
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ThemeColorIconView);
         Drawable icon = ta.getDrawable(R.styleable.ThemeColorIconView_icon);
         ta.recycle();
 
-        if (icon == null)
-            mBitmap = BitmapUtil.getBitmapFromRes(getContext(),R.drawable.airplane);
-        else
+        if (icon == null) {
+            mBitmap = BitmapUtil.getBitmapFromRes(getContext(), R.drawable.airplane);
+        } else {
             mBitmap = BitmapUtil.getBitmapFromDrawable(icon);
+        }
 
         mBitmapWidth = mBitmap.getWidth();
         mBitmapHeight = mBitmap.getHeight();
         mMatrix = new Matrix();
-        mCircleRadius = mBitmapWidth/2 + ROUND_WIDTH;
+        mCircleRadius = mBitmapWidth / 2 + ROUND_WIDTH;
     }
 
     @Override
@@ -132,10 +126,10 @@ public class BoomView extends View {
         super.onDraw(canvas);
 
         //将画布转移到底部中间，因为gravity失效了
-        canvas.translate(mWidth/2-mBitmapWidth/2 - ROUND_WIDTH,mHeight/10 * 9 - mBitmapHeight/2);
+        canvas.translate(mWidth / 2 - mBitmapWidth / 2 - ROUND_WIDTH, mHeight / 10 * 9 - mBitmapHeight / 2);
 
         //创建圆形、火箭、流星雨混合bitmap。圆形作为dest，在此基础上叠加蒙板
-        canvas.drawBitmap(cretaeComBitmap(),0,0,mPaint);
+        canvas.drawBitmap(cretaeComBitmap(), 0, 0, mPaint);
 
         //以下是裁剪出区域再进行绘图，但是圆形会有锯齿。故不采用
         //裁剪出圆形区域,
@@ -172,16 +166,16 @@ public class BoomView extends View {
 
     public Bitmap cretaeComBitmap() {
 
-        Bitmap output = Bitmap.createBitmap(mCircleRadius*2,mCircleRadius*2, Bitmap.Config.ARGB_8888);
+        Bitmap output = Bitmap.createBitmap(mCircleRadius * 2, mCircleRadius * 2, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
-        canvas.translate(ROUND_WIDTH,ROUND_WIDTH);
+        canvas.translate(ROUND_WIDTH, ROUND_WIDTH);
         //画圆
-        canvas.drawCircle(mBitmapWidth/2,mBitmapHeight/2,mCircleRadius,mPaint);
+        canvas.drawCircle(mBitmapWidth / 2, mBitmapHeight / 2, mCircleRadius, mPaint);
 
         //画火箭
-        mMatrix.postTranslate(mDx,mDy);
-        canvas.drawBitmap(mBitmap,mMatrix,mBitmapPaint);
-        mMatrix.postTranslate(-mDx,-mDy);
+        mMatrix.postTranslate(mDx, mDy);
+        canvas.drawBitmap(mBitmap, mMatrix, mBitmapPaint);
+        mMatrix.postTranslate(-mDx, -mDy);
 
         //画流星
         if (isAnimation) {
@@ -223,14 +217,14 @@ public class BoomView extends View {
         }
     }
 
-    private void createMeteors(){
+    private void createMeteors() {
         Random randRom = new Random();
 
         mMeteorList = new ArrayList<>();
-        for (int i=0;i<15;i++) {
-            int dy = -randRom.nextInt(mCircleRadius*2);
-            int dx = randRom.nextInt(50) +50;
-            int startX = randRom.nextInt(mCircleRadius*25);
+        for (int i = 0; i < 15; i++) {
+            int dy = -randRom.nextInt(mCircleRadius * 2);
+            int dx = randRom.nextInt(50) + 50;
+            int startX = randRom.nextInt(mCircleRadius * 25);
             int startY = - (startX + dy);
             int endX = startX + dx;
             int endY = - (endX + dy);
@@ -270,7 +264,7 @@ public class BoomView extends View {
         int x = (int) event.getX();
         int y = (int) event.getY();
 
-        switch (event.getAction()){
+        switch (event.getAction()) {
 
             case MotionEvent.ACTION_DOWN:
                 //Log.w(TAG,"DOWN");
@@ -278,12 +272,14 @@ public class BoomView extends View {
                 return isTouchView;
             case MotionEvent.ACTION_MOVE:
                 //Log.w(TAG,"MOVE");
-                if (!isTouchView)
+                if (!isTouchView) {
                     return true;
+                }
                 break;
             case MotionEvent.ACTION_UP:
-                if (mListener!=null && isTouchView && checkPoint(x,y))
+                if (mListener != null && isTouchView && checkPoint(x, y)) {
                     mListener.onClick();
+                }
                 return true;
         }
 
@@ -292,14 +288,15 @@ public class BoomView extends View {
 
     private boolean checkPoint(int x, int y) {
 
-        if (x < mWidth/2-mBitmapWidth/2)
+        if (x < mWidth / 2 - mBitmapWidth / 2) {
             return false;
-        else if (x > mWidth/2+mBitmapWidth/2)
+        } else if (x > mWidth / 2 + mBitmapWidth / 2) {
             return false;
-        else if (y < mHeight/10*9 - mBitmapHeight/2 - ROUND_WIDTH)
+        } else if (y < mHeight / 10 * 9 - mBitmapHeight / 2 - ROUND_WIDTH) {
             return false;
-        else if (y > mHeight/10*9 + mBitmapHeight/2 + ROUND_WIDTH)
+        } else if (y > mHeight / 10 * 9 + mBitmapHeight / 2 + ROUND_WIDTH) {
             return false;
+        }
         return true;
     }
 
@@ -311,24 +308,24 @@ public class BoomView extends View {
         this.mAnimatorListener = listener;
     }
 
-    public interface OnViewClickListener{
+    public interface OnViewClickListener {
 
         void onClick();
     }
 
-    public interface OnAnimatorListener{
+    public interface OnAnimatorListener {
 
         void onAnimationEnd();
     }
 
-    public void startAnimation(){
+    public void startAnimation() {
 
         mMeteorDx = 0;
         mMeteorDy = 0;
         isAnimation = true;
 
         //上下振动动画
-        ObjectAnimator repeatAnimator = ObjectAnimator.ofFloat(this,"amplitudeUp",-0.05f,0.05f);
+        ObjectAnimator repeatAnimator = ObjectAnimator.ofFloat(this, "amplitudeUp", -0.05f, 0.05f);
         repeatAnimator.setInterpolator(new LinearInterpolator());
         repeatAnimator.setRepeatCount(20);
         repeatAnimator.setDuration(100);
@@ -337,7 +334,7 @@ public class BoomView extends View {
             mDy = (int) ((Float) animation.getAnimatedValue() * mBitmapHeight);
 
             mMeteorDx -= (int) (((Float) animation.getAnimatedValue() + 0.05f) * 4 * mCircleRadius);
-            mMeteorDy += (int)(((Float) animation.getAnimatedValue() + 0.05f) * 4 * mCircleRadius);
+            mMeteorDy += (int) (((Float) animation.getAnimatedValue() + 0.05f) * 4 * mCircleRadius);
 
             /*Log.w(TAG,"====================");
             Log.w(TAG,mMeteorDx + "");
@@ -347,7 +344,7 @@ public class BoomView extends View {
         });
 
         //飞出动画
-        ObjectAnimator flyUpAnimator = ObjectAnimator.ofFloat(this,"fly",1f);
+        ObjectAnimator flyUpAnimator = ObjectAnimator.ofFloat(this, "fly", 1f);
         flyUpAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         flyUpAnimator.setDuration(500);
         flyUpAnimator.addUpdateListener(animation -> {
@@ -357,7 +354,7 @@ public class BoomView extends View {
         });
 
         //飞回动画，添加动画结束回调
-        ObjectAnimator flyDownAnimator = ObjectAnimator.ofFloat(this,"fly",1f,0);
+        ObjectAnimator flyDownAnimator = ObjectAnimator.ofFloat(this, "fly", 1f, 0);
         flyDownAnimator.setInterpolator(new DecelerateInterpolator());
         flyDownAnimator.setDuration(500);
         flyDownAnimator.addUpdateListener(animation -> {
@@ -368,8 +365,9 @@ public class BoomView extends View {
         flyDownAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                if (mAnimatorListener != null)
+                if (mAnimatorListener != null) {
                     mAnimatorListener.onAnimationEnd();
+                }
                 isAnimation = false;
             }
 

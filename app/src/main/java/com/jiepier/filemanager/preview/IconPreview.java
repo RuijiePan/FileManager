@@ -14,12 +14,10 @@ import android.media.ThumbnailUtils;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.jiepier.filemanager.R;
-import com.jiepier.filemanager.preview.BitmapLruCache;
-import com.jiepier.filemanager.preview.DrawableLruCache;
-import com.jiepier.filemanager.preview.MimeTypes;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.Settings;
 
@@ -62,6 +60,7 @@ public class IconPreview {
     }
 
     private static boolean isvalidMimeType(File file) {
+
         boolean isImage = MimeTypes.isPicture(file);
         boolean isVideo = MimeTypes.isVideo(file);
         boolean isApk = file.getName().endsWith(".apk");
@@ -184,6 +183,7 @@ public class IconPreview {
             addBitmapToMemoryCache(path, mBitmap);
             return mBitmap;
         } else if (isApk) {
+            Log.w("ruijie", path);
             final PackageInfo packageInfo = pm.getPackageArchiveInfo(path,
                     PackageManager.GET_ACTIVITIES);
 

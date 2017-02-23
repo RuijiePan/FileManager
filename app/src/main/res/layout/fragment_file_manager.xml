@@ -21,6 +21,9 @@
             app:progress="70"
             app:startAngle="45"
             app:roundRadiusWeight="0.7"
+            app:roundColor="?attr/colorPrimary"
+            app:roundFillColor="@color/white"
+            android:background="?attr/colorPrimary"
             style="@style/power_progressbar_style"/>
 
         <com.jiepier.filemanager.widget.PowerProgressBar
@@ -31,6 +34,9 @@
             app:centerBottomText="storage"
             app:startAngle="45"
             app:progress="50"
+            app:roundColor="?attr/colorPrimary"
+            app:roundFillColor="@color/white"
+            android:background="?attr/colorPrimary"
             style="@style/power_progressbar_style"/>
     </LinearLayout>
 

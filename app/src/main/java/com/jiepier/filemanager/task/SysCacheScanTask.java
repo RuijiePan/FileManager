@@ -104,7 +104,7 @@ public class SysCacheScanTask extends AsyncTask<Void, Void, Void> {
             if (succeeded && pStats != null) {
                 JunkInfo info = new JunkInfo();
                 info.setPackageName(pStats.packageName)
-                        .setName(info.getName())
+                        .setName(pStats.packageName)
                         .setSize(pStats.cacheSize + pStats.externalCacheSize);
 
                 if (info.getSize() > 0) {

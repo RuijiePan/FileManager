@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.bean.AppProcessInfo;
+import com.jiepier.filemanager.bean.JunkGroup;
 import com.jiepier.filemanager.bean.JunkInfo;
 import com.jiepier.filemanager.bean.JunkProcessInfo;
 import com.jiepier.filemanager.bean.JunkType;
@@ -22,7 +23,6 @@ import com.jiepier.filemanager.util.FormatUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -54,9 +54,10 @@ public class StoragePresenter implements StorageContact.Presenter {
         mProcessManager = ProcessManager.getInstance();
 
         //生产者速度太快，加上sample对事件进行过滤。否则会出现rx.exceptions.MissingBackpressureException
+        //60帧
         mCompositeSubscription.add(RxBus.getDefault()
                 .toObservable(TotalJunkSizeEvent.class)
-                .sample(10, TimeUnit.MILLISECONDS)
+                .sample(16, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(totalJunkSizeEvent -> {
@@ -64,7 +65,10 @@ public class StoragePresenter implements StorageContact.Presenter {
                 }, Throwable::printStackTrace));
 
         mCompositeSubscription.add(RxBus.getDefault()
-                .IoToUiObservable(CurrenScanJunkEvent.class)
+                .toObservable(CurrenScanJunkEvent.class)
+                .sample(16, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(event -> {
                     if (event.getType() == CurrenScanJunkEvent.OVER_CACHE) {
                         mView.setCurrenOverScanJunk(event.getJunkInfo());
@@ -82,7 +86,7 @@ public class StoragePresenter implements StorageContact.Presenter {
         mCompositeSubscription.add(RxBus.getDefault()
                 .IoToUiObservable(JunkDataEvent.class)
                 .subscribe(junkDataEvent -> {
-                    mView.setData(junkDataEvent.getHashMap());
+                    mView.setData(junkDataEvent.getJunkGroup());
                 }, Throwable::printStackTrace));
 
         mCompositeSubscription.add(RxBus.getDefault()
@@ -119,13 +123,13 @@ public class StoragePresenter implements StorageContact.Presenter {
                 RxBus.getDefault().post(new JunkDismissDialogEvent(JunkType.BIG_FILE));
 
                 RxBus.getDefault().post(new ItemTotalJunkSizeEvent(
-                        JunkType.APK, getFilterJunkSize(JunkType.APK, apkList)));
+                        JunkType.APK, getFilterJunkSize(apkList)));
                 RxBus.getDefault().post(new ItemTotalJunkSizeEvent(
-                        JunkType.LOG, getFilterJunkSize(JunkType.LOG, logList)));
+                        JunkType.LOG, getFilterJunkSize(logList)));
                 RxBus.getDefault().post(new ItemTotalJunkSizeEvent(
-                        JunkType.TEMP, getFilterJunkSize(JunkType.TEMP, tempList)));
+                        JunkType.TEMP, getFilterJunkSize(tempList)));
                 RxBus.getDefault().post(new ItemTotalJunkSizeEvent(
-                        JunkType.BIG_FILE, getFilterJunkSize(JunkType.BIG_FILE, bigFileList)));
+                        JunkType.BIG_FILE, getFilterJunkSize(bigFileList)));
 
                 mOverScanFinish = true;
             }
@@ -135,7 +139,7 @@ public class StoragePresenter implements StorageContact.Presenter {
 
                 RxBus.getDefault().post(new JunkDismissDialogEvent(JunkType.CACHE));
                 RxBus.getDefault().post(new ItemTotalJunkSizeEvent(
-                        JunkType.CACHE, getFilterJunkSize(JunkType.CACHE, sysCacheList)));
+                        JunkType.CACHE, getFilterJunkSize(sysCacheList)));
             }
 
             @Override
@@ -151,8 +155,8 @@ public class StoragePresenter implements StorageContact.Presenter {
             }
 
             @Override
-            public void isAllScanFinish(HashMap<Integer, ArrayList<JunkProcessInfo>> hashMap) {
-                RxBus.getDefault().post(new JunkDataEvent(hashMap));
+            public void isAllScanFinish(JunkGroup junkGroup) {
+                RxBus.getDefault().post(new JunkDataEvent(junkGroup));
                 /*RxBus.getDefault().post(new ItemTotalJunkSizeEvent(JunkType.PROCESS, getJunkSize(hashMap.get(JunkType.PROCESS))));
                 RxBus.getDefault().post(new ItemTotalJunkSizeEvent(JunkType.PROCESS, getJunkSize(hashMap.get(JunkType.PROCESS))));
                 RxBus.getDefault().post(new ItemTotalJunkSizeEvent(JunkType.CACHE, getJunkSize(hashMap.get(JunkType.CACHE))));
@@ -193,12 +197,7 @@ public class StoragePresenter implements StorageContact.Presenter {
         return FormatUtil.formatFileSize(size).toString();
     }
 
-    private String getFilterJunkSize(int index, ArrayList<JunkInfo> list) {
-
-/*
-        if (index == JunkType.CACHE || index == JunkType.BIG_FILE)
-            return "0.00B";
-*/
+    private String getFilterJunkSize(ArrayList<JunkInfo> list) {
 
         long size = 0L;
         for (JunkInfo info : list) {

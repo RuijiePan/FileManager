@@ -1,9 +1,6 @@
 package com.jiepier.filemanager.event;
 
-import com.jiepier.filemanager.bean.JunkProcessInfo;
-
-import java.util.ArrayList;
-import java.util.HashMap;
+import com.jiepier.filemanager.bean.JunkGroup;
 
 /**
  * Created by panruijie on 2017/2/22.
@@ -12,17 +9,17 @@ import java.util.HashMap;
 
 public class JunkDataEvent {
 
-    private HashMap<Integer, ArrayList<JunkProcessInfo>> hashMap;
+    private JunkGroup junkGroup;
 
-    public JunkDataEvent(HashMap<Integer, ArrayList<JunkProcessInfo>> hashMap) {
-        this.hashMap = hashMap;
+    public JunkDataEvent(JunkGroup junkGroup) {
+        this.junkGroup = junkGroup;
     }
 
-    public HashMap<Integer, ArrayList<JunkProcessInfo>> getHashMap() {
-        return hashMap;
+    public JunkGroup getJunkGroup() {
+        return junkGroup;
     }
 
-    public void setHashMap(HashMap<Integer, ArrayList<JunkProcessInfo>> hashMap) {
-        this.hashMap = hashMap;
+    public void setJunkGroup(JunkGroup junkGroup) {
+        this.junkGroup = junkGroup;
     }
 }

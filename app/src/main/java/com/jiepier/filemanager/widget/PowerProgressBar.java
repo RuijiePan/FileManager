@@ -1,7 +1,6 @@
 package com.jiepier.filemanager.widget;
 
 import android.animation.ObjectAnimator;
-import android.animation.TypeEvaluator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -10,13 +9,8 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.CycleInterpolator;
 import android.view.animation.OvershootInterpolator;
-import android.widget.TextView;
 
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.util.ColorUtil;
@@ -30,23 +24,23 @@ import com.jiepier.filemanager.util.ColorUtil;
 public class PowerProgressBar extends View {
 
     private int mCenter;
-    private int mRoundRadius;//内半径
-    private int mRoundWidth;//圆的宽度
-    private int mRoundColor;//圆的颜色
-    private int mRoundFillColor;//圆的填充颜色
-    private int mStartAngle;//开始角度
+    private int mRoundRadius; //内半径
+    private int mRoundWidth; //圆的宽度
+    private int mRoundColor; //圆的颜色
+    private int mRoundFillColor; //圆的填充颜色
+    private int mStartAngle; //开始角度
     private int mDuration;
     private float mCenterTopTextSize;
     private float mCenterTextSize;
     private float mCenterBottomTextSize;
-    private float mProgress;//填充百分比
+    private float mProgress; //填充百分比
     private float mProgressStart;
     private float mRadiusWeight;
     private float mWidthWeight;
-    private boolean mIsClockwise;//是否顺时针进度
-    private String mCenterTopText;//显示所占百分比textview
-    private String mCenterText;//显示具体数值textview
-    private String mCenterBottomText;//进度条类型（memory或者storage）
+    private boolean mIsClockwise; //是否顺时针进度
+    private String mCenterTopText; //显示所占百分比textview
+    private String mCenterText; //显示具体数值textview
+    private String mCenterBottomText; //进度条类型（memory或者storage）
     private RectF mOval;
     private Paint mRoundPaint;
     private Paint mRoundFillPaint;
@@ -64,7 +58,7 @@ public class PowerProgressBar extends View {
     private final static double DEFAULT_TOP_TEXT_SIZE_PERCENT = 0.48;
     private final static double DEFAULT_CENTER_TEXT_SIZE_PERCENT = 0.16;
     private final static double DEFAULT_BOTTOM_TEXT_SIZE_PERCENT = 0.16;
-    private final static boolean DEFAULT_CLOCK_WISE = true;//顺时针
+    private final static boolean DEFAULT_CLOCK_WISE = true; //顺时针
 
     public PowerProgressBar(Context context) {
         this(context , null);
@@ -77,7 +71,7 @@ public class PowerProgressBar extends View {
     public PowerProgressBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initPaint();
-        init(context ,attrs);
+        init(context, attrs);
     }
 
     private void initPaint() {
@@ -92,24 +86,27 @@ public class PowerProgressBar extends View {
         mRoundFillPaint.setStyle(Paint.Style.STROKE);
 
         mCenterTopTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        mCenterTopTextPaint.setColor(Color.WHITE);
         mCenterTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        mCenterTextPaint.setColor(Color.WHITE);
         mCenterBottomTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        mCenterBottomTextPaint.setColor(Color.WHITE);
     }
 
-    private void init(Context context ,AttributeSet attrs ) {
+    private void init(Context context, AttributeSet attrs) {
 
         int DEFAULT_ROUND_COLOR = ColorUtil.getBackgroundColor(context);
         int DEFAULT_ROUND_FILL_COLOR = ColorUtil.getColorPrimary(context);
 
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.PowerProgressBar);
-        mRoundRadius = ta.getInteger(R.styleable.PowerProgressBar_roundRadius,DEFAULT_RADIUS);
-        mRoundWidth = ta.getInteger(R.styleable.PowerProgressBar_roundWith,DEFAULT_WIDTH);
-        mDuration = ta.getInteger(R.styleable.PowerProgressBar_duration,DEFAULT_DURATION);
+        mRoundRadius = ta.getInteger(R.styleable.PowerProgressBar_roundRadius, DEFAULT_RADIUS);
+        mRoundWidth = ta.getInteger(R.styleable.PowerProgressBar_roundWith, DEFAULT_WIDTH);
+        mDuration = ta.getInteger(R.styleable.PowerProgressBar_duration, DEFAULT_DURATION);
         mRoundColor = ta.getColor(R.styleable.PowerProgressBar_roundColor, DEFAULT_ROUND_COLOR);
         mRoundFillColor = ta.getColor(R.styleable.PowerProgressBar_roundFillColor, DEFAULT_ROUND_FILL_COLOR);
-        mStartAngle = ta.getInteger(R.styleable.PowerProgressBar_startAngle,DEFAULT_START_ANGLE);
-        mProgress = ta.getInteger(R.styleable.PowerProgressBar_progress,DEFAULT_PROGRESS);
-        mIsClockwise = ta.getBoolean(R.styleable.PowerProgressBar_isClockwise,DEFAULT_CLOCK_WISE);
+        mStartAngle = ta.getInteger(R.styleable.PowerProgressBar_startAngle, DEFAULT_START_ANGLE);
+        mProgress = ta.getInteger(R.styleable.PowerProgressBar_progress, DEFAULT_PROGRESS);
+        mIsClockwise = ta.getBoolean(R.styleable.PowerProgressBar_isClockwise, DEFAULT_CLOCK_WISE);
         mCenterTopText = ta.getString(R.styleable.PowerProgressBar_centerTopText);
         mCenterText = ta.getString(R.styleable.PowerProgressBar_centerTexts);
         mCenterBottomText = ta.getString(R.styleable.PowerProgressBar_centerBottomText);
@@ -124,9 +121,9 @@ public class PowerProgressBar extends View {
         mCenterBottomTextSize = ta.getFloat(
                 R.styleable.PowerProgressBar_centerBottomTextSizePercent,
                 (float) DEFAULT_BOTTOM_TEXT_SIZE_PERCENT) * mRoundRadius;
-        mCenterTopText = mCenterTopText == null?"":mCenterTopText;
-        mCenterText = mCenterText == null?"":mCenterText;
-        mCenterBottomText = mCenterBottomText == null?"":mCenterBottomText;
+        mCenterTopText = mCenterTopText == null ? "" : mCenterTopText;
+        mCenterText = mCenterText == null ? "" : mCenterText;
+        mCenterBottomText = mCenterBottomText == null ? "" : mCenterBottomText;
         mProgressStart = DEFAULT_PROGRESS_START;
 
         //根据主题色设置圆形进度条的颜色
@@ -140,7 +137,7 @@ public class PowerProgressBar extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        mCenter = w/2;
+        mCenter = w / 2;
         mRoundRadius = (int) (mCenter * mRadiusWeight);
         mRoundWidth = (int) (mCenter * mWidthWeight);
         mRoundPaint.setStrokeWidth(mRoundWidth);
@@ -158,11 +155,11 @@ public class PowerProgressBar extends View {
         super.onDraw(canvas);
 
         //画出圆环
-        canvas.drawCircle(mCenter,mCenter,mRoundRadius,mRoundPaint);
+        canvas.drawCircle(mCenter, mCenter, mRoundRadius, mRoundPaint);
         //画出填充的弧
         if (mIsClockwise) {
             canvas.drawArc(mOval, mStartAngle, (float) (3.6 * getProgress()), false, mRoundFillPaint);
-        }else {
+        } else {
             canvas.drawArc(mOval, mStartAngle, -(float) (3.6 * getProgress()), false, mRoundFillPaint);
         }
 
@@ -176,7 +173,7 @@ public class PowerProgressBar extends View {
                     , mCenter - topTextWidth / 2
                     , mCenter + mCenterTopTextSize / 2 - mRoundRadius / 3
                     , mCenterTopTextPaint);
-        }else {
+        } else {
             canvas.drawText(100 + "%"
                     , mCenter - topTextWidth / 2
                     , mCenter + mCenterTopTextSize / 2 - mRoundRadius / 3
@@ -184,14 +181,14 @@ public class PowerProgressBar extends View {
         }
 
         canvas.drawText(mCenterText
-                ,mCenter - centerTextWidth/2
-                ,mCenter + mCenterTopTextSize/2
-                ,mCenterTextPaint);
+                , mCenter - centerTextWidth / 2
+                , mCenter + mCenterTopTextSize / 2
+                , mCenterTextPaint);
 
         canvas.drawText(mCenterBottomText
-                ,mCenter - bottomTextWidth/2
-                ,mCenter + mCenterTopTextSize/2 + mRoundRadius/3
-                ,mCenterBottomTextPaint);
+                , mCenter - bottomTextWidth / 2
+                , mCenter + mCenterTopTextSize / 2 + mRoundRadius / 3
+                , mCenterBottomTextPaint);
 
         invalidate();
     }
@@ -252,7 +249,7 @@ public class PowerProgressBar extends View {
         this.mDuration = mDuration;
     }
 
-    public void setProgressStart(int mProgressStart){
+    public void setProgressStart(int mProgressStart) {
         this.mProgressStart = mProgressStart;
     }
 
@@ -260,8 +257,8 @@ public class PowerProgressBar extends View {
         return mProgress;
     }
 
-    public void startAnimation(){
-        ObjectAnimator animator = ObjectAnimator.ofFloat(this,"progress",mProgressStart,mProgress);
+    public void startAnimation() {
+        ObjectAnimator animator = ObjectAnimator.ofFloat(this, "progress", mProgressStart, mProgress);
         animator.setInterpolator(new OvershootInterpolator());
         animator.setDuration(mDuration);
         animator.start();

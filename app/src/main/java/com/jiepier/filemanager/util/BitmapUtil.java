@@ -1,6 +1,9 @@
 package com.jiepier.filemanager.util;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -12,6 +15,8 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import com.jiepier.filemanager.R;
+
 /**
  * Created by panruijiesx on 2016/11/24.
  */
@@ -22,7 +27,7 @@ public class BitmapUtil {
         int[] argb = new int[sourceImg.getWidth() * sourceImg.getHeight()];
 
         sourceImg.getPixels(argb, 0, sourceImg.getWidth(), 0, 0, sourceImg
-                .getWidth(), sourceImg.getHeight());// 获得图片的ARGB值
+                .getWidth(), sourceImg.getHeight()); // 获得图片的ARGB值
 
         number = number * 255 / 100;
 
@@ -38,12 +43,12 @@ public class BitmapUtil {
         return sourceImg;
     }
 
-    public static Bitmap getBitmapFromDrawable(Drawable drawable){
+    public static Bitmap getBitmapFromDrawable(Drawable drawable) {
 
         Bitmap bitmap;
         if (drawable instanceof BitmapDrawable) {
             bitmap = ((BitmapDrawable) drawable).getBitmap();
-        }else {
+        } else {
             //drawable instanceof VectorDrawable
             bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
@@ -53,7 +58,7 @@ public class BitmapUtil {
         return bitmap;
     }
 
-    public static Bitmap getBitmapFromRes(Context context,int ResId){
+    public static Bitmap getBitmapFromRes(Context context, int ResId) {
 
         return getBitmapFromDrawable(context.getResources().getDrawable(ResId));
     }
@@ -135,5 +140,33 @@ public class BitmapUtil {
         drawable.setColorFilter(new
                 PorterDuffColorFilter(context.getResources().getColor(colorRes), PorterDuff.Mode.MULTIPLY));
         return drawable;
+    }
+
+    public static Bitmap getApkIcon(Context context, String path) {
+
+        Bitmap mBitmap = null;
+        PackageManager pm = context.getApplicationContext().getPackageManager();
+        PackageInfo packageInfo = pm.getPackageArchiveInfo(path,
+                PackageManager.GET_ACTIVITIES);
+
+        if (packageInfo != null) {
+            final ApplicationInfo appInfo = packageInfo.applicationInfo;
+
+            if (appInfo != null) {
+                appInfo.sourceDir = path;
+                appInfo.publicSourceDir = path;
+                final Drawable icon = appInfo.loadIcon(pm);
+
+                if (icon != null) {
+                    mBitmap = ((BitmapDrawable) icon).getBitmap();
+                }
+            }
+        } else {
+            // load apk icon from /res/drawable/..
+            mBitmap = BitmapFactory.decodeResource(context.getApplicationContext().getResources(),
+                    R.drawable.type_apk);
+        }
+
+        return mBitmap;
     }
 }

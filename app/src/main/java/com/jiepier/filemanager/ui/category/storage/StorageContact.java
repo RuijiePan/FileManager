@@ -4,11 +4,10 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.jiepier.filemanager.base.BasePresenter;
 import com.jiepier.filemanager.base.BaseView;
 import com.jiepier.filemanager.bean.AppProcessInfo;
+import com.jiepier.filemanager.bean.JunkGroup;
 import com.jiepier.filemanager.bean.JunkInfo;
-import com.jiepier.filemanager.bean.JunkProcessInfo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -40,7 +39,7 @@ public class StorageContact {
 
         void setCurrenSysCacheScanJunk(JunkInfo junk);
 
-        void setData(HashMap<Integer, ArrayList<JunkProcessInfo>> hashMap);
+        void setData(JunkGroup junkGroup);
 
         void setTotalJunk(String junkSize);
 

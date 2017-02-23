@@ -7,10 +7,10 @@ import android.view.View;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseAdapter;
 import com.jiepier.filemanager.base.BaseViewHolder;
+import com.jiepier.filemanager.preview.IconPreview;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.SortUtils;
-import com.jiepier.filemanager.preview.IconPreview;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -22,7 +22,7 @@ import java.util.Locale;
  * Created by JiePier on 16/12/14.
  */
 
-public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
+public class BrowserListAdapter extends BaseAdapter<String, BaseViewHolder> {
 
     private SparseBooleanArray selectedItems;
     private boolean isLongClick;
@@ -44,61 +44,63 @@ public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
         DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT,
                 DateFormat.SHORT, Locale.getDefault());
 
-        if (Settings.getListAppearance() > 0){
+        if (Settings.getListAppearance() > 0) {
             holder.setVisibility(R.id.dateview, View.VISIBLE);
-        }else {
+        } else {
             holder.setVisibility(R.id.dateview, View.GONE);
         }
 
         IconPreview.getFileIcon(file, holder.getView(R.id.row_image));
-        if (file.isFile()){
+        if (file.isFile()) {
             holder.setText(R.id.bottom_view, FileUtil.formatCalculatedSize(file.length()));
-        }else {
+        } else {
             String[] list = file.list();
 
-            if (list != null){
+            if (list != null) {
                 numItems = list.length;
             }
-            holder.setText(R.id.bottom_view,numItems+mResources.getString(R.string.files));
+            holder.setText(R.id.bottom_view, numItems + mResources.getString(R.string.files));
         }
 
-        holder.setText(R.id.top_view,file.getName())
-                .setText(R.id.dateview,df.format(file.lastModified()));
+        holder.setText(R.id.top_view, file.getName())
+                .setText(R.id.dateview, df.format(file.lastModified()));
 
 
         int position = holder.getLayoutPosition();
-        if (selectedItems.get(position, false)){
-            holder.setVisibility(R.id.bottom_view,View.GONE);
-            holder.setVisibility(R.id.iv_check,View.VISIBLE);
-        }else {
-            holder.setVisibility(R.id.bottom_view,View.VISIBLE);
-            holder.setVisibility(R.id.iv_check,View.GONE);
+        if (selectedItems.get(position, false)) {
+            holder.setVisibility(R.id.bottom_view, View.GONE);
+            holder.setVisibility(R.id.iv_check, View.VISIBLE);
+        } else {
+            holder.setVisibility(R.id.bottom_view, View.VISIBLE);
+            holder.setVisibility(R.id.iv_check, View.GONE);
         }
 
         holder.itemView.setOnClickListener(view -> {
             if (isLongClick) {
                 toggleSelection(position);
-                if (getSelectedItemCount()==0) {
+                if (getSelectedItemCount() == 0) {
                     isLongClick = false;
                     mListener.onMultipeChoiceCancel();
                 }
                 else {
                     mListener.onMultipeChoice(getSelectedFilesPath());
-                    if (getSelectedItemCount()==1)
+                    if (getSelectedItemCount() == 1) {
                         mListener.onMultipeChoiceStart();
+                    }
                 }
                 mListener.onMultipeChoice(getSelectedFilesPath());
-            }else {
+            } else {
                 mListener.onItemClick(position);
             }
         });
 
         holder.itemView.setOnLongClickListener(view -> {
             toggleSelection(position);
-            if (getSelectedItemCount()!=0) {
+            if (getSelectedItemCount() != 0) {
                 isLongClick = true;
-                if (getSelectedItemCount()==1)
+                if (getSelectedItemCount() == 1) {
                     mListener.onMultipeChoiceStart();
+                }
             }
             else {
                 isLongClick = false;
@@ -109,21 +111,23 @@ public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
         });
     }
 
-    public void addFiles(String path){
+    public void addFiles(String path) {
         mPath = path;
-        mData = FileUtil.listFiles(path,mContext);
+        mData = FileUtil.listFiles(path, mContext);
 
-        if (mData != null)
-            SortUtils.sortList(mData,path);
+        if (mData != null) {
+            SortUtils.sortList(mData, path);
+        }
 
         notifyDataSetChanged();
     }
 
-    public void refresh(){
-        mData = FileUtil.listFiles(mPath,mContext);
+    public void refresh() {
+        mData = FileUtil.listFiles(mPath, mContext);
 
-        if (mData != null)
-            SortUtils.sortList(mData,mPath);
+        if (mData != null) {
+            SortUtils.sortList(mData, mPath);
+        }
 
         notifyDataSetChanged();
     }
@@ -143,9 +147,9 @@ public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
         notifyDataSetChanged();
     }
 
-    public void setAllSelections(){
-        for (int i = 0;i < getItemCount();i++){
-            selectedItems.put(i,true);
+    public void setAllSelections() {
+        for (int i = 0; i < getItemCount(); i++) {
+            selectedItems.put(i, true);
         }
         mListener.onMultipeChoice(getSelectedFilesPath());
         notifyDataSetChanged();
@@ -163,7 +167,7 @@ public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
         return items;
     }
 
-    public List<String> getSelectedFilesPath(){
+    public List<String> getSelectedFilesPath() {
 
         List<Integer> items = new ArrayList<Integer>(selectedItems.size());
         for (int i = 0; i < selectedItems.size(); i++) {
@@ -171,13 +175,13 @@ public class BrowserListAdapter extends BaseAdapter<String,BaseViewHolder> {
         }
 
         List<String> list = new ArrayList<>();
-        for (int i=0;i<items.size();i++){
+        for (int i = 0; i < items.size(); i++) {
             list.add(getData(items.get(i)));
         }
         return list;
     }
 
-    public void isLongClick(boolean click){
+    public void isLongClick(boolean click) {
         isLongClick = click;
     }
 }
