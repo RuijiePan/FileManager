@@ -344,7 +344,7 @@ public class BoomView extends View {
         });
 
         //飞出动画
-        ObjectAnimator flyUpAnimator = ObjectAnimator.ofFloat(this, "fly", 1f);
+        ObjectAnimator flyUpAnimator = ObjectAnimator.ofFloat(this, "fly", 2f);
         flyUpAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         flyUpAnimator.setDuration(500);
         flyUpAnimator.addUpdateListener(animation -> {
@@ -354,7 +354,7 @@ public class BoomView extends View {
         });
 
         //飞回动画，添加动画结束回调
-        ObjectAnimator flyDownAnimator = ObjectAnimator.ofFloat(this, "fly", 1f, 0);
+        ObjectAnimator flyDownAnimator = ObjectAnimator.ofFloat(this, "fly", 2f, 0);
         flyDownAnimator.setInterpolator(new DecelerateInterpolator());
         flyDownAnimator.setDuration(500);
         flyDownAnimator.addUpdateListener(animation -> {

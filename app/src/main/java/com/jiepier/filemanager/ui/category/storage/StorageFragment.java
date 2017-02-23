@@ -50,8 +50,7 @@ public class StorageFragment extends BaseFragment implements StorageContact.View
     }
 
     @Override
-    protected void initListeners() {
-
+    protected void initData() {
         mPresnter = new StoragePresenter(getContext());
         mPresnter.attachView(this);
         mPresnter.startScanTask();
@@ -59,8 +58,14 @@ public class StorageFragment extends BaseFragment implements StorageContact.View
     }
 
     @Override
-    protected void initData() {
+    protected void initListeners() {
+        mCleanView.setViewClickListener(new BoomView.OnViewClickListener() {
+            @Override
+            public void onClick() {
+                mCleanView.startAnimation();
 
+            }
+        });
     }
 
     @Override

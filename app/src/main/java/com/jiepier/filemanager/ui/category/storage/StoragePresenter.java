@@ -11,6 +11,7 @@ import com.jiepier.filemanager.bean.JunkInfo;
 import com.jiepier.filemanager.bean.JunkProcessInfo;
 import com.jiepier.filemanager.bean.JunkType;
 import com.jiepier.filemanager.event.CurrenScanJunkEvent;
+import com.jiepier.filemanager.event.CurrentJunSizeEvent;
 import com.jiepier.filemanager.event.ItemTotalJunkSizeEvent;
 import com.jiepier.filemanager.event.JunkDataEvent;
 import com.jiepier.filemanager.event.JunkDismissDialogEvent;
@@ -75,6 +76,13 @@ public class StoragePresenter implements StorageContact.Presenter {
                     } else if (event.getType() == CurrenScanJunkEvent.SYS_CAHCE) {
                         mView.setCurrenSysCacheScanJunk(event.getJunkInfo());
                     }
+                }, Throwable::printStackTrace));
+
+        mCompositeSubscription.add(RxBus.getDefault()
+                .IoToUiObservable(CurrentJunSizeEvent.class)
+                .subscribe(event -> {
+                    mTotalJunkSize = event.getTotalSize();
+                    mView.setTotalJunk(FormatUtil.formatFileSize(mTotalJunkSize).toString());
                 }, Throwable::printStackTrace));
 
         mCompositeSubscription.add(RxBus.getDefault()
@@ -157,6 +165,7 @@ public class StoragePresenter implements StorageContact.Presenter {
             @Override
             public void isAllScanFinish(JunkGroup junkGroup) {
                 RxBus.getDefault().post(new JunkDataEvent(junkGroup));
+                RxBus.getDefault().post(new CurrentJunSizeEvent(mTotalJunkSize));
                 /*RxBus.getDefault().post(new ItemTotalJunkSizeEvent(JunkType.PROCESS, getJunkSize(hashMap.get(JunkType.PROCESS))));
                 RxBus.getDefault().post(new ItemTotalJunkSizeEvent(JunkType.PROCESS, getJunkSize(hashMap.get(JunkType.PROCESS))));
                 RxBus.getDefault().post(new ItemTotalJunkSizeEvent(JunkType.CACHE, getJunkSize(hashMap.get(JunkType.CACHE))));
