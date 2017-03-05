@@ -182,6 +182,7 @@ public class ScanManager {
             ArrayList<JunkProcessInfo> list = new ArrayList<>();
             for (AppProcessInfo info : mProcessList) {
                 JunkProcessInfo junkProcessInfo = new JunkProcessInfo(info);
+                junkProcessInfo.setCheck(true);
                 list.add(junkProcessInfo);
             }
             mJunkGroup.setProcessList(list);
@@ -213,6 +214,7 @@ public class ScanManager {
             for (int i = 0; i < junkInfo.getChildren().size(); i++) {
                 JunkInfo info = junkInfo.getChildren().get(i);
                 JunkProcessInfo junkProcessInfo = new JunkProcessInfo(info, type);
+                junkProcessInfo.setCheck(info.isCheck());
                 tempList.add(junkProcessInfo);
             }
         }

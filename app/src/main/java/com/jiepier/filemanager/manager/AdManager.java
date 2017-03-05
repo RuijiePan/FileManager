@@ -1,13 +1,16 @@
+/*
 package com.jiepier.filemanager.manager;
 
 import android.content.Context;
 
 import com.facebook.ads.NativeAd;
 
+*/
 /**
  * Created by panruijie on 17/1/25.
  * Email : zquprj@gmail.com
- */
+ *//*
+
 
 public class AdManager {
 
@@ -50,3 +53,4 @@ public class AdManager {
         throw new IllegalStateException("NativeAd is null,please check it first");
     }
 }
+*/

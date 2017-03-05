@@ -1,11 +1,10 @@
 package com.jiepier.filemanager.ui.category.storage;
 
-import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.jiepier.filemanager.base.BasePresenter;
 import com.jiepier.filemanager.base.BaseView;
-import com.jiepier.filemanager.bean.AppProcessInfo;
 import com.jiepier.filemanager.bean.JunkGroup;
 import com.jiepier.filemanager.bean.JunkInfo;
+import com.jiepier.filemanager.bean.entity.MultiItemEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +24,8 @@ public class StorageContact {
         void startCleanTask(ArrayList<JunkInfo> overList, ArrayList<JunkInfo> sysCacheList, Set<String> processList);
 
         void initAdapterData();
+
+        void updateJunkInfo(List<MultiItemEntity> list);
     }
 
     interface View extends BaseView {
@@ -43,7 +44,7 @@ public class StorageContact {
 
         void setTotalJunk(String junkSize);
 
-        void setRunningAppData(ArrayList<AppProcessInfo> list);
+        void groupClick(boolean isExpand, int position);
 
         void setItemTotalJunk(int index, String junkSize);
 

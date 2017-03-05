@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CheckedTextView;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,13 +37,13 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return convertView;
     }
 
-    public <T extends View> T getView(int viewId){
+    public <T extends View> T getView(int viewId) {
         View view = views.get(viewId);
         if (view == null){
             view = convertView.findViewById(viewId);
-            views.put(viewId,view);
+            views.put(viewId, view);
         }
-        return (T)view;
+        return (T) view;
     }
 
     public BaseViewHolder setText(int viewId, CharSequence value) {
@@ -56,15 +58,15 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    public BaseViewHolder loadLocal(int viewId, String path){
+    public BaseViewHolder loadLocal(int viewId, String path) {
         ImageView imageView = getView(viewId);
 
         Glide.with(App.getAppContext())
-                .load("file://"+path)
-                .override(250,250)
+                .load("file://" + path)
+                .override(250, 250)
                 .centerCrop()
                 //禁止磁盘缓存
-                .diskCacheStrategy( DiskCacheStrategy.NONE )
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 //禁止内存缓存
                 //.skipMemoryCache( true )
                 .placeholder(R.drawable.image_loading)
@@ -74,21 +76,32 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    public BaseViewHolder setImageBitmap(int viewId, Bitmap bitmap){
+    public BaseViewHolder setImageBitmap(int viewId, Bitmap bitmap) {
         ImageView imageView = getView(viewId);
         imageView.setImageBitmap(bitmap);
         return this;
     }
 
-    public BaseViewHolder setImageDrawable(int viewId, Drawable drawable){
+    public BaseViewHolder setImageDrawable(int viewId, Drawable drawable) {
         ImageView imageView = getView(viewId);
         imageView.setImageDrawable(drawable);
         return this;
     }
 
-    public BaseViewHolder setImageResource(int viewId, int resourceId){
+    public BaseViewHolder setImageResource(int viewId, int resourceId) {
         ImageView imageView = getView(viewId);
         imageView.setImageResource(resourceId);
+        return this;
+    }
+
+    public BaseViewHolder setChecked(int viewId, boolean checked) {
+        View view = getView(viewId);
+        // View unable cast to Checkable
+        if (view instanceof CompoundButton) {
+            ((CompoundButton) view).setChecked(checked);
+        } else if (view instanceof CheckedTextView) {
+            ((CheckedTextView) view).setChecked(checked);
+        }
         return this;
     }
 
@@ -104,15 +117,15 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    public BaseViewHolder setColorFilter(int viewId,int color){
+    public BaseViewHolder setColorFilter(int viewId, int color) {
         View view = getView(viewId);
-        ((ImageView)view).setColorFilter(Color.parseColor("#77000000"));
+        ((ImageView) view).setColorFilter(Color.parseColor("#77000000"));
         return this;
     }
 
-    public BaseViewHolder setColorFilter(int viewId, ColorFilter colorFilter){
+    public BaseViewHolder setColorFilter(int viewId, ColorFilter colorFilter) {
         View view = getView(viewId);
-        ((ImageView)view).setColorFilter(colorFilter);
+        ((ImageView) view).setColorFilter(colorFilter);
         return this;
     }
 
@@ -120,7 +133,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         View view = getView(viewId);
         if (visibility) {
             view.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             view.setVisibility(View.INVISIBLE);
         }
         return this;
@@ -128,19 +141,20 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     public BaseViewHolder setChceked(int viewId, boolean checked) {
         View view = getView(viewId);
-        ((CheckBox)view).setChecked(checked);
+        ((CheckBox) view).setChecked(checked);
         return this;
     }
 
-    public BaseViewHolder setVisibility(int viewId,int type) {
+    public BaseViewHolder setVisibility(int viewId, int type) {
         View view = getView(viewId);
         if (type == 0) {
             view.setVisibility(View.VISIBLE);
-        }else if (type == 4){
+        } else if (type == 4) {
             view.setVisibility(View.INVISIBLE);
-        }else if (type == 8){
+        } else if (type == 8) {
             view.setVisibility(View.GONE);
         }
         return this;
     }
+
 }

@@ -120,7 +120,8 @@ public class SysCacheScanTask extends AsyncTask<Void, Void, Void> {
                         .setSize(mTotalSize)
                         .setChildren(mSysCaches)
                         .setVisible(true)
-                        .setChild(false);
+                        .setChild(false)
+                        .isCheck(false);
 
                 Collections.sort(mSysCaches);
                 Collections.reverse(mSysCaches);

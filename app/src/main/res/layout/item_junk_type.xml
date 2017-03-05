@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="120dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="1dp"
     android:clickable="true"
@@ -39,15 +39,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <CheckBox
+        <android.support.v7.widget.AppCompatCheckBox
             android:id="@+id/cb_junk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.jiepier.filemanager.widget.CircularProgress
+        <com.jiepier.filemanager.widget.ProgressWheel
             android:id="@+id/pb_junk"
-            app:borderWidth="2dp"
             android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_height="30dp"
+            app:matProg_barColor="?attr/colorPrimary"
+            app:matProg_barWidth="2dp"
+            app:matProg_progressIndeterminate="true" />
+
     </RelativeLayout>
 </LinearLayout>

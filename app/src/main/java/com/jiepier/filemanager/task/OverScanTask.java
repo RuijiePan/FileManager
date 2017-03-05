@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 
 import com.jiepier.filemanager.bean.JunkInfo;
+import com.jiepier.filemanager.preview.MimeTypes;
 import com.jiepier.filemanager.task.callback.IScanCallBack;
 
 import java.io.File;
@@ -23,7 +24,6 @@ public class OverScanTask extends AsyncTask<Void, Void, Void> {
 
     private IScanCallBack mCallBack;
     private final int SCAN_LEVEL = 10;
-    private static final int TEN_MB = 10 * 1024 * 1024;
     private boolean mIsOverTime = true;
     private JunkInfo mApkInfo;
     private JunkInfo mLogInfo;
@@ -59,23 +59,23 @@ public class OverScanTask extends AsyncTask<Void, Void, Void> {
         if (files != null) {
             for (File file : files) {
                 if (file.isFile()) {
-                    String name = file.getName();
                     JunkInfo info = null;
 
-                    if (name.endsWith(".apk")) {
+                    if (MimeTypes.isApk(file)) {
                         info = getJunkInfo(file);
                         mApkInfo.getChildren().add(info);
                         mApkInfo.setSize(mApkInfo.getSize() + info.getSize());
-                    } else if (name.endsWith(".log")) {
+                    } else if (MimeTypes.isLog(file)) {
                         info = getJunkInfo(file);
                         mLogInfo.getChildren().add(info);
                         mLogInfo.setSize(mLogInfo.getSize() + info.getSize());
-                    } else if (name.endsWith(".tmp") || name.endsWith(".temp")) {
+                    } else if (MimeTypes.isTempFile(file)) {
                         info = getJunkInfo(file);
                         mTempInfo.getChildren().add(info);
                         mTempInfo.setSize(mTempInfo.getSize() + info.getSize());
-                    } else if (file.length() > TEN_MB) {
+                    } else if (MimeTypes.isBigFile(file)) {
                         info = getJunkInfo(file);
+                        info.isCheck(false);
                         mBigFileInfo.getChildren().add(info);
                         mBigFileInfo.setSize(mBigFileInfo.getSize() + info.getSize());
                     }
@@ -99,7 +99,8 @@ public class OverScanTask extends AsyncTask<Void, Void, Void> {
                 .setName(file.getName())
                 .setPath(file.getAbsolutePath())
                 .setChild(false)
-                .setVisible(true);
+                .setVisible(true)
+                .isCheck(true);
         return junkInfo;
     }
 

@@ -3,27 +3,30 @@ package com.jiepier.filemanager.ui.category.storage;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.bean.AppProcessInfo;
 import com.jiepier.filemanager.bean.JunkGroup;
 import com.jiepier.filemanager.bean.JunkInfo;
-import com.jiepier.filemanager.bean.JunkProcessInfo;
 import com.jiepier.filemanager.bean.JunkType;
+import com.jiepier.filemanager.bean.entity.MultiItemEntity;
 import com.jiepier.filemanager.event.CurrenScanJunkEvent;
 import com.jiepier.filemanager.event.CurrentJunSizeEvent;
 import com.jiepier.filemanager.event.ItemTotalJunkSizeEvent;
 import com.jiepier.filemanager.event.JunkDataEvent;
 import com.jiepier.filemanager.event.JunkDismissDialogEvent;
 import com.jiepier.filemanager.event.JunkShowDialogEvent;
+import com.jiepier.filemanager.event.JunkTypeClickEvent;
 import com.jiepier.filemanager.event.TotalJunkSizeEvent;
 import com.jiepier.filemanager.manager.CleanManager;
 import com.jiepier.filemanager.manager.ProcessManager;
 import com.jiepier.filemanager.manager.ScanManager;
+import com.jiepier.filemanager.preview.MimeTypes;
 import com.jiepier.filemanager.util.FormatUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -44,6 +47,7 @@ public class StoragePresenter implements StorageContact.Presenter {
     private ScanManager mScanManger;
     private CleanManager mCleanManager;
     private ProcessManager mProcessManager;
+    private List<MultiItemEntity> mList;
     private long mTotalJunkSize;
     private boolean mOverScanFinish;
 
@@ -53,6 +57,7 @@ public class StoragePresenter implements StorageContact.Presenter {
         mScanManger = ScanManager.getInstance();
         mCleanManager = CleanManager.getInstance();
         mProcessManager = ProcessManager.getInstance();
+        mList = new ArrayList<>();
 
         //生产者速度太快，加上sample对事件进行过滤。否则会出现rx.exceptions.MissingBackpressureException
         //60帧
@@ -65,6 +70,7 @@ public class StoragePresenter implements StorageContact.Presenter {
                     mView.setTotalJunk(totalJunkSizeEvent.getTotalSize());
                 }, Throwable::printStackTrace));
 
+        //当前扫描类名
         mCompositeSubscription.add(RxBus.getDefault()
                 .toObservable(CurrenScanJunkEvent.class)
                 .sample(16, TimeUnit.MILLISECONDS)
@@ -108,6 +114,14 @@ public class StoragePresenter implements StorageContact.Presenter {
                 .subscribe(event -> {
                     mView.dimissDialog(event.getIndex());
                 }, Throwable::printStackTrace));
+
+
+        mCompositeSubscription.add(RxBus.getDefault()
+                .IoToUiObservable(JunkTypeClickEvent.class)
+                .subscribe(event -> {
+                    mView.groupClick(event.isExpand(), event.getPosition());
+                }, Throwable::printStackTrace));
+
     }
 
     @Override
@@ -177,33 +191,25 @@ public class StoragePresenter implements StorageContact.Presenter {
 
             @Override
             public void currentOverScanJunk(JunkInfo junkInfo) {
-                mTotalJunkSize += junkInfo.getSize();
+                //大文件默认不勾选
+                File file = new File(junkInfo.getPath());
+                if (MimeTypes.isApk(file) || MimeTypes.isTempFile(file) || MimeTypes.isLog(file)) {
+                    mTotalJunkSize += junkInfo.getSize();
+                    RxBus.getDefault().post(new TotalJunkSizeEvent(FormatUtil.formatFileSize(mTotalJunkSize).toString()));
+                }
                 RxBus.getDefault().post(new CurrenScanJunkEvent(CurrenScanJunkEvent.OVER_CACHE, junkInfo));
-                RxBus.getDefault().post(new TotalJunkSizeEvent(FormatUtil.formatFileSize(mTotalJunkSize).toString()));
             }
 
             @Override
             public void currentSysCacheScanJunk(JunkInfo junkInfo) {
-                mTotalJunkSize += junkInfo.getSize();
+                //缓存文件默认不勾选
+                //mTotalJunkSize += junkInfo.getSize();
                 if (mOverScanFinish) {
                     RxBus.getDefault().post(new CurrenScanJunkEvent(CurrenScanJunkEvent.SYS_CAHCE, junkInfo));
                 }
-                RxBus.getDefault().post(new TotalJunkSizeEvent(FormatUtil.formatFileSize(mTotalJunkSize).toString()));
+                //RxBus.getDefault().post(new TotalJunkSizeEvent(FormatUtil.formatFileSize(mTotalJunkSize).toString()));
             }
         });
-    }
-
-    private String getJunkSize(ArrayList<JunkProcessInfo> list) {
-
-        long size = 0L;
-        for (JunkProcessInfo info : list) {
-            if (info.getJunkInfo() != null && info.isCheck()) {
-                size += info.getJunkInfo().getSize();
-            } else if (info.getAppProcessInfo() != null) {
-                size += info.getAppProcessInfo().getMemory();
-            }
-        }
-        return FormatUtil.formatFileSize(size).toString();
     }
 
     private String getFilterJunkSize(ArrayList<JunkInfo> list) {
@@ -247,14 +253,22 @@ public class StoragePresenter implements StorageContact.Presenter {
         for (int i = 0; i < 6; i++) {
             JunkType junkType = new JunkType();
             junkType.setTitle(mContext.getString(title[i]))
-                    .setCheck(false)
+                    .setCheck(true)
                     .setIconResourceId(resourceId[i])
                     .setTotalSize("")
                     .setProgressVisible(true);
+            if (JunkType.BIG_FILE == i || JunkType.CACHE == i) {
+                junkType.setCheck(false);
+            }
             list.add(junkType);
         }
 
         mView.setAdapterData(list);
+    }
+
+    @Override
+    public void updateJunkInfo(List<MultiItemEntity> list) {
+        this.mList = list;
     }
 
     @Override

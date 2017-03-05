@@ -2,7 +2,6 @@ package com.jiepier.filemanager.preview;
 
 import android.webkit.MimeTypeMap;
 
-
 import com.blankj.utilcode.utils.FileUtils;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.util.FileUtil;
@@ -16,6 +15,7 @@ public final class MimeTypes {
 
     private MimeTypes() {}
 
+    private static final long BIG_FILE = 10 * 1024 * 1024;
     private static final HashMap<String, Integer> EXT_ICONS = new HashMap<>();
     private static final HashMap<String, String> MIME_TYPES = new HashMap<>();
 
@@ -325,8 +325,8 @@ public final class MimeTypes {
             }
         }
 
-        if(type == null)
-            type="*/*";
+        if (type == null)
+            type = "*/*";
         return type;
     }
 
@@ -347,23 +347,37 @@ public final class MimeTypes {
     public static boolean isDoc(File f){
         final String mime = getMimeType(f);
         return mime != null && (mime.equals("text/plain")
-                ||mime.equals("application/pdf")
-                ||mime.equals("application/msword")
-                ||mime.equals("application/vnd.ms-excel"));
+                || mime.equals("application/pdf")
+                || mime.equals("application/msword")
+                || mime.equals("application/vnd.ms-excel"));
     }
 
-    public static boolean isApk(File f){
+    public static boolean isApk(File f) {
         String path = FileUtils.getFileName(f);
         return path.endsWith(".apk");
     }
 
-    public static boolean isZip(File f){
+    public static boolean isZip(File f) {
         String path = FileUtils.getFileName(f);
         return path.endsWith(".zip");
     }
 
-    public static boolean isMusic(File f){
+    public static boolean isMusic(File f) {
         final String REGEX = "(.*/)*.+\\.(mp3|m4a|ogg|wav|aac)$";
         return f.getName().matches(REGEX);
+    }
+
+    public static boolean isBigFile(File f) {
+        return f.length() > BIG_FILE;
+    }
+
+    public static boolean isTempFile(File f) {
+        String name = FileUtils.getFileName(f);
+        return name.endsWith(".tmp") || name.endsWith(".temp");
+    }
+
+    public static boolean isLog(File f) {
+        String name = FileUtils.getFileName(f);
+        return name.endsWith(".log");
     }
 }

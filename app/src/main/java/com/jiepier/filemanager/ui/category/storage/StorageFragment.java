@@ -1,22 +1,18 @@
 package com.jiepier.filemanager.ui.category.storage;
 
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseFragment;
-import com.jiepier.filemanager.bean.AppProcessInfo;
 import com.jiepier.filemanager.bean.JunkGroup;
 import com.jiepier.filemanager.bean.JunkInfo;
+import com.jiepier.filemanager.bean.entity.MultiItemEntity;
 import com.jiepier.filemanager.widget.BoomView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -28,14 +24,14 @@ import butterknife.BindView;
 
 public class StorageFragment extends BaseFragment implements StorageContact.View {
 
-    @BindView(R.id.recyclerView)
-    RecyclerView mRecyclerView;
+    @BindView(R.id.junk_listview)
+    ExpandableListView mListView;
     @BindView(R.id.cleanView)
     BoomView mCleanView;
     private TextView mTvProgress;
     private TextView mTvTotalSize;
     private StoragePresenter mPresnter;
-    private StorageAdapter mAdapter;
+    private StorageExpandAdapter mAdapter;
     private View mHeadView;
 
     @Override
@@ -59,27 +55,21 @@ public class StorageFragment extends BaseFragment implements StorageContact.View
 
     @Override
     protected void initListeners() {
-        mCleanView.setViewClickListener(new BoomView.OnViewClickListener() {
-            @Override
-            public void onClick() {
-                mCleanView.startAnimation();
+        mCleanView.setViewClickListener(() -> mCleanView.startAnimation());
 
-            }
-        });
     }
 
     @Override
     public void setAdapterData(List<MultiItemEntity> data) {
-        mAdapter = new StorageAdapter(data);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setAdapter(mAdapter);
 
-        mAdapter.setHeaderView(mHeadView);
-        mTvProgress = (TextView) mAdapter.getHeaderLayout().findViewById(R.id.tv_progress);
-        mTvTotalSize = (TextView) mAdapter.getHeaderLayout().findViewById(R.id.tv_total_size);
-        mAdapter.notifyDataSetChanged();
+        mAdapter = new StorageExpandAdapter(getContext(), data);
+        mListView.setGroupIndicator(null);
+        mListView.setChildIndicator(null);
+        mListView.setDividerHeight(0);
+        mListView.setAdapter(mAdapter);
+        mListView.addHeaderView(mHeadView);
+        mTvProgress = (TextView) mHeadView.findViewById(R.id.tv_progress);
+        mTvTotalSize = (TextView) mHeadView.findViewById(R.id.tv_total_size);
     }
 
     @Override
@@ -91,6 +81,7 @@ public class StorageFragment extends BaseFragment implements StorageContact.View
     public void dimissDialog(int index) {
         mAdapter.dismissItemDialog(index);
     }
+
 
     @Override
     public void setCurrenOverScanJunk(JunkInfo junk) {
@@ -106,6 +97,7 @@ public class StorageFragment extends BaseFragment implements StorageContact.View
     @Override
     public void setData(JunkGroup junkGroup) {
         mAdapter.setData(junkGroup);
+        //刷新数据
         mCleanView.setVisibility(View.VISIBLE);
     }
 
@@ -116,8 +108,13 @@ public class StorageFragment extends BaseFragment implements StorageContact.View
     }
 
     @Override
-    public void setRunningAppData(ArrayList<AppProcessInfo> list) {
-
+    public void groupClick(boolean isExpand, int position) {
+        //如果原本没展开，那么展开
+        if (!isExpand) {
+            mListView.expandGroup(position);
+        } else {
+            mListView.collapseGroup(position);
+        }
     }
 
     @Override

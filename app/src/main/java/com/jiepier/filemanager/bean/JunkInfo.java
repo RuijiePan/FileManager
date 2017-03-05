@@ -19,6 +19,7 @@ public class JunkInfo implements Comparable<JunkInfo> {
     private ArrayList<JunkInfo> mChildren = new ArrayList<>();
     private boolean mIsVisible = false;
     private boolean mIsChild = true;
+    private boolean mIsCheck = false;
 
     public String getName() {
         return mName;
@@ -81,6 +82,14 @@ public class JunkInfo implements Comparable<JunkInfo> {
     public JunkInfo setChild(boolean mIsChild) {
         this.mIsChild = mIsChild;
         return this;
+    }
+
+    public boolean isCheck() {
+        return mIsCheck;
+    }
+
+    public void isCheck(boolean mIsCheck) {
+        this.mIsCheck = mIsCheck;
     }
 
     @Override

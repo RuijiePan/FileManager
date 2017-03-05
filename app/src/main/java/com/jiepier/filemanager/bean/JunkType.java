@@ -1,8 +1,8 @@
 package com.jiepier.filemanager.bean;
 
-import com.chad.library.adapter.base.entity.AbstractExpandableItem;
-import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.jiepier.filemanager.Constant.AppConstant;
+import com.jiepier.filemanager.bean.entity.AbstractExpandableItem;
+import com.jiepier.filemanager.bean.entity.MultiItemEntity;
 
 /**
  * Created by panruijie on 2017/2/21.

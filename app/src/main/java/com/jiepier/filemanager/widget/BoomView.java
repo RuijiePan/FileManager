@@ -47,8 +47,8 @@ public class BoomView extends View {
     private int mMeteorDx;
     private int mMeteorDy;
     private int mCircleRadius;
-    private boolean isTouchView;
-    private boolean isAnimation;
+    private boolean mIsTouchView;
+    private boolean mIsAnimation;
     private Paint mPaint;
     private Paint mMeteorPaint;
     private Paint mBitmapPaint;
@@ -178,7 +178,7 @@ public class BoomView extends View {
         mMatrix.postTranslate(-mDx, -mDy);
 
         //画流星
-        if (isAnimation) {
+        if (mIsAnimation) {
             canvas.save();
             canvas.translate(mMeteorDx, mMeteorDy);
             for (Meteor mMeteor : mMeteorList) {
@@ -194,7 +194,7 @@ public class BoomView extends View {
         return output;
     }
 
-    class Meteor{
+    class Meteor {
         PointF pointStart;
         PointF pointEnd;
 
@@ -268,16 +268,16 @@ public class BoomView extends View {
 
             case MotionEvent.ACTION_DOWN:
                 //Log.w(TAG,"DOWN");
-                isTouchView = checkPoint(x, y);
-                return isTouchView;
+                mIsTouchView = checkPoint(x, y);
+                return mIsTouchView;
             case MotionEvent.ACTION_MOVE:
                 //Log.w(TAG,"MOVE");
-                if (!isTouchView) {
+                if (!mIsTouchView) {
                     return true;
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                if (mListener != null && isTouchView && checkPoint(x, y)) {
+                if (mListener != null && mIsTouchView && checkPoint(x, y)) {
                     mListener.onClick();
                 }
                 return true;
@@ -322,7 +322,7 @@ public class BoomView extends View {
 
         mMeteorDx = 0;
         mMeteorDy = 0;
-        isAnimation = true;
+        mIsAnimation = true;
 
         //上下振动动画
         ObjectAnimator repeatAnimator = ObjectAnimator.ofFloat(this, "amplitudeUp", -0.05f, 0.05f);
@@ -368,7 +368,7 @@ public class BoomView extends View {
                 if (mAnimatorListener != null) {
                     mAnimatorListener.onAnimationEnd();
                 }
-                isAnimation = false;
+                mIsAnimation = false;
             }
 
             @Override
