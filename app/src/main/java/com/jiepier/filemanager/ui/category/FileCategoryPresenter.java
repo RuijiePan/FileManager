@@ -14,6 +14,7 @@ import com.jiepier.filemanager.ui.category.picture.PictureActivity;
 import com.jiepier.filemanager.ui.category.storage.StorageActivity;
 import com.jiepier.filemanager.util.FormatUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
+import com.jiepier.filemanager.util.StorageUtil;
 
 import java.util.ArrayList;
 
@@ -94,6 +95,18 @@ public class FileCategoryPresenter implements FileCategoryContact.Presenter {
                 .subscribe(memory -> {
                     mView.setMemoryText(memory);
                 }, Throwable::printStackTrace);
+    }
+
+    @Override
+    public void updateStorageInfo() {
+
+        StorageUtil.SDCardInfo sdCardInfo = StorageUtil.getSDCardInfo(mContext);
+        String storageInfo = FormatUtil.formatFileSize(sdCardInfo.mTotal - sdCardInfo.mFree).toString() + "/" +
+                FormatUtil.formatFileSize(sdCardInfo.mTotal).toString();
+        float storagePercent = (sdCardInfo.mTotal - sdCardInfo.mFree) * 100 / sdCardInfo.mTotal;
+
+        mView.setMemoryText(storageInfo);
+        mView.setStorageProgress(storagePercent);
     }
 
     @Override

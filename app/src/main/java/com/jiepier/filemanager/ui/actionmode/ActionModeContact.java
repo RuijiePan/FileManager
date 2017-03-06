@@ -9,7 +9,6 @@ import com.jiepier.filemanager.base.BasePresenter;
 import com.jiepier.filemanager.base.BaseView;
 
 import java.io.File;
-import java.util.ArrayList;
 
 /**
  * Created by panruijie on 17/1/3.
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 
 public class ActionModeContact {
 
-    interface View extends BaseView{
+    interface View extends BaseView {
 
         void cretaeActionMode();
 
@@ -36,12 +35,12 @@ public class ActionModeContact {
 
         void startShareActivity(Intent intent);
 
-        void startZipTask(String fileName,String[] files);
+        void startZipTask(String fileName, String[] files);
 
         void startUnZipTask(File unZipFile, File folder);
     }
 
-    interface Presenter extends BasePresenter<View>{
+    interface Presenter extends BasePresenter<View> {
 
         void clickMove();
 

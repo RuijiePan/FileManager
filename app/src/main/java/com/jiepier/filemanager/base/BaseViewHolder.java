@@ -19,7 +19,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jiepier.filemanager.R;
 
 /**
- * Created by panruijiesx on 2016/11/14.
+ * Created by panruijie on 2016/11/14.
  */
 
 public class BaseViewHolder extends RecyclerView.ViewHolder {

@@ -5,34 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 import com.blankj.utilcode.utils.FileUtils;
 import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
-import com.jiepier.filemanager.base.App;
-import com.jiepier.filemanager.base.BasePresenter;
-import com.jiepier.filemanager.base.BaseView;
 import com.jiepier.filemanager.event.ActionChoiceFolderEvent;
-import com.jiepier.filemanager.event.ActionModeTitleEvent;
 import com.jiepier.filemanager.event.ActionMutipeChoiceEvent;
-import com.jiepier.filemanager.event.AllChoiceEvent;
-import com.jiepier.filemanager.event.CategoryTypeEvent;
-import com.jiepier.filemanager.event.ChangeThemeEvent;
-import com.jiepier.filemanager.event.ChoiceFolderEvent;
-import com.jiepier.filemanager.event.CleanActionModeEvent;
-import com.jiepier.filemanager.event.CleanChoiceEvent;
-import com.jiepier.filemanager.event.MutipeChoiceEvent;
-import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.event.TypeEvent;
-import com.jiepier.filemanager.manager.CategoryManager;
-import com.jiepier.filemanager.sqlite.DataManager;
-import com.jiepier.filemanager.task.PasteTaskExecutor;
 import com.jiepier.filemanager.util.ClipBoard;
-import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
-import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.UUIDUtil;
 import com.jiepier.filemanager.widget.DeleteFilesDialog;
 import com.jiepier.filemanager.widget.RenameDialog;
@@ -41,7 +23,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -57,7 +38,7 @@ public class ActionModePresenter implements ActionModeContact.Presenter {
     private List<String> mList;
     private String unZipPath = "";
 
-    public ActionModePresenter(Context context){
+    public ActionModePresenter(Context context) {
 
         mCompositeSubscription = new CompositeSubscription();
 
@@ -67,27 +48,28 @@ public class ActionModePresenter implements ActionModeContact.Presenter {
 
                     mList = event.getList();
                     mFiles = new String[mList.size()];
-                    for (int i=0;i<mFiles.length;i++){
+                    for (int i = 0; i < mFiles.length; i++) {
                         mFiles[i] = mList.get(i);
                     }
 
                     mView.cretaeActionMode();
 
                     final String mSelected = context.getString(R.string._selected);
-                    mView.setActionModeTitle(mList.size()+mSelected);
+                    mView.setActionModeTitle(mList.size() + mSelected);
 
-                    if (mList.size() == 0)
+                    if (mList.size() == 0) {
                         mView.finishActionMode();
-
+                    }
                 }, Throwable::printStackTrace));
 
         mCompositeSubscription.add(RxBus.getDefault()
                 .IoToUiObservable(TypeEvent.class)
                 .subscribe(event -> {
-                    if (event.getType() == AppConstant.CLEAN_ACTIONMODE)
+                    if (event.getType() == AppConstant.CLEAN_ACTIONMODE) {
                         mView.finishActionMode();
-                    else if (event.getType() == AppConstant.CLEAN_CHOICE)
+                    } else if (event.getType() == AppConstant.CLEAN_CHOICE) {
                         mView.finishActionMode();
+                    }
                 }, Throwable::printStackTrace));
 
         mCompositeSubscription.add(RxBus.getDefault()
@@ -144,11 +126,12 @@ public class ActionModePresenter implements ActionModeContact.Presenter {
     public void clickRename() {
 
         String parentPath = FileUtils.getDirName(mFiles[0]);
-        if (parentPath.length()!=1)
-            parentPath = parentPath.substring(0,parentPath.length()-1);
+        if (parentPath.length() != 1) {
+            parentPath = parentPath.substring(0, parentPath.length() - 1);
+        }
 
         DialogFragment renameDialog = RenameDialog.instantiate(
-                parentPath,mList.get(0));
+                parentPath, mList.get(0));
         mView.showDialog(renameDialog);
         RxBus.getDefault().post(new TypeEvent(AppConstant.CLEAN_ACTIONMODE));
 
@@ -165,11 +148,11 @@ public class ActionModePresenter implements ActionModeContact.Presenter {
         if (tag.equals(AppConstant.ZIP)) {
             mView.startZipTask(folder.getAbsolutePath() + File.separator + UUIDUtil.createUUID() + ".zip",
                     mFiles);
-        }else if (tag.equals(AppConstant.UNZIP)){
-            mView.startUnZipTask(new File(unZipPath),folder);
-        }else if (tag.equals(AppConstant.MOVE)) {
+        } else if (tag.equals(AppConstant.UNZIP)) {
+            mView.startUnZipTask(new File(unZipPath), folder);
+        } else if (tag.equals(AppConstant.MOVE)) {
             mView.executePaste(folder.getAbsolutePath());
-        }else if (tag.equals(AppConstant.COPY)) {
+        } else if (tag.equals(AppConstant.COPY)) {
             mView.executePaste(folder.getAbsolutePath());
         }
         mView.finishActionMode();
@@ -190,8 +173,9 @@ public class ActionModePresenter implements ActionModeContact.Presenter {
     @Override
     public void detachView() {
         mView = null;
-        if (mCompositeSubscription != null)
+        if (mCompositeSubscription != null) {
             mCompositeSubscription.unsubscribe();
+        }
         mCompositeSubscription = null;
     }
 }

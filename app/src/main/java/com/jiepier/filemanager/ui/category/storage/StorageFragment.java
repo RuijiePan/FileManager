@@ -1,6 +1,7 @@
 package com.jiepier.filemanager.ui.category.storage;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -12,6 +13,7 @@ import com.jiepier.filemanager.bean.JunkGroup;
 import com.jiepier.filemanager.bean.JunkInfo;
 import com.jiepier.filemanager.bean.entity.MultiItemEntity;
 import com.jiepier.filemanager.widget.BoomView;
+import com.jiepier.filemanager.widget.DustbinDialog;
 
 import java.util.List;
 
@@ -28,6 +30,7 @@ public class StorageFragment extends BaseFragment implements StorageContact.View
     ExpandableListView mListView;
     @BindView(R.id.cleanView)
     BoomView mCleanView;
+    private DustbinDialog mDustbinDialog;
     private TextView mTvProgress;
     private TextView mTvTotalSize;
     private StoragePresenter mPresnter;
@@ -51,11 +54,39 @@ public class StorageFragment extends BaseFragment implements StorageContact.View
         mPresnter.attachView(this);
         mPresnter.startScanTask();
         mPresnter.initAdapterData();
+
+        mDustbinDialog = DustbinDialog.createDialog(getContext());
+        mDustbinDialog.show();
+        mDustbinDialog.setAnimationListener(new DustbinDialog.AnimationListener() {
+            @Override
+            public void onFirstAnimationStart() {
+                Log.w("ruijie", "1");
+            }
+
+            @Override
+            public void onSecondAnimationStart() {
+                Log.w("ruijie", "2");
+            }
+
+            @Override
+            public void onThirdAnimationStart() {
+                Log.w("ruijie", "3");
+            }
+
+            @Override
+            public void onAnimationFinish() {
+                Log.w("ruijie", "4");
+                mDustbinDialog.dismiss();
+            }
+        });
     }
 
     @Override
     protected void initListeners() {
-        mCleanView.setViewClickListener(() -> mCleanView.startAnimation());
+        mCleanView.setViewClickListener(() -> {
+            mCleanView.startAnimation();
+            mPresnter.startCleanTask(mAdapter.getData());
+        });
 
     }
 
@@ -91,7 +122,7 @@ public class StorageFragment extends BaseFragment implements StorageContact.View
 
     @Override
     public void setCurrenSysCacheScanJunk(JunkInfo junk) {
-
+        mTvProgress.setText(junk.getPath());
     }
 
     @Override
@@ -121,6 +152,38 @@ public class StorageFragment extends BaseFragment implements StorageContact.View
     public void setItemTotalJunk(int index, String JunkSize) {
 
         mAdapter.setItemTotalSize(index, JunkSize);
+    }
+
+    @Override
+    public void cleanFinish() {
+        mDustbinDialog = DustbinDialog.createDialog(getContext());
+        mDustbinDialog.show();
+        mDustbinDialog.setAnimationListener(new DustbinDialog.AnimationListener() {
+            @Override
+            public void onFirstAnimationStart() {
+
+            }
+
+            @Override
+            public void onSecondAnimationStart() {
+
+            }
+
+            @Override
+            public void onThirdAnimationStart() {
+
+            }
+
+            @Override
+            public void onAnimationFinish() {
+                mDustbinDialog.dismiss();
+            }
+        });
+    }
+
+    @Override
+    public void cleanFailure() {
+
     }
 
     @Override

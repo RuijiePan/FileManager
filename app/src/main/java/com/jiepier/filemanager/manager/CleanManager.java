@@ -6,13 +6,11 @@ import android.content.pm.IPackageDataObserver;
 import android.content.pm.PackageManager;
 import android.os.RemoteException;
 
-import com.jiepier.filemanager.bean.JunkInfo;
 import com.jiepier.filemanager.util.FileUtil;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -55,7 +53,7 @@ public class CleanManager {
         return sInstance;
     }
 
-    public Observable<Boolean> cleanJunksUsingObservable(ArrayList<JunkInfo> junkList) {
+    public Observable<Boolean> cleanJunksUsingObservable(List<String> junkList) {
 
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
 
@@ -68,11 +66,11 @@ public class CleanManager {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public boolean cleanJunks(ArrayList<JunkInfo> junkList) {
+    public boolean cleanJunks(List<String> junkList) {
 
-        for (JunkInfo junkInfo : junkList) {
+        for (int i = 0; i < junkList.size(); i++) {
             try {
-                FileUtil.deleteTarget(junkInfo.getPath());
+                FileUtil.deleteTarget(junkList.get(i));
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -81,20 +79,20 @@ public class CleanManager {
         return true;
     }
 
-    public Observable<Boolean> cleanAppsCacheUsingObservable() {
+    public Observable<Boolean> cleanAppsCacheUsingObservable(List<String> packageNameList) {
 
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
 
             @Override
             public void call(Subscriber<? super Boolean> subscriber) {
 
-                subscriber.onNext(cleanAppsCache());
+                subscriber.onNext(cleanAppsCache(packageNameList));
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public boolean cleanAppsCache() {
+    public boolean cleanAppsCache(List<String> packageNameList) {
 
         File externalDir = mContext.getExternalCacheDir();
         if (externalDir == null) {
@@ -104,11 +102,13 @@ public class CleanManager {
         PackageManager pm = mContext.getPackageManager();
         List<ApplicationInfo> installedPackages = pm.getInstalledApplications(PackageManager.GET_GIDS);
         for (ApplicationInfo info : installedPackages) {
-            String externalCacheDir = externalDir.getAbsolutePath()
-                    .replace(mContext.getPackageName(), info.packageName);
-            File externalCache = new File(externalCacheDir);
-            if (externalCache.exists() && externalCache.isDirectory()) {
-                FileUtil.deleteTarget(externalCacheDir);
+            if (packageNameList.contains(info.packageName)) {
+                String externalCacheDir = externalDir.getAbsolutePath()
+                        .replace(mContext.getPackageName(), info.packageName);
+                File externalCache = new File(externalCacheDir);
+                if (externalCache.exists() && externalCache.isDirectory()) {
+                    FileUtil.deleteTarget(externalCacheDir);
+                }
             }
         }
 

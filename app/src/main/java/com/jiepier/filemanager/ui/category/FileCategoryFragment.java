@@ -3,11 +3,9 @@ package com.jiepier.filemanager.ui.category;
 import android.os.Bundle;
 import android.view.View;
 
-import com.blankj.utilcode.utils.AppUtils;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseLazyFragment;
 import com.jiepier.filemanager.widget.PowerProgressBar;
-import com.jiepier.filemanager.widget.ThemeColorIconView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -16,25 +14,13 @@ import butterknife.OnClick;
  * Created by JiePier on 16/12/7.
  */
 
-public class FileCategoryFragment extends BaseLazyFragment implements FileCategoryContact.View{
+public class FileCategoryFragment extends BaseLazyFragment implements FileCategoryContact.View {
 
     private FileCategoryPresenter mPresenter;
     @BindView(R.id.memoryProgressbar)
-    PowerProgressBar memoryProgressbar;
+    PowerProgressBar mMemoryProgressbar;
     @BindView(R.id.storageProgressbar)
-    PowerProgressBar storageProgressbar;
-    @BindView(R.id.item_music)
-    ThemeColorIconView itemMusic;
-    @BindView(R.id.item_video)
-    ThemeColorIconView itemVideo;
-    @BindView(R.id.item_picture)
-    ThemeColorIconView itemPicture;
-    @BindView(R.id.item_document)
-    ThemeColorIconView itemDocument;
-    @BindView(R.id.item_zip)
-    ThemeColorIconView itemZip;
-    @BindView(R.id.item_apk)
-    ThemeColorIconView itemApk;
+    PowerProgressBar mStorageProgressbar;
 
     @Override
     protected int getLayoutId() {
@@ -51,6 +37,7 @@ public class FileCategoryFragment extends BaseLazyFragment implements FileCatego
     @Override
     protected void initData() {
         mPresenter.updateMemoryInfo();
+        mPresenter.updateStorageInfo();
     }
 
     @Override
@@ -61,8 +48,8 @@ public class FileCategoryFragment extends BaseLazyFragment implements FileCatego
 
     @Override
     protected void onShow() {
-        memoryProgressbar.startAnimation();
-        storageProgressbar.startAnimation();
+        mMemoryProgressbar.startAnimation();
+        mStorageProgressbar.startAnimation();
     }
 
     @Override
@@ -102,12 +89,22 @@ public class FileCategoryFragment extends BaseLazyFragment implements FileCatego
 
     @Override
     public void setMemoryProgress(float progress) {
-        memoryProgressbar.setProgress(progress);
+        mMemoryProgressbar.setProgress(progress);
+    }
+
+    @Override
+    public void setStorageProgress(float progress) {
+        mStorageProgressbar.setProgress(progress);
     }
 
     @Override
     public void setMemoryText(String memory) {
-        memoryProgressbar.setCenterText(memory);
+        mMemoryProgressbar.setCenterText(memory);
+    }
+
+    @Override
+    public void setStorageText(String storage) {
+        mStorageProgressbar.setCenterText(storage);
     }
 
     @Override

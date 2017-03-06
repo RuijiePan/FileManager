@@ -18,21 +18,21 @@ import rx.Observable;
 public interface CRUD {
 
     //apk、word、zip、video接口
-    boolean insertSQL(String type,String path);
+    boolean insertSQL(String type, String path);
 
-    Observable<Boolean> insertSQLUsingObservable(String type,String path);
+    Observable<Boolean> insertSQLUsingObservable(String type, String path);
 
     boolean updateSQL(String type, List<String> list);
 
-    Observable<Boolean> updateSQLUsingObservable(String type,List<String> list);
+    Observable<Boolean> updateSQLUsingObservable(String type, List<String> list);
 
-    boolean deleteSQL(String type,String path);
+    boolean deleteSQL(String type, String path);
 
-    Observable<Boolean> deleteSQLUsingObservable(String type,String path);
+    Observable<Boolean> deleteSQLUsingObservable(String type, String path);
 
-    boolean updateSQL(String type,String orignalPath,String path);
+    boolean updateSQL(String type, String orignalPath, String path);
 
-    Observable<Boolean> updateSQLUsingObservable(String type,String orignalPath,String path);
+    Observable<Boolean> updateSQLUsingObservable(String type, String orignalPath, String path);
 
     SQLiteDatabase getSQLite(String type);
 
@@ -49,11 +49,11 @@ public interface CRUD {
 
     Observable<Boolean> deleteMusicSQLUsingObservable(String path);
 
-    boolean updateMusic(Music music,String newPath);
+    boolean updateMusic(Music music, String newPath);
 
     boolean updateMusic(List<Music> list);
 
-    Observable<Boolean> updateMusicSQLUsingObservable(Music music,String newPath);
+    Observable<Boolean> updateMusicSQLUsingObservable(Music music, String newPath);
 
     ArrayList<Music> selectMusic();
 
@@ -74,9 +74,9 @@ public interface CRUD {
 
     boolean updatePicture(List<ImageFolder> list);
 
-    boolean updatePictureSQL(String oldPath,String newPath);
+    boolean updatePictureSQL(String oldPath, String newPath);
 
-    Observable<Boolean> updatePictureSQLUsingObservable(String path,String newPath);
+    Observable<Boolean> updatePictureSQLUsingObservable(String path, String newPath);
 
     ArrayList<ImageFolder> selectPicture();
 

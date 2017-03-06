@@ -5,24 +5,17 @@ import android.content.Context;
 /**
  * Created by panruijie on 2017/2/14.
  * Email : zquprj@gmail.com
- * 手机内存存储管理（sd卡类）:扫描和清理
+ * 计算手机内存管理类
  */
 
 public class StorageManager {
 
     private static StorageManager sInstance;
-    private ScanManager mScanManager;
-    private CleanManager mCleanManager;
     private Context mContext;
 
     private StorageManager(Context context) {
 
         mContext = context.getApplicationContext();
-        ScanManager.init(context);
-        CleanManager.init(context);
-
-        mScanManager = ScanManager.getInstance();
-        mCleanManager = CleanManager.getInstance();
     }
 
     public static void init(Context context) {

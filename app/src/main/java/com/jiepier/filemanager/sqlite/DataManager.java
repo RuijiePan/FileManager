@@ -4,10 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.blankj.utilcode.utils.FileUtils;
-import com.jiepier.filemanager.base.App;
 import com.jiepier.filemanager.bean.ImageFolder;
 import com.jiepier.filemanager.bean.Music;
 import com.jiepier.filemanager.util.FileUtil;
@@ -20,7 +18,6 @@ import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -29,7 +26,7 @@ import rx.schedulers.Schedulers;
  * Email : zquprj@gmail.com
  */
 
-public class DataManager implements CRUD{
+public class DataManager implements CRUD {
 
     private static DataManager sInstance;
     public static final String MUSIC = "music";
@@ -46,29 +43,29 @@ public class DataManager implements CRUD{
     private DBOpenHelper mApkHelper;
     private SQLiteDatabase mDb;
 
-    public static void init(Context context,int version){
+    public static void init(Context context, int version) {
 
-        if (sInstance == null){
-            synchronized (DataManager.class){
+        if (sInstance == null) {
+            synchronized (DataManager.class) {
                 if (sInstance == null)
-                    sInstance = new DataManager(context,version);
+                    sInstance = new DataManager(context, version);
             }
         }
     }
 
-    private DataManager(Context context,int version){
+    private DataManager(Context context, int version) {
 
-        mMusicHelper = new DBOpenHelper(context,"music.db",null,version);
-        mVideoHelper = new DBOpenHelper(context,"video.db",null,version);
-        mPictureHelper = new DBOpenHelper(context,"picture.db",null,version);
-        mDocHelper = new DBOpenHelper(context,"doc.db",null,version);
-        mZipHelper = new DBOpenHelper(context,"zip.db",null,version);
-        mApkHelper = new DBOpenHelper(context,"apk.db",null,version);
+        mMusicHelper = new DBOpenHelper(context, "music.db", null, version);
+        mVideoHelper = new DBOpenHelper(context, "video.db", null, version);
+        mPictureHelper = new DBOpenHelper(context, "picture.db", null, version);
+        mDocHelper = new DBOpenHelper(context, "doc.db", null, version);
+        mZipHelper = new DBOpenHelper(context, "zip.db", null, version);
+        mApkHelper = new DBOpenHelper(context, "apk.db", null, version);
     }
 
-    public static DataManager getInstance(){
+    public static DataManager getInstance() {
 
-        if (sInstance == null){
+        if (sInstance == null) {
             throw new IllegalStateException("You must be init DataManager first");
         }
         return sInstance;
@@ -76,7 +73,7 @@ public class DataManager implements CRUD{
 
     @Override
     public SQLiteDatabase getSQLite(String type) {
-        switch (type){
+        switch (type) {
             case MUSIC:
                 return mMusicHelper.getWritableDatabase();
             case VIDEO:
@@ -97,18 +94,18 @@ public class DataManager implements CRUD{
     @Override
     public boolean insertSQL(String type, String path) {
 
-        if (type.equals(DOC)|type.equals(ZIP)
-                |type.equals(VIDEO)|type.equals(APK)){
+        if (type.equals(DOC) | type.equals(ZIP)
+                | type.equals(VIDEO) | type.equals(APK)) {
 
             mDb = getSQLite(type);
             ContentValues newValues = new ContentValues();
             newValues.put("path", path);
             return mDb.insert(type, null, newValues) > 0;
 
-        }else if (type.equals(PICTURE)){
+        } else if (type.equals(PICTURE)) {
 
             return insertPictureSQL(path);
-        }else if (type.equals(MUSIC)){
+        } else if (type.equals(MUSIC)) {
 
             Music music = FileUtil.fileToMusic(new File(path));
             return insertMusicSQL(music);
@@ -119,12 +116,12 @@ public class DataManager implements CRUD{
     @Override
     public Observable<Boolean> insertSQLUsingObservable(String type, String path) {
 
-        return Observable.create(new Observable.OnSubscribe<Boolean>(){
+        return Observable.create(new Observable.OnSubscribe<Boolean>() {
 
             @Override
             public void call(Subscriber<? super Boolean> subscriber) {
 
-                subscriber.onNext(insertSQL(type,path));
+                subscriber.onNext(insertSQL(type, path));
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
@@ -135,12 +132,13 @@ public class DataManager implements CRUD{
 
         mDb = getSQLite(type);
         try {
-            mDb.delete(type,null,null);
+            mDb.delete(type, null, null);
 
-            for (int i= 0; i<list.size() ;i++)
-                insertSQL(type,list.get(i));
+            for (int i = 0; i < list.size(); i++) {
+                insertSQL(type, list.get(i));
+            }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -154,7 +152,7 @@ public class DataManager implements CRUD{
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(Subscriber<? super Boolean> subscriber) {
-                subscriber.onNext(updateSQL(type,list));
+                subscriber.onNext(updateSQL(type, list));
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
@@ -164,15 +162,15 @@ public class DataManager implements CRUD{
     @Override
     public boolean deleteSQL(String type, String path) {
 
-        if (type.equals(DOC)|type.equals(ZIP)
-                |type.equals(VIDEO)|type.equals(APK)){
+        if (type.equals(DOC) | type.equals(ZIP)
+                | type.equals(VIDEO) | type.equals(APK)) {
 
             mDb = getSQLite(type);
             return mDb.delete(type, "path=?", new String[]{path}) > 0;
 
-        }else if (type.equals(PICTURE)){
+        } else if (type.equals(PICTURE)) {
             return deletePictureSQL(path);
-        }else if (type.equals(MUSIC)){
+        } else if (type.equals(MUSIC)) {
             return deleteMusic(path);
         }
 
@@ -185,7 +183,7 @@ public class DataManager implements CRUD{
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(Subscriber<? super Boolean> subscriber) {
-                subscriber.onNext(deleteSQL(type,path));
+                subscriber.onNext(deleteSQL(type, path));
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
@@ -194,30 +192,30 @@ public class DataManager implements CRUD{
     @Override
     public boolean updateSQL(String type, String orignalPath, String path) {
 
-        if (type.equals(DOC)|type.equals(ZIP)
-                |type.equals(VIDEO)|type.equals(APK)){
+        if (type.equals(DOC) | type.equals(ZIP)
+                | type.equals(VIDEO) | type.equals(APK)) {
             mDb = getSQLite(type);
             ContentValues newValues = new ContentValues();
             newValues.put("path", path);
 
             return mDb.update(type, newValues, "path=?", new String[]{orignalPath}) > 0;
-        }else if (type.equals(PICTURE)){
-            return updatePictureSQL(orignalPath,path);
-        }else if (type.equals(MUSIC)){
+        } else if (type.equals(PICTURE)) {
+            return updatePictureSQL(orignalPath, path);
+        } else if (type.equals(MUSIC)) {
             Music music = FileUtil.fileToMusic(new File(orignalPath));
-            return updateMusic(music,path);
+            return updateMusic(music, path);
         }
 
         return false;
     }
 
     @Override
-    public Observable<Boolean> updateSQLUsingObservable(String type,String orignalPath, String path) {
+    public Observable<Boolean> updateSQLUsingObservable(String type, String orignalPath, String path) {
 
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(Subscriber<? super Boolean> subscriber) {
-                subscriber.onNext(updateSQL(type,orignalPath,path));
+                subscriber.onNext(updateSQL(type, orignalPath, path));
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
@@ -232,19 +230,20 @@ public class DataManager implements CRUD{
         Cursor cursor = null;
 
         try {
-            cursor = mDb.rawQuery("select path from "+type,null);
+            cursor = mDb.rawQuery("select path from " + type, null);
 
-            if (cursor.moveToFirst()){
+            if (cursor.moveToFirst()) {
                 do {
                     String path = cursor.getString(cursor.getColumnIndex("path"));
                     list.add(path);
-                }while (cursor.moveToNext());
+                } while (cursor.moveToNext());
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if (cursor != null)
+        } finally {
+            if (cursor != null) {
                 cursor.close();
+            }
         }
 
         return list;
@@ -253,7 +252,7 @@ public class DataManager implements CRUD{
     @Override
     public Observable<ArrayList<String>> selectUsingObservable(String type) {
 
-        return Observable.create(new Observable.OnSubscribe<ArrayList<String>>(){
+        return Observable.create(new Observable.OnSubscribe<ArrayList<String>>() {
 
             @Override
             public void call(Subscriber<? super ArrayList<String>> subscriber) {
@@ -269,20 +268,20 @@ public class DataManager implements CRUD{
         mDb = getSQLite(MUSIC);
 
         ContentValues newValues = new ContentValues();
-        newValues.put("title",music.getTitle());
-        newValues.put("album",music.getAlbum());
-        newValues.put("artist",music.getArtist());
-        newValues.put("url",music.getUrl());
-        newValues.put("duration",music.getDuration());
-        newValues.put("size",music.getSize());
+        newValues.put("title", music.getTitle());
+        newValues.put("album", music.getAlbum());
+        newValues.put("artist", music.getArtist());
+        newValues.put("url", music.getUrl());
+        newValues.put("duration", music.getDuration());
+        newValues.put("size", music.getSize());
 
-        return mDb.insert(MUSIC,null,newValues)>0;
+        return mDb.insert(MUSIC, null, newValues) > 0;
     }
 
     @Override
     public Observable<Boolean> insertMusicSQLUsingObservable(Music music) {
 
-        return Observable.create(new Observable.OnSubscribe<Boolean>(){
+        return Observable.create(new Observable.OnSubscribe<Boolean>() {
 
             @Override
             public void call(Subscriber<? super Boolean> subscriber) {
@@ -296,7 +295,7 @@ public class DataManager implements CRUD{
     public boolean deleteMusic(String path) {
 
         mDb = getSQLite(MUSIC);
-        return mDb.delete(MUSIC,"url=?",new String[]{path}) > 0;
+        return mDb.delete(MUSIC, "url=?", new String[]{path}) > 0;
     }
 
     @Override
@@ -317,9 +316,9 @@ public class DataManager implements CRUD{
         mDb = getSQLite(MUSIC);
 
         ContentValues newValues = new ContentValues();
-        newValues.put("url",newPath);
+        newValues.put("url", newPath);
 
-        return mDb.update(MUSIC,newValues,"id=?",new String[]{music.getId()+""}) > 0;
+        return mDb.update(MUSIC, newValues, "id=?", new String[]{music.getId() + ""}) > 0;
     }
 
     @Override
@@ -328,12 +327,13 @@ public class DataManager implements CRUD{
         mDb = getSQLite(MUSIC);
 
         try {
-            mDb.delete(MUSIC,null,null);
+            mDb.delete(MUSIC, null, null);
 
-            for (int i= 0; i<list.size() ;i++)
+            for (int i = 0; i < list.size(); i++) {
                 insertMusicSQL(list.get(i));
+            }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -348,7 +348,7 @@ public class DataManager implements CRUD{
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(Subscriber<? super Boolean> subscriber) {
-                subscriber.onNext(updateMusic(music,newPath));
+                subscriber.onNext(updateMusic(music, newPath));
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
@@ -363,7 +363,7 @@ public class DataManager implements CRUD{
         try {
             cursor = mDb.rawQuery("select * from music", null);
 
-            if (cursor.moveToFirst()){
+            if (cursor.moveToFirst()) {
 
                 do {
                     int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
@@ -376,15 +376,16 @@ public class DataManager implements CRUD{
 
                     Music music = new Music(id, title, album, artist, url, duration, size);
                     list.add(music);
-                }while (cursor.moveToNext());
+                } while (cursor.moveToNext());
 
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if (cursor != null)
+        } finally {
+            if (cursor != null) {
                 cursor.close();
+            }
         }
 
         return list;
@@ -408,25 +409,25 @@ public class DataManager implements CRUD{
 
         mDb = getSQLite(PICTURE);
         ImageFolder imageFolder = selectPictureFloder(path);
-        if (imageFolder != null){
+        if (imageFolder != null) {
 
             ContentValues contentValues = new ContentValues();
-            contentValues.put("count",imageFolder.getCount()+1);
+            contentValues.put("count", imageFolder.getCount() + 1);
 
             return mDb.update(PICTURE, contentValues, "dir=?", new String[]{imageFolder.getDir()}) > 0;
-        }else {
+        } else {
             imageFolder = new ImageFolder();
             imageFolder.setCount(1);
             imageFolder.setFirstImagePath(path);
             imageFolder.setDir(FileUtils.getDirName(new File(path)));
 
             ContentValues newValues = new ContentValues();
-            newValues.put("dir",imageFolder.getDir());
-            newValues.put("firstImagePath",imageFolder.getFirstImagePath());
-            newValues.put("name",imageFolder.getName());
-            newValues.put("count",imageFolder.getCount());
+            newValues.put("dir", imageFolder.getDir());
+            newValues.put("firstImagePath", imageFolder.getFirstImagePath());
+            newValues.put("name", imageFolder.getName());
+            newValues.put("count", imageFolder.getCount());
 
-            return mDb.insert(PICTURE,null,newValues)>0;
+            return mDb.insert(PICTURE, null, newValues) > 0;
         }
     }
 
@@ -436,12 +437,12 @@ public class DataManager implements CRUD{
         mDb = getSQLite(PICTURE);
 
         ContentValues newValues = new ContentValues();
-        newValues.put("dir",imageFolder.getDir());
-        newValues.put("firstImagePath",imageFolder.getFirstImagePath());
-        newValues.put("name",imageFolder.getName());
-        newValues.put("count",imageFolder.getCount());
+        newValues.put("dir", imageFolder.getDir());
+        newValues.put("firstImagePath", imageFolder.getFirstImagePath());
+        newValues.put("name", imageFolder.getName());
+        newValues.put("count", imageFolder.getCount());
 
-        return mDb.insert(PICTURE,null,newValues)>0;
+        return mDb.insert(PICTURE, null, newValues) > 0;
     }
 
     @Override
@@ -475,7 +476,7 @@ public class DataManager implements CRUD{
         ImageFolder imageFolder = selectPictureFloder(path);
 
         //刚好删了第一张图片并且不只一张，那么需要把第二张给替换成首张图片
-        if (imageFolder.getFirstImagePath().equals(path)&&imageFolder.getCount()!=1){
+        if (imageFolder.getFirstImagePath().equals(path) && imageFolder.getCount() != 1) {
             List<String> mImgs = Arrays.asList(new File(imageFolder.getDir()).list(new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String filename) {
@@ -483,21 +484,21 @@ public class DataManager implements CRUD{
                             || filename.endsWith(".jpeg");
                 }
             }));
-            for (int i = 0;i<mImgs.size();i++){
+            for (int i = 0; i < mImgs.size(); i++) {
                 if (!mImgs.get(i).equals(path)) {
                     imageFolder.setFirstImagePath(mImgs.get(i));
                     break;
                 }
             }
-            imageFolder.setCount(imageFolder.getCount()-1);
+            imageFolder.setCount(imageFolder.getCount() - 1);
 
             ContentValues contentValues = new ContentValues();
-            contentValues.put("firstImagePath",imageFolder.getFirstImagePath());
-            contentValues.put("count",imageFolder.getCount());
+            contentValues.put("firstImagePath", imageFolder.getFirstImagePath());
+            contentValues.put("count", imageFolder.getCount());
             return mDb.update(PICTURE, contentValues, "dir=?", new String[]{imageFolder.getDir()}) > 0;
-        }else {
+        } else {
             ContentValues contentValues = new ContentValues();
-            contentValues.put("count",imageFolder.getCount()-1);
+            contentValues.put("count", imageFolder.getCount() - 1);
             return mDb.update(PICTURE, contentValues, "dir=?", new String[]{imageFolder.getDir()}) > 0;
         }
     }
@@ -520,13 +521,13 @@ public class DataManager implements CRUD{
         mDb = getSQLite(PICTURE);
 
         try {
-            mDb.delete(PICTURE,null,null);
+            mDb.delete(PICTURE, null, null);
 
-            for (int i= 0; i<list.size() ;i++) {
+            for (int i = 0; i < list.size(); i++) {
                 insertPictureSQL(list.get(i));
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -537,7 +538,7 @@ public class DataManager implements CRUD{
     @Override
     public boolean updatePictureSQL(String oldPath, String newPath) {
 
-        return deletePictureSQL(oldPath)&&insertPictureSQL(newPath);
+        return deletePictureSQL(oldPath) && insertPictureSQL(newPath);
     }
 
 
@@ -547,7 +548,7 @@ public class DataManager implements CRUD{
         return Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(Subscriber<? super Boolean> subscriber) {
-                subscriber.onNext(updatePictureSQL(path,newPath));
+                subscriber.onNext(updatePictureSQL(path, newPath));
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
@@ -563,7 +564,7 @@ public class DataManager implements CRUD{
         try {
             cursor = mDb.rawQuery("select * from picture", null);
 
-            if (cursor.moveToFirst()){
+            if (cursor.moveToFirst()) {
 
                 do {
                     String dir = cursor.getString(cursor.getColumnIndexOrThrow("dir"));
@@ -575,15 +576,16 @@ public class DataManager implements CRUD{
                     imageFolder.setDir(dir);
                     imageFolder.setCount(count);
                     list.add(imageFolder);
-                }while (cursor.moveToNext());
+                } while (cursor.moveToNext());
 
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if (cursor != null)
+        } finally {
+            if (cursor != null) {
                 cursor.close();
+            }
         }
 
         return list;
@@ -597,7 +599,7 @@ public class DataManager implements CRUD{
 
         Cursor cursor = null;
         try {
-            cursor = mDb.rawQuery("select * from picture where dir = "+dirPath,null);
+            cursor = mDb.rawQuery("select * from picture where dir = " + dirPath, null);
 
             if (cursor != null) {
                 ImageFolder imageFolder = new ImageFolder();
@@ -610,11 +612,12 @@ public class DataManager implements CRUD{
                 imageFolder.setCount(count);
                 return imageFolder;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if (cursor != null)
-            cursor.close();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
         return null;
     }

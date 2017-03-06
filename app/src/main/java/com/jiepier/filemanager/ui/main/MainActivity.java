@@ -1,7 +1,6 @@
 package com.jiepier.filemanager.ui.main;
 
 import android.app.DialogFragment;
-import android.app.usage.UsageStatsManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,18 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
-import com.blankj.utilcode.utils.ProcessUtils;
-import com.jaredrummler.android.processes.AndroidProcesses;
-import com.jaredrummler.android.processes.models.AndroidAppProcess;
-import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
-import com.jiepier.filemanager.base.App;
 import com.jiepier.filemanager.base.BaseDrawerActivity;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
-import com.jiepier.filemanager.event.MutipeChoiceEvent;
-import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.manager.CategoryManager;
-import com.jiepier.filemanager.sqlite.DataManager;
 import com.jiepier.filemanager.task.PasteTaskExecutor;
 import com.jiepier.filemanager.task.UnzipTask;
 import com.jiepier.filemanager.task.ZipTask;
@@ -35,28 +26,12 @@ import com.jiepier.filemanager.util.ClipBoard;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.ResourceUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
-import com.jiepier.filemanager.util.SettingPrefUtil;
-import com.jiepier.filemanager.util.Settings;
-import com.jiepier.filemanager.util.SharedUtil;
-import com.jiepier.filemanager.util.SortUtil;
 import com.jiepier.filemanager.util.StatusBarUtil;
-import com.jiepier.filemanager.util.ThemeUtil;
-import com.jiepier.filemanager.util.UUIDUtil;
-import com.jiepier.filemanager.widget.DeleteFilesDialog;
-import com.jiepier.filemanager.widget.DirectoryInfoDialog;
-import com.jiepier.filemanager.widget.RenameDialog;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseDrawerActivity implements
-        ActionMode.Callback,FolderChooserDialog.FolderCallback,MainContact.View{
+        ActionMode.Callback, FolderChooserDialog.FolderCallback, MainContact.View {
 
     private MainPresenter mPresenter;
     private ActionMode mActionMode;
@@ -86,7 +61,7 @@ public class MainActivity extends BaseDrawerActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_main,menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
 
         menu.findItem(R.id.paste).setVisible(!ClipBoard.isEmpty());
         menu.findItem(R.id.cancel).setVisible(!ClipBoard.isEmpty());
@@ -95,12 +70,12 @@ public class MainActivity extends BaseDrawerActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.cancel:
                 mPresenter.clickCancel();
                 return true;
             case R.id.paste:
-                new PasteTaskExecutor(this,mSdCardFragment.getCurrentPath()).start();
+                new PasteTaskExecutor(this, mSdCardFragment.getCurrentPath()).start();
                 return true;
             case R.id.folderinfo:
                 mPresenter.clickFloderInfo(mSdCardFragment.getCurrentPath());
@@ -118,8 +93,8 @@ public class MainActivity extends BaseDrawerActivity implements
     @Override
     public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
         menu.clear();
-        getMenuInflater().inflate(R.menu.actionmode,menu);
-        if (mChoiceCount > 1){
+        getMenuInflater().inflate(R.menu.actionmode, menu);
+        if (mChoiceCount > 1) {
             menu.removeItem(R.id.actionrename);
         }
 
@@ -168,12 +143,12 @@ public class MainActivity extends BaseDrawerActivity implements
     @Override
     public void onFolderSelection(@NonNull FolderChooserDialog dialog, @NonNull File folder) {
 
-        mPresenter.folderSelect(dialog,folder);
+        mPresenter.folderSelect(dialog, folder);
     }
 
     @Override
     public void cretaeActionMode() {
-        if (mActionMode == null){
+        if (mActionMode == null) {
             mActionMode = startSupportActionMode(this);
             StatusBarUtil.setColor(this, ResourceUtil.getThemeColor(this), 0);
         }
@@ -198,14 +173,14 @@ public class MainActivity extends BaseDrawerActivity implements
 
     @Override
     public void createShortCut(String[] files) {
-        for (String file:files){
-            FileUtil.createShortcut(this,file);
+        for (String file : files) {
+            FileUtil.createShortcut(this, file);
         }
     }
 
     @Override
     public void showDialog(DialogFragment dialog) {
-        dialog.show(fm_v4,TAG_DIALOG);
+        dialog.show(fm_v4, TAG_DIALOG);
     }
 
     @Override
@@ -230,14 +205,14 @@ public class MainActivity extends BaseDrawerActivity implements
 
     @Override
     public void startZipTask(String fileName, String[] files) {
-        final ZipTask task = new ZipTask(this,fileName);
+        final ZipTask task = new ZipTask(this, fileName);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, files);
     }
 
     @Override
     public void startUnZipTask(File unZipFile, File folder) {
         UnzipTask task = new UnzipTask(this);
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, unZipFile,folder);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, unZipFile, folder);
     }
 
     @Override
@@ -255,12 +230,12 @@ public class MainActivity extends BaseDrawerActivity implements
             String action = intent.getAction();
 
             if (action.equals(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)) {
-                Log.w(TAG,"Start scan file");
+                Log.w(TAG, "Start scan file");
             }
             // handle intents related to external storage
             else if (action.equals(Intent.ACTION_MEDIA_SCANNER_FINISHED)) {
                 CategoryManager.getInstance().update();
-                Log.w(TAG,"Sacn finish");
+                Log.w(TAG, "Sacn finish");
             }
         }
     }

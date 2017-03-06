@@ -6,9 +6,7 @@ import com.jiepier.filemanager.bean.JunkGroup;
 import com.jiepier.filemanager.bean.JunkInfo;
 import com.jiepier.filemanager.bean.entity.MultiItemEntity;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by panruijie on 2017/2/19.
@@ -21,11 +19,10 @@ public class StorageContact {
 
         void startScanTask();
 
-        void startCleanTask(ArrayList<JunkInfo> overList, ArrayList<JunkInfo> sysCacheList, Set<String> processList);
+        void startCleanTask(List<MultiItemEntity> list);
 
         void initAdapterData();
 
-        void updateJunkInfo(List<MultiItemEntity> list);
     }
 
     interface View extends BaseView {
@@ -47,6 +44,10 @@ public class StorageContact {
         void groupClick(boolean isExpand, int position);
 
         void setItemTotalJunk(int index, String junkSize);
+
+        void cleanFinish();
+
+        void cleanFailure();
 
     }
 }

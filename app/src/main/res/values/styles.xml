@@ -153,4 +153,13 @@
     <style name="listDivider">
         <item name="divider">@drawable/divider_bg</item>
     </style>
+
+    <!--垃圾清理结束透明dialog-->
+    <style name="junk_finish_dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 </resources>

@@ -16,7 +16,7 @@ import butterknife.BindView;
 public class StorageActivity extends BaseActivity {
 
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    Toolbar mToolbar;
 
     @Override
     public int initContentView() {
@@ -25,8 +25,8 @@ public class StorageActivity extends BaseActivity {
 
     @Override
     protected void initToolbar(Bundle savedInstanceState) {
-        if (null != toolbar) {
-            setSupportActionBar(toolbar);
+        if (null != mToolbar) {
+            setSupportActionBar(mToolbar);
             getSupportActionBar().setDisplayShowHomeEnabled(false);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }

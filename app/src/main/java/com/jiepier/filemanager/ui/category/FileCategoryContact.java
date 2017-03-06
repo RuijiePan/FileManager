@@ -10,20 +10,26 @@ import com.jiepier.filemanager.base.BaseView;
 
 public interface FileCategoryContact {
 
-    interface View extends BaseView{
+    interface View extends BaseView {
 
         void setMemoryProgress(float progress);
 
+        void setStorageProgress(float progress);
+
         void setMemoryText(String memory);
+
+        void setStorageText(String storage);
     }
 
-    interface Presenter extends BasePresenter<View>{
+    interface Presenter extends BasePresenter<View> {
 
         void clickMemoryProgressbar();
 
         void clickStorageProgressbar();
 
         void updateMemoryInfo();
+
+        void updateStorageInfo();
 
         void clickMusic();
 

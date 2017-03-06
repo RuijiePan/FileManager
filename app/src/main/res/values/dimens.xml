@@ -41,4 +41,6 @@
     <dimen name="textSize_sidebar_padding">20sp</dimen>
     <dimen name="radius_sidebar">20dp</dimen>
     <dimen name="ball_radius_sidebar">24dp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

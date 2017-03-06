@@ -13,16 +13,16 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.jiepier.filemanager.R;
+import com.jiepier.filemanager.preview.IconPreview;
 import com.jiepier.filemanager.ui.about.AboutActivity;
-import com.jiepier.filemanager.ui.sdcard.SDCardFragment;
-import com.jiepier.filemanager.ui.category.FileCategoryFragment;
-import com.jiepier.filemanager.ui.setting.SettingActivity;
 import com.jiepier.filemanager.ui.advertisement.AdvertisementFragment;
+import com.jiepier.filemanager.ui.category.FileCategoryFragment;
+import com.jiepier.filemanager.ui.sdcard.SDCardFragment;
+import com.jiepier.filemanager.ui.setting.SettingActivity;
 import com.jiepier.filemanager.util.ResourceUtil;
 import com.jiepier.filemanager.util.SettingPrefUtil;
 import com.jiepier.filemanager.util.StatusBarUtil;
 import com.jiepier.filemanager.widget.ColorsDialog;
-import com.jiepier.filemanager.preview.IconPreview;
 
 import butterknife.BindView;
 
@@ -30,7 +30,7 @@ import butterknife.BindView;
  * Created by JiePier on 16/12/6.
  */
 
-public abstract class BaseDrawerActivity extends BaseToolbarActivity{
+public abstract class BaseDrawerActivity extends BaseToolbarActivity {
 
     @BindView(R.id.drawerLayout)
     protected DrawerLayout drawerLayout;
@@ -85,10 +85,10 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
         }
 
         mSwitch.setOnCheckedChangeListener((compoundButton, checked) -> {
-            if (checked){
+            if (checked) {
                 SettingPrefUtil.setNightModel(this, true);
                 mIvtheme.setImageResource(R.drawable.ic_wb_sunny_white_24dp);
-            }else {
+            } else {
                 SettingPrefUtil.setNightModel(this, false);
                 mIvtheme.setImageResource(R.drawable.ic_brightness_3_white_24dp);
             }
@@ -100,24 +100,24 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
         drawerLayout.setDrawerListener(new FileDrawerListener());
     }
 
-    protected void addFragment(){
+    protected void addFragment() {
         fm = getSupportFragmentManager();
         fm_v4 = getFragmentManager();
         fm.beginTransaction()
-                .add(R.id.flContentRoot,mSdCardFragment,SDCARD)
+                .add(R.id.flContentRoot, mSdCardFragment, SDCARD)
                 .commit();
         fm.beginTransaction()
-                .add(R.id.flContentRoot, mFileCategoryFragment,CATEGORY)
+                .add(R.id.flContentRoot, mFileCategoryFragment, CATEGORY)
                 .commit();
         fm.beginTransaction()
-                .add(R.id.flContentRoot, mAdvertisementFragment,SYSTEM)
+                .add(R.id.flContentRoot, mAdvertisementFragment, SYSTEM)
                 .commit();
         fm.beginTransaction().hide(mFileCategoryFragment).commit();
         fm.beginTransaction().hide(mAdvertisementFragment).commit();
 
     }
 
-    private void transformFragment(String TAG){
+    private void transformFragment(String TAG) {
         if (OLDTAG.equals(TAG))
             return;
         else {
@@ -155,15 +155,15 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
                 case R.id.menu_setting:
                     Intent intent = new Intent(this, SettingActivity.class);
                     startActivity(intent);
-                    overridePendingTransition(0,0);
+                    overridePendingTransition(0, 0);
                     break;
                 case R.id.menu_about:
                     intent = new Intent(this, AboutActivity.class);
                     startActivity(intent);
-                    overridePendingTransition(0,0);
+                    overridePendingTransition(0, 0);
                     break;
                 case R.id.menu_theme:
-                    ColorsDialog.launch(this).show(fm_v4,TAG_DIALOG);
+                    ColorsDialog.launch(this).show(fm_v4, TAG_DIALOG);
             }
             drawerLayout.closeDrawer(GravityCompat.START);
             return false;
@@ -202,7 +202,8 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
      * proceed, true to consume it here.
      * @see #onCreateOptionsMenu
      */
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             this.drawerLayout.openDrawer(GravityCompat.START);
             return true;
@@ -215,9 +216,10 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
      * Take care of calling onBackPressed() for pre-Eclair platforms.
      *
      * @param keyCode keyCode
-     * @param event event
+     * @param event   event
      */
-    @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
         // 如果抽屉打开了
         if (keyCode == KeyEvent.KEYCODE_BACK &&
                 this.drawerLayout.isDrawerOpen(this.mNavigation)) {
@@ -225,9 +227,9 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
             return true;
         }
 
-        if (OLDTAG.equals(SDCARD)&&keyCode == KeyEvent.KEYCODE_BACK)
+        if (OLDTAG.equals(SDCARD) && keyCode == KeyEvent.KEYCODE_BACK) {
             return mSdCardFragment.onBackPressed();
-
+        }
         return super.onKeyDown(keyCode, event);
     }
 
@@ -235,7 +237,7 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity{
      * When using ActionBarDrawerToggle, all DrawerLayout listener methods should be forwarded
      * if the ActionBarDrawerToggle is not used as the DrawerLayout listener directly.
      */
-    private class FileDrawerListener implements DrawerLayout.DrawerListener{
+    private class FileDrawerListener implements DrawerLayout.DrawerListener {
 
         @Override
         public void onDrawerSlide(View drawerView, float slideOffset) {

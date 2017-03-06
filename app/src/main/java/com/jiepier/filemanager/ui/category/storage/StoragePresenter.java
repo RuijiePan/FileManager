@@ -7,6 +7,7 @@ import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.bean.AppProcessInfo;
 import com.jiepier.filemanager.bean.JunkGroup;
 import com.jiepier.filemanager.bean.JunkInfo;
+import com.jiepier.filemanager.bean.JunkProcessInfo;
 import com.jiepier.filemanager.bean.JunkType;
 import com.jiepier.filemanager.bean.entity.MultiItemEntity;
 import com.jiepier.filemanager.event.CurrenScanJunkEvent;
@@ -26,6 +27,7 @@ import com.jiepier.filemanager.util.RxBus.RxBus;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -212,23 +214,16 @@ public class StoragePresenter implements StorageContact.Presenter {
         });
     }
 
-    private String getFilterJunkSize(ArrayList<JunkInfo> list) {
-
-        long size = 0L;
-        for (JunkInfo info : list) {
-            size += info.getSize();
-        }
-        return FormatUtil.formatFileSize(size).toString();
-    }
-
     @Override
-    public void startCleanTask(ArrayList<JunkInfo> overList,
-                               ArrayList<JunkInfo> sysCacheList,
-                               Set<String> processSet) {
+    public void startCleanTask(List<MultiItemEntity> list) {
+
+        List<String> junkList = getJunkList(list);
+        List<String> appCacheList = getJunkTypeList(list.get(1));
+        Set<String> processSet = getJunkProcessSet(list.get(0));
 
         //合并清理rx监听
-        mCleanManager.cleanJunksUsingObservable(overList)
-                .zipWith(mCleanManager.cleanJunksUsingObservable(sysCacheList),
+        mCleanManager.cleanJunksUsingObservable(junkList)
+                .zipWith(mCleanManager.cleanAppsCacheUsingObservable(appCacheList),
                         (aBoolean, aBoolean2) -> aBoolean && aBoolean2)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -237,9 +232,54 @@ public class StoragePresenter implements StorageContact.Presenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
-
+                    if (aBoolean) {
+                        mView.cleanFinish();
+                    } else {
+                        mView.cleanFailure();
+                    }
                 }, Throwable::printStackTrace);
+    }
 
+    private List<String> getJunkList(List<MultiItemEntity> list) {
+        List<String> tempList = new ArrayList<>();
+        for (int i = 2; i < 6; i++) {
+            tempList.addAll(getJunkTypeList(list.get(i)));
+        }
+
+        return tempList;
+    }
+
+    private List<String> getJunkTypeList(MultiItemEntity entity) {
+        List<JunkProcessInfo> appCacheList = ((JunkType) entity).getSubItems();
+        List<String> tempList = new ArrayList<>();
+        for (JunkProcessInfo info : appCacheList) {
+            if (info.isCheck()) {
+                tempList.add(info.getJunkInfo().getPath());
+            }
+        }
+
+        return tempList;
+    }
+
+    private Set<String> getJunkProcessSet(MultiItemEntity entity) {
+        List<JunkProcessInfo> appCacheList = ((JunkType) entity).getSubItems();
+        Set<String> tempSet = new HashSet<>();
+        for (JunkProcessInfo info : appCacheList) {
+            if (info.isCheck()) {
+                tempSet.add(info.getAppProcessInfo().getProcessName());
+            }
+        }
+
+        return tempSet;
+    }
+
+    private String getFilterJunkSize(ArrayList<JunkInfo> list) {
+
+        long size = 0L;
+        for (JunkInfo info : list) {
+            size += info.getSize();
+        }
+        return FormatUtil.formatFileSize(size).toString();
     }
 
     @Override
@@ -264,11 +304,6 @@ public class StoragePresenter implements StorageContact.Presenter {
         }
 
         mView.setAdapterData(list);
-    }
-
-    @Override
-    public void updateJunkInfo(List<MultiItemEntity> list) {
-        this.mList = list;
     }
 
     @Override
