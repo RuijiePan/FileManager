@@ -1,4 +1,11 @@
 # FileManager
 Material Design的文件清理管理器(MVP+RxJava/RxAndroid)
 
-![image](https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1489255542&di=1bf34ec6346e98a82f81b6a1d94b4e54&src=http://pic7.nipic.com/20100513/4544943_085213094141_2.jpg)
+这是本人的毕业设计，采用material design设计，主要使用mvp+rxjava进行编写。该项目主要有文件管理 + 内存清理 +垃圾回收功能。本人会一直维护下去，希望喜欢的朋友可以star或者fork一下。以下是部分截图：
+
+![image](http://pic.027cgb.cn/20170302/2017312141833680147.jpeg)
+![image](http://pic.027cgb.cn/20170302/20173123291297448713.jpeg)
+![image](http://pic.027cgb.cn/20170302/2017312954257683019.jpeg)
+![image](http://pic.027cgb.cn/20170302/2017312797213070490.jpeg)
+
+
