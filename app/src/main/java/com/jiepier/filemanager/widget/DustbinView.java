@@ -178,22 +178,21 @@ public class DustbinView extends View {
             int i = -1;
             for (IconInfo info : mIconInfos) {
                 i++;
-                long time = currentTime - DEFAULT_FADE_TIME - mAnimationStartTime - info.getDelayTime();
-                if (time > 0) {
+                long time = currentTime - mFadeTime - mAnimationStartTime - info.getDelayTime();
+                if (time > 0 && time < mRecyclerTime) {
                     Path path = new Path();
                     path.moveTo(info.startX, info.startY);
                     path.quadTo(info.getControlPoint().x, info.getControlPoint().y, mWidth / 2 + info.getBitmap().getWidth() / 2, mHeight / 2);
                     PathMeasure pathMeasure = new PathMeasure(path, false);
-                    if (time < mRecyclerTime) {
-                        info.alpha = 255 - (int) (time * 255 / mRecyclerTime);
-                        float[] pos = new float[2];
-                        float[] tan = new float[2];
-                        pathMeasure.getPosTan(time * pathMeasure.getLength() / mRecyclerTime, pos, tan);
-                        info.setX((int) pos[0]);
-                        info.setY((int) pos[1]);
-                        info.setRotateAngle(Math.atan2(tan[1], tan[0]) * 180 / Math.PI);
-                        mProcessPaint[i].setAlpha(info.getAlpha());
-                    }
+
+                    info.alpha = 255 - (int) (time * 255 / mRecyclerTime);
+                    float[] pos = new float[2];
+                    float[] tan = new float[2];
+                    pathMeasure.getPosTan(time * pathMeasure.getLength() / mRecyclerTime, pos, tan);
+                    info.setX((int) pos[0]);
+                    info.setY((int) pos[1]);
+                    info.setRotateAngle(Math.atan2(tan[1], tan[0]) * 180 / Math.PI);
+                    mProcessPaint[i].setAlpha(info.getAlpha());
 
                     //先旋转再移动
                     mIconMatrix.postRotate((float) info.getRotateAngle());
