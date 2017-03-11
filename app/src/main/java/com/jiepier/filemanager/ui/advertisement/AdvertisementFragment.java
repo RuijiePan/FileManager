@@ -2,10 +2,11 @@ package com.jiepier.filemanager.ui.advertisement;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.Button;
 
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseFragment;
+import com.jiepier.filemanager.widget.DustbinView;
 
 import butterknife.BindView;
 
@@ -16,8 +17,10 @@ import butterknife.BindView;
 
 public class AdvertisementFragment extends BaseFragment {
 
-    @BindView(R.id.native_ad_icon)
-    ImageView nativeAdIcon;
+    @BindView(R.id.dustbinView)
+    DustbinView dustbinView;
+    @BindView(R.id.button)
+    Button button;
 
     @Override
     protected int getLayoutId() {
@@ -36,7 +39,37 @@ public class AdvertisementFragment extends BaseFragment {
 
     @Override
     protected void initListeners() {
+        button.setOnClickListener(v -> {
+            dustbinView.startAnimation();
+            dustbinView.setVisibility(View.VISIBLE);
+        });
 
+        dustbinView.setAnimationListener(new DustbinView.IAnimationListener() {
+            @Override
+            public void onDustbinFadeIn() {
+
+            }
+
+            @Override
+            public void onProcessRecycler() {
+
+            }
+
+            @Override
+            public void onShakeDustbin() {
+
+            }
+
+            @Override
+            public void onDustbinFadeOut() {
+
+            }
+
+            @Override
+            public void onAnimationFinish() {
+                dustbinView.setVisibility(View.GONE);
+            }
+        });
     }
 
 }

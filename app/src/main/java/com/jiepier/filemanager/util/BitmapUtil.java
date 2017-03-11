@@ -23,7 +23,7 @@ import com.jiepier.filemanager.R;
 
 public class BitmapUtil {
 
-    public static Bitmap getTransparentBitmap(Bitmap sourceImg, int number){
+    public static Bitmap getTransparentBitmap(Bitmap sourceImg, int number) {
         int[] argb = new int[sourceImg.getWidth() * sourceImg.getHeight()];
 
         sourceImg.getPixels(argb, 0, sourceImg.getWidth(), 0, 0, sourceImg
@@ -63,8 +63,7 @@ public class BitmapUtil {
         return getBitmapFromDrawable(context.getResources().getDrawable(ResId));
     }
 
-    public static Bitmap adjustOpacity(Bitmap bitmap, int opacity)
-    {
+    public static Bitmap adjustOpacity(Bitmap bitmap, int opacity) {
         Bitmap mutableBitmap = bitmap.isMutable()
                 ? bitmap
                 : bitmap.copy(Bitmap.Config.ARGB_8888, true);

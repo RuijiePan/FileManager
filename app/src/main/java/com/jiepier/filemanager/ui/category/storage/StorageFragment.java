@@ -1,7 +1,6 @@
 package com.jiepier.filemanager.ui.category.storage;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -13,7 +12,7 @@ import com.jiepier.filemanager.bean.JunkGroup;
 import com.jiepier.filemanager.bean.JunkInfo;
 import com.jiepier.filemanager.bean.entity.MultiItemEntity;
 import com.jiepier.filemanager.widget.BoomView;
-import com.jiepier.filemanager.widget.DustbinDialog;
+import com.jiepier.filemanager.widget.DustbinView;
 
 import java.util.List;
 
@@ -30,7 +29,8 @@ public class StorageFragment extends BaseFragment implements StorageContact.View
     ExpandableListView mListView;
     @BindView(R.id.cleanView)
     BoomView mCleanView;
-    private DustbinDialog mDustbinDialog;
+    @BindView(R.id.dustbinView)
+    DustbinView mDustbinView;
     private TextView mTvProgress;
     private TextView mTvTotalSize;
     private StoragePresenter mPresnter;
@@ -55,30 +55,6 @@ public class StorageFragment extends BaseFragment implements StorageContact.View
         mPresnter.startScanTask();
         mPresnter.initAdapterData();
 
-        mDustbinDialog = DustbinDialog.createDialog(getContext());
-        mDustbinDialog.show();
-        mDustbinDialog.setAnimationListener(new DustbinDialog.AnimationListener() {
-            @Override
-            public void onFirstAnimationStart() {
-                Log.w("ruijie", "1");
-            }
-
-            @Override
-            public void onSecondAnimationStart() {
-                Log.w("ruijie", "2");
-            }
-
-            @Override
-            public void onThirdAnimationStart() {
-                Log.w("ruijie", "3");
-            }
-
-            @Override
-            public void onAnimationFinish() {
-                Log.w("ruijie", "4");
-                mDustbinDialog.dismiss();
-            }
-        });
     }
 
     @Override
@@ -156,29 +132,8 @@ public class StorageFragment extends BaseFragment implements StorageContact.View
 
     @Override
     public void cleanFinish() {
-        mDustbinDialog = DustbinDialog.createDialog(getContext());
-        mDustbinDialog.show();
-        mDustbinDialog.setAnimationListener(new DustbinDialog.AnimationListener() {
-            @Override
-            public void onFirstAnimationStart() {
-
-            }
-
-            @Override
-            public void onSecondAnimationStart() {
-
-            }
-
-            @Override
-            public void onThirdAnimationStart() {
-
-            }
-
-            @Override
-            public void onAnimationFinish() {
-                mDustbinDialog.dismiss();
-            }
-        });
+        mDustbinView.setVisibility(View.VISIBLE);
+        mDustbinView.startAnimation();
     }
 
     @Override
