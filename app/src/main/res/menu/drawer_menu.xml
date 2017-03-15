@@ -5,41 +5,41 @@
         <item
             android:id="@+id/menu_sdcard"
             android:icon="@drawable/ic_phone_android_white_24dp"
-            android:title="SDCard" />
+            android:title="@string/sdCard" />
 
         <item
             android:id="@+id/menu_category"
             android:icon="@drawable/ic_android_white_24dp"
-            android:title="Category" />
+            android:title="@string/category" />
 
         <item
             android:id="@+id/menu_system"
             android:icon="@drawable/ic_stars_white_24dp"
-            android:title="System" />
+            android:title="@string/system" />
 
         <item
             android:id="@+id/menu_setting"
             android:icon="@drawable/ic_settings_white_24dp"
-            android:title="Settings" />
+            android:title="@string/setting" />
         <item
             android:id="@+id/menu_about"
             android:icon="@drawable/ic_face_white_24dp"
-            android:title="About" />
+            android:title="@string/about" />
     </group>
 
 
     <group android:id="@+id/menu_group_2">
         <item
             android:id="@+id/light_model"
-            android:title="LightModel"
+            android:title="@string/lightModel"
             android:icon="@drawable/ic_lightbulb_outline_black_24dp"
             app:actionLayout="@layout/switch_layout"
             />
 
-        <item
-            android:id="@+id/menu_theme"
-            android:title="Theme"
-            android:icon="@drawable/ic_skin_white_24dp"
-            />
+        <!--        <item
+                    android:id="@+id/menu_theme"
+                    android:title="Theme"
+                    android:icon="@drawable/ic_skin_white_24dp"
+                    />-->
     </group>
 </menu>

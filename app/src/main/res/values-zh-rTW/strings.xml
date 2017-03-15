@@ -1,0 +1,210 @@
+<resources>
+    <string name="app_name">文件管理器</string>
+    <string name="app_menu">文件管理器</string>
+
+    <string name="minus" translatable="false">-</string>
+    <string name="advancedsettings">其它設置</string>
+    <string name="cancel">取消</string>
+    <string name="cannotbeundoneareyousureyouwanttodelete">"這個動作無法撤銷，妳確定刪除嗎!"</string>
+    <string name="cantopenfile">無法打開這個文件</string>
+    <string name="cantreadfolder">沒有權限打開這個文件</string>
+    <string name="changegroupowner">交換組的所有者</string>
+    <string name="copiedtoclipboard">復制到剪切板</string>
+    <string name="copy">復制</string>
+    <string name="zip">壓縮</string>
+    <string name="copyfail">復制失敗!</string>
+    <string name="copying">復制中</string>
+    <string name="copysuccsess">復制成功</string>
+    <string name="create">創建</string>
+    <string name="created">" 已創建."</string>
+    <string name="createmsg">Set a period before the text to create hidden folder.</string>
+    <string name="createnewfolder">新建文件夾</string>
+    <string name="defaultdir">默認文件夾</string>
+    <string name="default_sacn_dir">默認掃描路徑</string>
+    <string name="delete">刪除</string>
+    <string name="deletesuccess">刪除成功</string>
+    <string name="deleting">正在刪除</string>
+    <string name="desc">降序</string>
+    <string name="detailed">詳細配置</string>
+    <string name="details">詳情</string>
+    <string name="dir_info">文件信息</string>
+    <string name="drawer_open">打開抽屜</string>
+    <string name="drawer_close">關閉抽屜</string>
+    <string name="edit">編輯</string>
+    <string name="empty">空</string>
+    <string name="enable_root">允許root操作</string>
+    <string name="enter_name">輸入名稱</string>
+    <string name="error">錯誤</string>
+    <string name="exit">退出</string>
+    <string name="certain">確認</string>
+    <string name="sure_to_exit">確定退出嗎?</string>
+    <string name="extractto">解壓到</string>
+    <string name="extractionsuccess">成功解壓</string>
+    <string name="filecreated">文件已被創建</string>
+    <string name="fileexists">文件已經存在</string>
+    <string name="files">" 文件"</string>
+    <string name="filewasrenamed">文件已被重命名</string>
+    <string name="hiddenfiles">隱藏文件</string>
+    <string name="itcouldntbefound">不能被找到</string>
+    <string name="LastModified">最後修改:</string>
+    <string name="md5">MD5:</string>
+    <string name="move">移動</string>
+    <string name="movefail">移動失敗</string>
+    <string name="movesuccsess">移動成功</string>
+    <string name="moving">移動中</string>
+    <string name="multizip">壓縮</string>
+    <string name="newfile">新文件</string>
+    <string name="newfolderwasnotcreated">新文件創建失敗</string>
+    <string name="ok">成功</string>
+    <string name="options">選項</string>
+    <string name="packing">打包</string>
+    <string name="paste">粘貼</string>
+    <string name="pressbackagaintoquit">再按壹次返回鍵即可退出</string>
+    <string name="rename">重命名</string>
+    <string name="search">搜索</string>
+    <string name="searchtext">搜索text</string>
+    <string name="selectall">選擇所有</string>
+    <string name="settings">設置</string>
+    <string name="sha1_key">SHA-1:</string>
+    <string name="share">分享</string>
+    <string name="shortcut">創建快捷方式</string>
+    <string name="shortcutcreated">快捷方式已被創建</string>
+    <string name="showpreview">縮略圖</string>
+    <string name="simple">簡單</string>
+    <string name="size">已使用:</string>
+    <string name="uisettings">UI設置</string>
+    <string name="unzipping">解壓</string>
+    <string name="viewmode">UI模式</string>
+    <string name="xdaforum">XDA論壇</string>
+    <string name="createFile">創建文件</string>
+    <string name="createFolder">創建文件夾</string>
+    <string name="scrollToTop">回到頂部</string>
+    <string name="waitForOpen">等待被打開</string>
+    <string name="loading">加載中…</string>
+    <string name="clean">清理</string>
+    <string name="system_cache">系統緩存</string>
+
+    <!--drawer-->
+    <string name="sdCard">SD卡</string>
+    <string name="category">分類</string>
+    <string name="system">系統</string>
+    <string name="setting">設置</string>
+    <string name="about">關於</string>
+    <string name="lightModel">夜間模式</string>
+    <string name="theme">主題</string>
+
+    <!-- directory info dialog -->
+    <string name="location">文件位置:</string>
+    <string name="total">總空間:</string>
+    <string name="free">空閑空間:</string>
+    <string name="block_size">塊大小:</string>
+    <string name="used">已用空間:</string>
+
+    <!-- permissions -->
+    <string name="permissions">擁有權限:</string>
+    <string name="owner">擁有:</string>
+    <string name="group">組:</string>
+    <string name="others">其他:</string>
+    <string name="read">讀取</string>
+    <string name="write">寫入</string>
+    <string name="execute">執行</string>
+    <string name="permissionschanged">權限變化</string>
+
+    <!-- permissions -->
+    <string name="message_denied">權限 \"%1$s\" 被檢測到</string>
+
+    <!-- bookmarks -->
+    <string name="bookmark">書簽</string>
+    <string name="bookmarkadded">書簽添加.</string>
+    <string name="bookmarkexist">書簽已經存在!</string>
+    <string name="createbookmark">創建書簽</string>
+
+    <!-- actionmode -->
+    <string name="_files">\u0020文件</string>
+    <string name="_selected">\u0020選中</string>
+
+    <!-- overwrite dialog -->
+    <string name="overwrite_title">目標文件已經存在</string>
+    <string name="overwrite_source">源文件</string>
+    <string name="overwrite_destination">目的地址</string>
+    <string name="overwrite_skip">跳過</string>
+    <string name="overwrite_skip_all">跳過所有</string>
+    <string name="overwrite_replace">替代</string>
+    <string name="overwrite_replace_all">替代所有</string>
+
+    <!--categroy-->
+    <string name="music">音樂</string>
+    <string name="video">視頻</string>
+    <string name="picture">圖片</string>
+    <string name="document">文檔</string>
+    <string name="memory">內存</string>
+    <string name="storage">儲存</string>
+
+    <!-- storage -->
+    <string name="junk">Junk</string>
+    <string name="wait_for_scan">等待掃描…</string>
+    <string name="clean_size">0.00B</string>
+    <string name="total_found">建議清理:</string>
+    <string name="running_app">運行的App</string>
+    <string name="cache_junk">系統緩存</string>
+    <string name="unuseful_apk">無用安裝包</string>
+    <string name="temp_file">臨時文件</string>
+    <string name="log">日誌</string>
+    <string name="big_file">大文件</string>
+    <string name="clean_failure">清理失敗</string>
+
+    <!--<string name="zip">Zip</string>-->
+    <string name="apk">安裝包</string>
+    <string name="apk_manager">安裝包管理</string>
+    <string name="music_manager">音樂管理</string>
+    <string name="video_manager">視頻管理</string>
+    <string name="document_manager">文檔管理</string>
+    <string name="zip_manager">壓縮管理</string>
+    <string name="picture_manager">圖片管理</string>
+
+    <!-- setting -->
+    <string name="settings_general_settings">通常設置</string>
+    <string name="settings_md_colors">主題</string>
+    <string name="settings_auto_update">自動更新</string>
+    <string name="settings_other">其它</string>
+    <string name="settings_notification_settings">推送</string>
+    <string name="settings_auto_notification">接受推送</string>
+    <string name="settings_language">語言</string>
+    <string name="settings_language_select">語言選擇</string>
+    <string name="settings_language_follow_system">跟隨系統</string>
+    <string name="settings_language_english">英语</string>
+    <string name="settings_language_simple_chinise">簡體中文</string>
+    <string name="settings_language_traditional_chinise">繁體中文</string>
+
+    <!--about-->
+    <string name="about_title">關於</string>
+    <string name="about_nickname">潘銳傑</string>
+    <string name="about_github">https://github.com/RuijiePan</string>
+    <string name="about_sign">久邦數碼安卓工程師</string>
+    <string name="about_project_introduce">File Manager項目所用的基本上是Rx系列的框架 ( ReactiveX ) :\n\n\tRxJava\n\tRxAndroid\n\tButterknife\n\n以基本的MVP模式為主劃分模塊，抽出Presenter作為View代理業務層，減輕View層代碼的藕合度，然後集成了現在主流的RxJava+RxAndroid+MVP組合框架。\n</string>
+    <string name="about_project_introduce_content">https://github.com/RuijiePan/FileManager\n</string>
+
+    <string-array name="mdColorNames">
+        <item>Red</item>
+        <item>Pink</item>
+        <item>Purple</item>
+        <item>Deep purple</item>
+        <item>Indigo</item>
+        <item>Blue</item>
+        <item>Light blue</item>
+        <item>Cyan</item>
+        <item>Teal</item>
+        <item>Green</item>
+        <item>Light green</item>
+        <item>Lime</item>
+        <item>Yellow</item>
+        <item>Amber</item>
+        <item>Orange</item>
+        <item>Deep orange</item>
+        <item>Brown</item>
+        <item>Grey</item>
+        <item>Blue grey</item>
+    </string-array>
+</resources>
+
+

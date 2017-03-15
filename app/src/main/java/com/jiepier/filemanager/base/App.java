@@ -9,6 +9,7 @@ import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.manager.CategoryManager;
 import com.jiepier.filemanager.manager.CleanManager;
 import com.jiepier.filemanager.manager.ScanManager;
+import com.jiepier.filemanager.util.LanguageUtil;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.SharedUtil;
 
@@ -21,7 +22,7 @@ public class App extends Application {
     public static App sContext;
     public static int sHeight;
     public static int sWidth;
-    private String TAG = getClass().getSimpleName();
+    private static final String TAG = "App";
 
     @Override
     public void onCreate() {
@@ -37,9 +38,8 @@ public class App extends Application {
         CleanManager.init(this);
         //初始化文件初始路径和各种Preferences参数
         Settings.updatePreferences(this);
-        //初始化facebook广告
-        /*AdManager.getInstance(this)
-                .setAdId("200400853762325_200401077095636");*/
+        //语言工具类初始化,用于语言切换
+        LanguageUtil.init(this);
 
         /*如果是第一次加载，那么数据库里没有数据，那么直接扫描获取数据，否则在主界面通过广播
                 扫描完之后再进行数据更新*/

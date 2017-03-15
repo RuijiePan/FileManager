@@ -9,6 +9,8 @@ import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseActivity;
 import com.jiepier.filemanager.event.ChangeDefaultDirEvent;
+import com.jiepier.filemanager.event.ChangeThemeEvent;
+import com.jiepier.filemanager.event.LanguageEvent;
 import com.jiepier.filemanager.event.NewDirEvent;
 import com.jiepier.filemanager.util.AnimationUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
@@ -17,8 +19,7 @@ import com.jiepier.filemanager.util.Settings;
 import java.io.File;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import io.codetail.widget.RevealLinearLayout;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by JiePier on 16/12/14.
@@ -27,9 +28,10 @@ import io.codetail.widget.RevealLinearLayout;
 public class SettingActivity extends BaseActivity implements FolderChooserDialog.FolderCallback {
 
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    Toolbar mToolbar;
     @BindView(R.id.content)
-    FrameLayout content;
+    FrameLayout mContentView;
+    private CompositeSubscription mCompositeSubscription;
 
     @Override
     public int initContentView() {
@@ -38,8 +40,8 @@ public class SettingActivity extends BaseActivity implements FolderChooserDialog
 
     @Override
     protected void initToolbar(Bundle savedInstanceState) {
-        if (null != toolbar) {
-            setSupportActionBar(toolbar);
+        if (null != mToolbar) {
+            setSupportActionBar(mToolbar);
             getSupportActionBar().setDisplayShowHomeEnabled(false);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -50,9 +52,10 @@ public class SettingActivity extends BaseActivity implements FolderChooserDialog
     public void initUiAndListener() {
         getFragmentManager().beginTransaction().replace(R.id.content, new SettingFragment()).commit();
 
-        AnimationUtil.showCircularReveal(content, 0, 0, 2, 1500);
+        AnimationUtil.showCircularReveal(mContentView, 0, 0, 2, 1500);
 
-        RxBus.getDefault().add(this, RxBus.getDefault()
+        mCompositeSubscription = new CompositeSubscription();
+        mCompositeSubscription.add(RxBus.getDefault()
                 .IoToUiObservable(ChangeDefaultDirEvent.class)
                 .map(ChangeDefaultDirEvent::getType)
                 .subscribe(type -> {
@@ -63,6 +66,18 @@ public class SettingActivity extends BaseActivity implements FolderChooserDialog
                             .cancelButton(R.string.cancel)
                             .goUpLabel("Up") // custom go up label, default label is "..."
                             .show();
+                }, Throwable::printStackTrace));
+
+        mCompositeSubscription.add(RxBus.getDefault()
+                .IoToUiObservable(ChangeThemeEvent.class)
+                .subscribe(event -> {
+                    reload();
+                }, Throwable::printStackTrace));
+
+        mCompositeSubscription.add(RxBus.getDefault()
+                .IoToUiObservable(LanguageEvent.class)
+                .subscribe(event -> {
+                    reload();
                 }, Throwable::printStackTrace));
 
     }
@@ -85,10 +100,12 @@ public class SettingActivity extends BaseActivity implements FolderChooserDialog
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mCompositeSubscription.isUnsubscribed()) {
+            this.mCompositeSubscription.unsubscribe();
+        }
+        this.mCompositeSubscription = null;
     }
 }
 

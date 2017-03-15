@@ -6,21 +6,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.util.AppManager;
+import com.jiepier.filemanager.util.LanguageUtil;
 import com.jiepier.filemanager.util.ResourceUtil;
-import com.jiepier.filemanager.util.RxBus.RxBus;
 import com.jiepier.filemanager.util.SettingPrefUtil;
 import com.jiepier.filemanager.util.StatusBarUtil;
 import com.jiepier.filemanager.util.ThemeUtil;
 
 import butterknife.ButterKnife;
-import rx.subscriptions.CompositeSubscription;
 
 
 /**
@@ -34,6 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LanguageUtil.getInstance().setConfiguration();
         initTheme();
         setContentView(initContentView());
         ButterKnife.bind(this);

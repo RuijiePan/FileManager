@@ -38,4 +38,6 @@ public class AppConstant {
 
     public static final int TYPE_TITLE = 0;
     public static final int TYPE_CHILD = 1;
+
+    public static final String LANGUAGE = "language";
 }

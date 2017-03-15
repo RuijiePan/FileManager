@@ -84,6 +84,15 @@
     <string name="clean">Clean</string>
     <string name="system_cache">System Cache</string>
 
+    <!--drawer-->
+    <string name="sdCard">SDCard</string>
+    <string name="category">Category</string>
+    <string name="system">System</string>
+    <string name="setting">Setting</string>
+    <string name="about">About</string>
+    <string name="lightModel">LightModel</string>
+    <string name="theme">Theme</string>
+
     <!-- directory info dialog -->
     <string name="location">Location:</string>
     <string name="total">Total space:</string>
@@ -155,11 +164,17 @@
 
     <!-- setting -->
     <string name="settings_general_settings">General Setting</string>
-    <string name="settings_md_colors">theme color</string>
-    <string name="settings_auto_update">auto update</string>
+    <string name="settings_md_colors">Theme</string>
+    <string name="settings_auto_update">Auto update</string>
     <string name="settings_other">Other</string>
     <string name="settings_notification_settings">Notification</string>
-    <string name="settings_auto_notification">accept notification</string>
+    <string name="settings_auto_notification">Accept notification</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_language_select">Language Select</string>
+    <string name="settings_language_follow_system">Follow System</string>
+    <string name="settings_language_english">ENGLISH</string>
+    <string name="settings_language_simple_chinise">SIMPLE CHINISE</string>
+    <string name="settings_language_traditional_chinise">TRADITIONAL CHINISE</string>
 
     <!--about-->
     <string name="about_title">About</string>
@@ -190,6 +205,7 @@
         <item>Grey</item>
         <item>Blue grey</item>
     </string-array>
+
 </resources>
 
 

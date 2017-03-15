@@ -28,25 +28,54 @@
         </activity>
 
         <activity android:name=".ui.main.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize" />
 
-        <activity android:name=".ui.category.music.MusicActivity"/>
+        <activity
+            android:name=".ui.category.music.MusicActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize" />
 
-        <activity android:name=".ui.category.picture.PictureActivity"/>
+        <activity
+            android:name=".ui.category.picture.PictureActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize" />
 
-        <activity android:name=".ui.category.picture.dir.PictureDirActivity"/>
+        <activity
+            android:name=".ui.category.picture.dir.PictureDirActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize" />
 
-        <activity android:name=".ui.category.picture.detail.PictureDetailActivity"/>
+        <activity
+            android:name=".ui.category.picture.detail.PictureDetailActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize" />
 
-        <activity android:name=".ui.category.categorybottom.CategoryBottomActivity" />
+        <activity
+            android:name=".ui.category.categorybottom.CategoryBottomActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize" />
 
-        <activity android:name=".ui.about.AboutActivity"/>
+        <activity
+            android:name=".ui.about.AboutActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize" />
 
-        <activity android:name=".ui.setting.SettingActivity" />
+        <activity
+            android:name=".ui.setting.SettingActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize" />
 
-        <activity android:name=".ui.category.memory.MemoryActivity" />
+        <activity
+            android:name=".ui.category.memory.MemoryActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize" />
 
-        <activity android:name=".ui.category.storage.StorageActivity" />
+        <activity
+            android:name=".ui.category.storage.StorageActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

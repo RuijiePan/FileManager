@@ -1,6 +1,5 @@
 package com.jiepier.filemanager.widget;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.View;
@@ -19,8 +18,8 @@ public final class FileExistsDialog extends MaterialDialog {
                             final View.OnClickListener replaceAllAction) {
 
         super(new MaterialDialog.Builder(context)
-            .customView(R.layout.dialog_exists,true)
-            .title(R.string.overwrite_title));
+                .customView(R.layout.dialog_exists, true)
+                .title(R.string.overwrite_title));
 
         this.initView(source, target, abortAction, skipAction, skipAllAction,
                 replaceAction, replaceAllAction);

@@ -10,6 +10,14 @@
         android:key="pAutoUpdate"
         android:title="@string/settings_auto_update"/>
 
+      <Preference
+          android:key="pThemeColor"
+          android:title="@string/settings_md_colors" />
+
+      <Preference
+          android:key="pLanguage"
+          android:summary="@string/settings_language"
+          android:title="@string/settings_language" />
   </PreferenceCategory>
 
   <PreferenceCategory android:title="@string/settings_notification_settings">
