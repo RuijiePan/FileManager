@@ -516,7 +516,7 @@ public class DataManager implements CRUD {
     }
 
     @Override
-    public boolean updatePicture(List<ImageFolder> list) {
+    public synchronized boolean updatePicture(List<ImageFolder> list) {
 
         mDb = getSQLite(PICTURE);
 

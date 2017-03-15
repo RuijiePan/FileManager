@@ -3,6 +3,9 @@ package com.jiepier.filemanager.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
@@ -13,11 +16,13 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.jiepier.filemanager.R;
+import com.jiepier.filemanager.base.App;
 import com.jiepier.filemanager.bean.ImageFolder;
 import com.jiepier.filemanager.bean.Music;
+import com.jiepier.filemanager.bean.entity.ApkInfo;
+import com.jiepier.filemanager.preview.IconPreview;
 import com.jiepier.filemanager.preview.MimeTypes;
 import com.jiepier.filemanager.ui.main.MainActivity;
-import com.jiepier.filemanager.preview.IconPreview;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,7 +38,8 @@ import java.util.ArrayList;
 
 public class FileUtil {
 
-    private FileUtil() {}
+    private FileUtil() {
+    }
 
     private static final int BUFFER = 16384;
     private static final long ONE_KB = 1024;
@@ -102,7 +108,7 @@ public class FileUtil {
         } else if (Settings.rootAccess()) {
             mDirContent = RootCommands.listFiles(file.getAbsolutePath(), showhidden);
         } else {
-            ToastUtil.showToast(c,c.getString(R.string.cantreadfolder));
+            ToastUtil.showToast(c, c.getString(R.string.cantreadfolder));
             //Toast.makeText(c, c.getString(R.string.cantreadfolder), Toast.LENGTH_SHORT).show();
         }
         return mDirContent;
@@ -133,7 +139,7 @@ public class FileUtil {
                     inChannel = inStream.getChannel();
                     outChannel = ((FileOutputStream) outStream).getChannel();
                     inChannel.transferTo(0, inChannel.size(), outChannel);
-                } else if (source.isDirectory()){
+                } else if (source.isDirectory()) {
                     File[] files = source.listFiles();
 
                     if (createDir(target)) {
@@ -153,7 +159,7 @@ public class FileUtil {
                     return false;
                 }
 
-                if (outStream != null && inStream !=null) {
+                if (outStream != null && inStream != null) {
                     byte[] buffer = new byte[BUFFER];
                     int bytesRead;
                     while ((bytesRead = inStream.read(buffer)) != -1) {
@@ -495,18 +501,18 @@ public class FileUtil {
         return ext.equalsIgnoreCase("zip");
     }
 
-    public static String getFileName(String path){
+    public static String getFileName(String path) {
         String s[] = path.split("/");
-        if (s.length!=0)
-        return "/"+s[s.length-1];
+        if (s.length != 0)
+            return "/" + s[s.length - 1];
         return "/";
     }
 
-    public static String getPath(String[] s,int position){
+    public static String getPath(String[] s, int position) {
         String path = "";
 
-        for (int i=0;i<=position;i++){
-            path += "/"+s[i];
+        for (int i = 0; i <= position; i++) {
+            path += "/" + s[i];
         }
 
         return path;
@@ -595,7 +601,7 @@ public class FileUtil {
         return value;
     }
 
-    public static ImageFolder getImageFolder(String path){
+    public static ImageFolder getImageFolder(String path) {
 
         File parentFile = new File(path).getParentFile();
         if (parentFile == null)
@@ -612,11 +618,28 @@ public class FileUtil {
             public boolean accept(File file, String filename) {
                 return filename.endsWith(".jpg")
                         || filename.endsWith(".png")
-                        || filename.endsWith(".jpeg");
+                        || filename.endsWith(".jpeg")
+                        || filename.endsWith(".gif");
             }
         }).length;
         imageFolder.setCount(picSize);
 
         return imageFolder;
+    }
+
+    public static ApkInfo getApkInfo(String path) {
+        ApkInfo apkInfo = new ApkInfo();
+        PackageManager pm = App.sContext.getApplicationContext().getPackageManager();
+        PackageInfo packageInfo = pm.getPackageArchiveInfo(path, PackageManager.GET_ACTIVITIES);
+
+        if (packageInfo != null) {
+            ApplicationInfo applicationInfo = packageInfo.applicationInfo;
+            apkInfo.setPackageName(applicationInfo.packageName);
+            apkInfo.setVersionName(packageInfo.versionName);
+            apkInfo.setVersionCode(packageInfo.versionCode);
+            return apkInfo;
+        }
+
+        return null;
     }
 }

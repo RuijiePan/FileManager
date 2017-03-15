@@ -24,10 +24,10 @@ public final class DirectoryInfoDialog extends DialogFragment {
     private View mView;
     private String path;
 
-    public static DirectoryInfoDialog create(String path){
+    public static DirectoryInfoDialog create(String path) {
         DirectoryInfoDialog instance = new DirectoryInfoDialog();
         Bundle args = new Bundle();
-        args.putString("path",path);
+        args.putString("path", path);
         instance.setArguments(args);
         return instance;
     }
@@ -39,7 +39,7 @@ public final class DirectoryInfoDialog extends DialogFragment {
                 R.layout.dialog_directory_info, null);
         MaterialDialog dialog = new MaterialDialog.Builder(activity)
                 .title(R.string.dir_info)
-                .customView(mView,true)
+                .customView(mView, true)
                 .positiveText(R.string.ok)
                 .build();
         return dialog;

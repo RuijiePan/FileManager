@@ -99,32 +99,12 @@ public class DustbinView extends View {
         mMatrix = new Matrix();
         mIconMatrix = new Matrix();
 
-        //初始化进程图标初始化位置
-        List<AppProcessInfo> mProcessList = ProcessManager.getInstance().getRunningProcessList();
-        mIconInfos = new IconInfo[mProcessList.size() + mOtherDrawable.length];
-        for (int i = 0; i < mProcessList.size(); i++) {
-            mIconInfos[i] = new IconInfo(BitmapUtil.getBitmapFromDrawable(
-                    BitmapUtil.zoomDrawable(mProcessList.get(i).getIcon(), 100, 100)));
-        }
-        for (int i = 0; i < mOtherDrawable.length; i++) {
-            mIconInfos[i + mProcessList.size()] = new IconInfo(BitmapUtil.getBitmapFromDrawable(
-                    BitmapUtil.zoomDrawable(getResources().getDrawable(mOtherDrawable[i]), 100, 100)));
-        }
-
         //画笔
         mBitmapPaint = new Paint();
         mBitmapPaint.setAntiAlias(true);
         mBitmapPaint.setDither(true);
         mBitmapPaint.setFilterBitmap(true);
         mBitmapPaint.setColor(Color.WHITE);
-
-        mProcessPaint = new Paint[mProcessList.size() + mOtherDrawable.length];
-        for (int i = 0; i < mProcessPaint.length; i++) {
-            mProcessPaint[i] = new Paint();
-            mProcessPaint[i].setAntiAlias(true);
-            mProcessPaint[i].setDither(true);
-            mProcessPaint[i].setFilterBitmap(true);
-        }
     }
 
     @Override
@@ -213,6 +193,7 @@ public class DustbinView extends View {
     }
 
     public void startAnimation() {
+        upDateProcessInfo();
         mIsFisrtAnimationFinish = false;
         mIsSecondAnimationFinish = false;
         mIsThirdAnimationFinish = false;
@@ -373,6 +354,27 @@ public class DustbinView extends View {
         });
 
         mAnimatorSetFirst.start();
+    }
+
+    private void upDateProcessInfo() {
+        List<AppProcessInfo> mProcessList = ProcessManager.getInstance().getRunningAppList();
+        mIconInfos = new IconInfo[mProcessList.size() + mOtherDrawable.length];
+        for (int i = 0; i < mProcessList.size(); i++) {
+            mIconInfos[i] = new IconInfo(BitmapUtil.getBitmapFromDrawable(
+                    BitmapUtil.zoomDrawable(mProcessList.get(i).getIcon(), 100, 100)));
+        }
+        for (int i = 0; i < mOtherDrawable.length; i++) {
+            mIconInfos[i + mProcessList.size()] = new IconInfo(BitmapUtil.getBitmapFromDrawable(
+                    BitmapUtil.zoomDrawable(getResources().getDrawable(mOtherDrawable[i]), 100, 100)));
+        }
+
+        mProcessPaint = new Paint[mProcessList.size() + mOtherDrawable.length];
+        for (int i = 0; i < mProcessPaint.length; i++) {
+            mProcessPaint[i] = new Paint();
+            mProcessPaint[i].setAntiAlias(true);
+            mProcessPaint[i].setDither(true);
+            mProcessPaint[i].setFilterBitmap(true);
+        }
     }
 
     public DustbinView setFadeTime(int fadeTime) {

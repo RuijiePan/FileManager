@@ -2,17 +2,14 @@ package com.jiepier.filemanager.task;
 
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
-import com.jiepier.filemanager.base.App;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.event.TypeEvent;
-import com.jiepier.filemanager.manager.CategoryManager;
 import com.jiepier.filemanager.sqlite.SqlUtil;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.RootCommands;
@@ -24,8 +21,6 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.functions.Action1;
-
 public final class RenameTask extends AsyncTask<String, Void, List<String>> {
 
     private final WeakReference<Activity> activity;
@@ -36,7 +31,7 @@ public final class RenameTask extends AsyncTask<String, Void, List<String>> {
 
     private String path;
 
-    public RenameTask(final Activity activity,String path) {
+    public RenameTask(final Activity activity, String path) {
         this.activity = new WeakReference<>(activity);
         this.path = path;
     }
@@ -47,7 +42,7 @@ public final class RenameTask extends AsyncTask<String, Void, List<String>> {
 
         if (activity != null) {
             this.dialog = new MaterialDialog.Builder(activity)
-                    .progress(true,0)
+                    .progress(true, 0)
                     .content(activity.getString(R.string.rename))
                     .cancelable(true)
                     .negativeText(R.string.cancel)
@@ -109,9 +104,9 @@ public final class RenameTask extends AsyncTask<String, Void, List<String>> {
             Toast.makeText(activity,
                     activity.getString(R.string.filewasrenamed),
                     Toast.LENGTH_LONG).show();
-            RxBus.getDefault().post(new CleanChoiceEvent());
-            RxBus.getDefault().post(new RefreshEvent());
-            RxBus.getDefault().post(new TypeEvent(AppConstant.REFRESH));
+        RxBus.getDefault().post(new CleanChoiceEvent());
+        RxBus.getDefault().post(new RefreshEvent());
+        RxBus.getDefault().post(new TypeEvent(AppConstant.REFRESH));
         if (activity != null && !failed.isEmpty()) {
             Toast.makeText(activity, activity.getString(R.string.cantopenfile),
                     Toast.LENGTH_SHORT).show();

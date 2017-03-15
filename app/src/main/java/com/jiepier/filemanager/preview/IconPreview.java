@@ -14,7 +14,6 @@ import android.media.ThumbnailUtils;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.jiepier.filemanager.R;
@@ -183,7 +182,7 @@ public class IconPreview {
             addBitmapToMemoryCache(path, mBitmap);
             return mBitmap;
         } else if (isApk) {
-            Log.w("ruijie", path);
+            //Log.w("ruijie", path);
             final PackageInfo packageInfo = pm.getPackageArchiveInfo(path,
                     PackageManager.GET_ACTIVITIES);
 

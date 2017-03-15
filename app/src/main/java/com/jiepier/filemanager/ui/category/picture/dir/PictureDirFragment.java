@@ -5,10 +5,7 @@ import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jiepier.filemanager.R;
@@ -19,10 +16,7 @@ import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import rx.Observable;
-import rx.functions.Action1;
-import rx.functions.Func1;
 
 /**
  * Created by panruijie on 17/1/19.
@@ -71,12 +65,12 @@ public class PictureDirFragment extends BaseFragment implements PictureDirContac
     protected void initData() {
 
         mAdapter = new PictureDirAdapter(getContext());
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerGridItemDecoration(getContext()));
         recyclerView.setAdapter(mAdapter);
 
-        mPresenter = new PictureDirPresenter(getContext(),dirPath);
+        mPresenter = new PictureDirPresenter(getContext(), dirPath);
         mPresenter.attachView(this);
         mPresenter.getData();
     }
@@ -85,7 +79,7 @@ public class PictureDirFragment extends BaseFragment implements PictureDirContac
     protected void initListeners() {
 
         mAdapter.setOnItemClickListener(position -> {
-            mPresenter.onItemClick(position,mAdapter.getData());
+            mPresenter.onItemClick(position, mAdapter.getData());
         });
     }
 

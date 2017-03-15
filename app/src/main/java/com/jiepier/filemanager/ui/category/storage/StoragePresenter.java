@@ -49,7 +49,6 @@ public class StoragePresenter implements StorageContact.Presenter {
     private ScanManager mScanManger;
     private CleanManager mCleanManager;
     private ProcessManager mProcessManager;
-    private List<MultiItemEntity> mList;
     private long mTotalJunkSize;
     private boolean mOverScanFinish;
 
@@ -59,7 +58,6 @@ public class StoragePresenter implements StorageContact.Presenter {
         mScanManger = ScanManager.getInstance();
         mCleanManager = CleanManager.getInstance();
         mProcessManager = ProcessManager.getInstance();
-        mList = new ArrayList<>();
 
         //生产者速度太快，加上sample对事件进行过滤。否则会出现rx.exceptions.MissingBackpressureException
         //60帧
@@ -232,11 +230,13 @@ public class StoragePresenter implements StorageContact.Presenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
+                    /*删除文件过程中，少部分会删除失败，但是这不影响全局删除过程
                     if (aBoolean) {
                         mView.cleanFinish();
                     } else {
                         mView.cleanFailure();
-                    }
+                    }*/
+                    mView.cleanFinish();
                 }, Throwable::printStackTrace);
     }
 
@@ -252,12 +252,15 @@ public class StoragePresenter implements StorageContact.Presenter {
     private List<String> getJunkTypeList(MultiItemEntity entity) {
         List<JunkProcessInfo> appCacheList = ((JunkType) entity).getSubItems();
         List<String> tempList = new ArrayList<>();
-        for (JunkProcessInfo info : appCacheList) {
-            if (info.isCheck()) {
-                tempList.add(info.getJunkInfo().getPath());
+
+        //appCacheList可能为空
+        if (appCacheList != null) {
+            for (JunkProcessInfo info : appCacheList) {
+                if (info.isCheck()) {
+                    tempList.add(info.getJunkInfo().getPath());
+                }
             }
         }
-
         return tempList;
     }
 

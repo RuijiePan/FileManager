@@ -15,7 +15,6 @@ import com.jiepier.filemanager.util.ToastUtil;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by JiePier on 16/12/19.
@@ -41,25 +40,21 @@ public class SplashActivity extends BaseActivity {
     @Override
     public void initUiAndListener() {
 
-        Animation scale = AnimationUtils.loadAnimation(this,R.anim.scale_small);
+        Animation scale = AnimationUtils.loadAnimation(this, R.anim.scale_small);
         imageView.startAnimation(scale);
 
         RxPermissions rxPermissions = new RxPermissions(this);
         rxPermissions
-                .requestEach(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE   )
+                .request(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
                 .subscribe(permission -> { // will emit 2 Permission objects
-                    if (permission.granted) {
+                    if (permission) {
                         Intent intent = new Intent(this, MainActivity.class);
                         startActivity(intent);
                         finish();
-                    } else if (permission.shouldShowRequestPermissionRationale) {
+                    } else {
                         // Denied permission without ask never again
                         ToastUtil.showToast(this, "请给予读写权限，否则无法使用");
-                    } else {
-                        // Denied permission with ask never again
-                        // Need to go to the settings
-                        ToastUtil.showToast(this, "您需要去APP设置手动给予权限");
                     }
                 });
 

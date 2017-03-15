@@ -7,12 +7,14 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.jiepier.filemanager.R;
+import com.jiepier.filemanager.base.App;
 import com.jiepier.filemanager.base.BaseFragment;
 import com.jiepier.filemanager.bean.JunkGroup;
 import com.jiepier.filemanager.bean.JunkInfo;
 import com.jiepier.filemanager.bean.entity.MultiItemEntity;
+import com.jiepier.filemanager.util.SnackbarUtil;
 import com.jiepier.filemanager.widget.BoomView;
-import com.jiepier.filemanager.widget.DustbinView;
+import com.jiepier.filemanager.widget.DustbinDialog;
 
 import java.util.List;
 
@@ -29,13 +31,12 @@ public class StorageFragment extends BaseFragment implements StorageContact.View
     ExpandableListView mListView;
     @BindView(R.id.cleanView)
     BoomView mCleanView;
-    @BindView(R.id.dustbinView)
-    DustbinView mDustbinView;
     private TextView mTvProgress;
     private TextView mTvTotalSize;
     private StoragePresenter mPresnter;
     private StorageExpandAdapter mAdapter;
     private View mHeadView;
+    private DustbinDialog mDustbinDialog;
 
     @Override
     protected int getLayoutId() {
@@ -132,13 +133,14 @@ public class StorageFragment extends BaseFragment implements StorageContact.View
 
     @Override
     public void cleanFinish() {
-        mDustbinView.setVisibility(View.VISIBLE);
-        mDustbinView.startAnimation();
+        mDustbinDialog = new DustbinDialog(getContext());
+        mDustbinDialog.show();
+        mDustbinDialog.setOnDismissListener(dialog -> getActivity().finish());
     }
 
     @Override
     public void cleanFailure() {
-
+        SnackbarUtil.show(mListView, App.sContext.getString(R.string.clean_failure), 0, null);
     }
 
     @Override

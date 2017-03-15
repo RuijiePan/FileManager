@@ -55,7 +55,7 @@ public class PictureDirPresenter implements PictureDirContact.Presenter {
                     @Override
                     public boolean accept(File dir, String filename) {
                         if (filename.endsWith(".jpg") || filename.endsWith(".png")
-                                || filename.endsWith(".jpeg")) {
+                                || filename.endsWith(".jpeg") || filename.endsWith(".gif")) {
                             return true;
                         }
                         return false;

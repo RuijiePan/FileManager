@@ -1,11 +1,17 @@
 package com.jiepier.filemanager.task;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.text.TextUtils;
 
+import com.jiepier.filemanager.base.App;
 import com.jiepier.filemanager.bean.JunkInfo;
+import com.jiepier.filemanager.bean.entity.ApkInfo;
 import com.jiepier.filemanager.preview.MimeTypes;
 import com.jiepier.filemanager.task.callback.IScanCallBack;
+import com.jiepier.filemanager.util.FileUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -65,6 +71,12 @@ public class OverScanTask extends AsyncTask<Void, Void, Void> {
                         info = getJunkInfo(file);
                         mApkInfo.getChildren().add(info);
                         mApkInfo.setSize(mApkInfo.getSize() + info.getSize());
+
+                        //如果是已经安装的apk并且版本号>=当前扫描到的apk，则勾选
+                        ApkInfo apkInfo = FileUtil.getApkInfo(file.getAbsolutePath());
+                        if (apkInfo != null && !TextUtils.isEmpty(apkInfo.getPackageName())) {
+                            mApkInfo.isCheck(compareToInstall(apkInfo.getVersionCode(), apkInfo.getPackageName()));
+                        }
                     } else if (MimeTypes.isLog(file)) {
                         info = getJunkInfo(file);
                         mLogInfo.getChildren().add(info);
@@ -165,5 +177,15 @@ public class OverScanTask extends AsyncTask<Void, Void, Void> {
         mCallBack.onFinish(mApkList, mLogList, mTempList, mBigFileList);
         mIsOverTime = false;
         super.onPostExecute(aVoid);
+    }
+
+    private boolean compareToInstall(int versionCode, String packageName) {
+        PackageInfo info;
+        try {
+            info = App.sContext.getPackageManager().getPackageInfo(packageName, 0);
+            return versionCode <= info.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 }

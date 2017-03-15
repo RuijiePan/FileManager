@@ -113,4 +113,12 @@ public class FileCategoryFragment extends BaseLazyFragment implements FileCatego
         super.onDestroy();
     }
 
+    @Override
+    public void onResume() {
+        mPresenter.updateStorageInfo();
+        mPresenter.updateMemoryInfo();
+        mMemoryProgressbar.startAnimation();
+        mStorageProgressbar.startAnimation();
+        super.onResume();
+    }
 }

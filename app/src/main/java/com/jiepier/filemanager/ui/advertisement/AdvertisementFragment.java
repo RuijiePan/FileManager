@@ -6,7 +6,7 @@ import android.widget.Button;
 
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseFragment;
-import com.jiepier.filemanager.widget.DustbinView;
+import com.jiepier.filemanager.widget.DustbinDialog;
 
 import butterknife.BindView;
 
@@ -17,8 +17,7 @@ import butterknife.BindView;
 
 public class AdvertisementFragment extends BaseFragment {
 
-    @BindView(R.id.dustbinView)
-    DustbinView dustbinView;
+    DustbinDialog mDialog;
     @BindView(R.id.button)
     Button button;
 
@@ -40,36 +39,10 @@ public class AdvertisementFragment extends BaseFragment {
     @Override
     protected void initListeners() {
         button.setOnClickListener(v -> {
-            dustbinView.startAnimation();
-            dustbinView.setVisibility(View.VISIBLE);
+            mDialog = new DustbinDialog(getContext());
+            mDialog.show();
         });
 
-        dustbinView.setAnimationListener(new DustbinView.IAnimationListener() {
-            @Override
-            public void onDustbinFadeIn() {
-
-            }
-
-            @Override
-            public void onProcessRecycler() {
-
-            }
-
-            @Override
-            public void onShakeDustbin() {
-
-            }
-
-            @Override
-            public void onDustbinFadeOut() {
-
-            }
-
-            @Override
-            public void onAnimationFinish() {
-                dustbinView.setVisibility(View.GONE);
-            }
-        });
     }
 
 }

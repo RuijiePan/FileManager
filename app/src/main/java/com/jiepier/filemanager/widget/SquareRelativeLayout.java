@@ -9,7 +9,7 @@ import android.widget.RelativeLayout;
  * Email : zquprj@gmail.com
  * 宽高相等的RelativeLayout。用于图片item界面
  */
-public class SquareRelativeLayout extends RelativeLayout{
+public class SquareRelativeLayout extends RelativeLayout {
 
 
     public SquareRelativeLayout(Context context) {
@@ -28,11 +28,11 @@ public class SquareRelativeLayout extends RelativeLayout{
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        setMeasuredDimension(getDefaultSize(0,widthMeasureSpec),getDefaultSize(0,heightMeasureSpec));
+        setMeasuredDimension(getDefaultSize(0, widthMeasureSpec), getDefaultSize(0, heightMeasureSpec));
 
         int childWidthSize = getMeasuredWidth();
-        heightMeasureSpec = widthMeasureSpec = MeasureSpec.makeMeasureSpec(childWidthSize,MeasureSpec.EXACTLY);
+        heightMeasureSpec = widthMeasureSpec = MeasureSpec.makeMeasureSpec(childWidthSize, MeasureSpec.EXACTLY);
 
-        super.onMeasure(widthMeasureSpec,heightMeasureSpec);
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 }

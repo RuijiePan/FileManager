@@ -58,7 +58,7 @@ public class MemoryPresenter implements MemoryContact.Presenter {
         mCategoryManager.killRunningAppUsingObservable(set)
             .subscribe(memory -> {
                 mView.dimissLoadingView();
-                mView.showMemoryClean(mContext.getString(R.string.clean) + ":" + (memory << 10) + " M");
+                mView.showMemoryClean(mContext.getString(R.string.clean) + ":" + (memory >> 20) + " M");
                 mView.notifityItem();
                 RxBus.getDefault().post(new UpdateMemoryInfoEvent());
             }, Throwable::printStackTrace);

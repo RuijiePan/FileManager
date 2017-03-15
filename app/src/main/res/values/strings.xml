@@ -142,6 +142,7 @@
     <string name="temp_file">Temp File</string>
     <string name="log">Log</string>
     <string name="big_file">Big File</string>
+    <string name="clean_failure">Clean Failure</string>
 
     <!--<string name="zip">Zip</string>-->
     <string name="apk">APK</string>

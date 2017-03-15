@@ -25,9 +25,9 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
+        super.onCreate();
 
         sContext = this;
-
         //初始化工具类
         Utils.init(this);
         //初始化category各个模块需要的单例
