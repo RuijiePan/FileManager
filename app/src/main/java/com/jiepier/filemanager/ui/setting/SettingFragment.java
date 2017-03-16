@@ -13,6 +13,7 @@ import com.jiepier.filemanager.event.ChangeDefaultDirEvent;
 import com.jiepier.filemanager.event.NewDirEvent;
 import com.jiepier.filemanager.util.LanguageUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
+import com.jiepier.filemanager.util.SettingPrefUtil;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.SharedUtil;
 import com.jiepier.filemanager.util.ToastUtil;
@@ -59,6 +60,7 @@ public class SettingFragment extends PreferenceFragment
         pDefaultDir.setSummary(Settings.getDefaultDir());
         pDefaultScanDir.setSummary(SharedUtil.getString(App.sContext, AppConstant.DEFAULT_SCAN_PATH));
         pLanguage.setSummary(LanguageUtil.getInstance().getLanguageName());
+        pThemeColor.setSummary(SettingPrefUtil.getThemeName(App.sContext));
 
         mCompositeSubscription = new CompositeSubscription();
         mCompositeSubscription.add(RxBus.getDefault()

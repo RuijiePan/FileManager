@@ -141,11 +141,11 @@
     <string name="storage">儲存</string>
 
     <!-- storage -->
-    <string name="junk">Junk</string>
+    <string name="junk">垃圾清理</string>
     <string name="wait_for_scan">等待掃描…</string>
     <string name="clean_size">0.00B</string>
     <string name="total_found">建議清理:</string>
-    <string name="running_app">運行的App</string>
+    <string name="running_app">運行程序</string>
     <string name="cache_junk">系統緩存</string>
     <string name="unuseful_apk">無用安裝包</string>
     <string name="temp_file">臨時文件</string>
@@ -185,25 +185,25 @@
     <string name="about_project_introduce_content">https://github.com/RuijiePan/FileManager\n</string>
 
     <string-array name="mdColorNames">
-        <item>Red</item>
-        <item>Pink</item>
-        <item>Purple</item>
-        <item>Deep purple</item>
-        <item>Indigo</item>
-        <item>Blue</item>
-        <item>Light blue</item>
-        <item>Cyan</item>
-        <item>Teal</item>
-        <item>Green</item>
-        <item>Light green</item>
-        <item>Lime</item>
-        <item>Yellow</item>
-        <item>Amber</item>
-        <item>Orange</item>
-        <item>Deep orange</item>
-        <item>Brown</item>
-        <item>Grey</item>
-        <item>Blue grey</item>
+        <item>紅色</item>
+        <item>粉紅色</item>
+        <item>紫色</item>
+        <item>深紫色</item>
+        <item>靛藍色</item>
+        <item>藍色</item>
+        <item>亮藍色</item>
+        <item>青綠色</item>
+        <item>青色</item>
+        <item>綠色</item>
+        <item>亮綠色</item>
+        <item>石灰色</item>
+        <item>黃色</item>
+        <item>琥珀色</item>
+        <item>橙色</item>
+        <item>深橙色</item>
+        <item>棕色</item>
+        <item>灰色</item>
+        <item>深灰色</item>
     </string-array>
 </resources>
 

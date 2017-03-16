@@ -14,6 +14,7 @@ import com.jiepier.filemanager.event.ChangeThemeEvent;
 import com.jiepier.filemanager.event.ChoiceFolderEvent;
 import com.jiepier.filemanager.event.CleanActionModeEvent;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
+import com.jiepier.filemanager.event.LanguageEvent;
 import com.jiepier.filemanager.event.MutipeChoiceEvent;
 import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.util.ClipBoard;
@@ -91,6 +92,12 @@ public class MainPresenter implements MainContact.Presenter {
                 .subscribe(event-> {
                     final String mSelected = context.getString(R.string._selected);
                     mView.setActionModeTitle(event.getCount() + mSelected);
+                }, Throwable::printStackTrace));
+
+        mCompositeSubscription.add(RxBus.getDefault()
+                .IoToUiObservable(LanguageEvent.class)
+                .subscribe(event -> {
+                    mView.reload();
                 }, Throwable::printStackTrace));
 
     }

@@ -3,7 +3,6 @@ package com.jiepier.filemanager.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.jiepier.filemanager.R;
 
@@ -25,6 +24,18 @@ public class SettingPrefUtil {
   public static void setThemeIndex(Context context, int index) {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
     prefs.edit().putInt("ThemeIndex", index).apply();
+  }
+
+  public static void setThemeName(Context context, int index) {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    String[] colorName = context.getApplicationContext().getResources().getStringArray(R.array.mdColorNames);
+    prefs.edit().putString("ThemeName", colorName[index]).apply();
+  }
+
+  public static String getThemeName(Context context) {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    String[] colorName = context.getApplicationContext().getResources().getStringArray(R.array.mdColorNames);
+    return prefs.getString("ThemeName", colorName[getThemeIndex(context)]);
   }
 
   public static void setOffline(Context context, boolean isOffline) {

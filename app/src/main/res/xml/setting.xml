@@ -12,6 +12,7 @@
 
       <Preference
           android:key="pThemeColor"
+          android:summary="@string/settings_language"
           android:title="@string/settings_md_colors" />
 
       <Preference
