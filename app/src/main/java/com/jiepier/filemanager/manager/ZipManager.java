@@ -25,47 +25,48 @@ public class ZipManager {
 
     private static ZipManager sInstance;
     private Context mContext;
-    private static ArrayList<String> mZipList;
+    private ArrayList<String> mZipList;
 
-    public static ZipManager getInstance(){
+    public static ZipManager getInstance() {
 
-        if (sInstance == null){
+        if (sInstance == null) {
             throw new IllegalStateException("You must be init ZipManager first");
         }
         return sInstance;
     }
 
-    private ZipManager (Context context){
+    private ZipManager(Context context) {
         mContext = context;
         mZipList = new ArrayList<>();
     }
 
-    public static void init(Context context){
+    public static void init(Context context) {
 
-        if (sInstance == null)
+        if (sInstance == null) {
             sInstance = new ZipManager(context);
+        }
     }
 
-    public List<String> getZipListBySort(SortUtil.SortMethod sort){
+    public List<String> getZipListBySort(SortUtil.SortMethod sort) {
 
         Uri uri = MediaStore.Files.getContentUri("external");
 
-        String[] columns = new String[] {
+        String[] columns = new String[]{
                 MediaStore.Files.FileColumns._ID
                 , MediaStore.Files.FileColumns.DATA
                 , MediaStore.Files.FileColumns.SIZE
                 , MediaStore.Files.FileColumns.DATE_MODIFIED
         };
-        String selection =  "(" + MediaStore.Files.FileColumns.MIME_TYPE +
+        String selection = "(" + MediaStore.Files.FileColumns.MIME_TYPE +
                 " == '" + "application/zip" + "')";
         String sortOrder = SortUtil.buildSortOrder(sort);
 
         Cursor cursor = mContext.getContentResolver().query(
-            uri,columns,selection,null,sortOrder
+                uri, columns, selection, null, sortOrder
         );
 
         mZipList.clear();
-        if (cursor != null){
+        if (cursor != null) {
 
             try {
                 cursor.moveToFirst();
@@ -75,9 +76,9 @@ public class ZipManager {
                     mZipList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
                 }
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 cursor.close();
             }
         }
@@ -85,9 +86,9 @@ public class ZipManager {
         return mZipList;
     }
 
-    public Observable<List<String>> getZipListUsingObservable(SortUtil.SortMethod sort){
+    public Observable<List<String>> getZipListUsingObservable(SortUtil.SortMethod sort) {
 
-        return Observable.create(new Observable.OnSubscribe<List<String>>(){
+        return Observable.create(new Observable.OnSubscribe<List<String>>() {
 
             @Override
             public void call(Subscriber<? super List<String>> subscriber) {
@@ -99,7 +100,7 @@ public class ZipManager {
 
     }
 
-    public List<String> getZipList(){
-            return mZipList;
+    public List<String> getZipList() {
+        return mZipList;
     }
 }

@@ -3,9 +3,9 @@ package com.jiepier.filemanager.ui.category.picture;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseActivity;
+import com.jiepier.filemanager.constant.AppConstant;
 
 import butterknife.BindView;
 

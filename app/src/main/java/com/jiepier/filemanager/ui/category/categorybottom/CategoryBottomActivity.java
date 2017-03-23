@@ -2,15 +2,10 @@ package com.jiepier.filemanager.ui.category.categorybottom;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 
-import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
-import com.jiepier.filemanager.base.App;
+import com.jiepier.filemanager.constant.AppConstant;
 import com.jiepier.filemanager.ui.actionmode.ActionModeActivity;
-import com.jiepier.filemanager.util.ClipBoard;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 

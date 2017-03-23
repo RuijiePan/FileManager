@@ -6,9 +6,9 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.App;
+import com.jiepier.filemanager.constant.AppConstant;
 import com.jiepier.filemanager.event.ChangeDefaultDirEvent;
 import com.jiepier.filemanager.event.NewDirEvent;
 import com.jiepier.filemanager.util.LanguageUtil;

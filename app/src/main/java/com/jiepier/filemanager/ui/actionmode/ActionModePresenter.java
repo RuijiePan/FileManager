@@ -8,8 +8,8 @@ import android.support.annotation.NonNull;
 
 import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 import com.blankj.utilcode.utils.FileUtils;
-import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
+import com.jiepier.filemanager.constant.AppConstant;
 import com.jiepier.filemanager.event.ActionChoiceFolderEvent;
 import com.jiepier.filemanager.event.ActionMutipeChoiceEvent;
 import com.jiepier.filemanager.event.TypeEvent;

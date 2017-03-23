@@ -1,4 +1,4 @@
-package com.jiepier.filemanager.Constant;
+package com.jiepier.filemanager.constant;
 
 /**
  * Created by panruijie on 17/1/2.
@@ -7,6 +7,7 @@ package com.jiepier.filemanager.Constant;
 
 public class AppConstant {
 
+    public static final String PACKAGE_NAME = "com.jiepier.filename";
     public static final String IS_FIRST = "IS_FIRST";
     public static final String INDEX = "INDEX";
     public static final String MUSIC = "MUSIC";
@@ -40,4 +41,16 @@ public class AppConstant {
     public static final int TYPE_CHILD = 1;
 
     public static final String LANGUAGE = "language";
+
+    //红包插件
+    public static final String WATCH_NOTIFICATION = "watch_notification";
+    public static final String WATCH_LIST = "watch_list";
+    public static final String WATCH_CHAT = "watch_chat";
+    public static final String WATCH_SELF = "watch_self";
+    public static final String WATCH_EXCLUDE_WORDS = "watch_exclude_words";
+    public static final String WATCH_ON_LOCK = "watch_on_lock";
+    public static final String OPEN_DELAY = "open_dalay";
+    public static final String COMMENT_SWITCH = "comment_switch";
+    public static final String COMMENT_WORDS = "comment_words";
+    public static final String COMMENT_AT = "comment_at";
 }

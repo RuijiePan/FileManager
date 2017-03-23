@@ -3,20 +3,16 @@ package com.jiepier.filemanager.ui.category.music;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.jiepier.filemanager.Constant.AppConstant;
-import com.jiepier.filemanager.bean.Music;
+import com.jiepier.filemanager.constant.AppConstant;
 import com.jiepier.filemanager.event.ActionChoiceFolderEvent;
 import com.jiepier.filemanager.event.TypeEvent;
 import com.jiepier.filemanager.manager.CategoryManager;
-import com.jiepier.filemanager.ui.category.categorybottom.CategoryBottomContact;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 import com.jiepier.filemanager.util.Settings;
 
 import java.io.File;
-import java.util.ArrayList;
 
-import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
 /**

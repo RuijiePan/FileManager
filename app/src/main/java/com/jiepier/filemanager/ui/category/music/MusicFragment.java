@@ -1,21 +1,16 @@
 package com.jiepier.filemanager.ui.category.music;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseAdapter;
 import com.jiepier.filemanager.base.BaseFragment;
 import com.jiepier.filemanager.bean.Music;
 import com.jiepier.filemanager.event.ActionMutipeChoiceEvent;
-import com.jiepier.filemanager.ui.category.categorybottom.CategoryBottomAdapter;
-import com.jiepier.filemanager.ui.category.categorybottom.CategoryBottomContact;
-import com.jiepier.filemanager.ui.category.categorybottom.CategoryBottomPresenter;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 import com.jiepier.filemanager.util.ToastUtil;
 

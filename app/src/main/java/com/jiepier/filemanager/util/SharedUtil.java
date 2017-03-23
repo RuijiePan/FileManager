@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.jiepier.filemanager.base.App;
+
 //TODO: Auto-generated Javadoc
 
 /**
@@ -38,8 +40,20 @@ public class SharedUtil {
         edit.commit();
     }
 
+    public static void putInt(String key, int value) {
+        SharedPreferences sharedPreferences = getDefaultSharedPreferences(App.sContext);
+        Editor edit = sharedPreferences.edit();
+        edit.putInt(key, value);
+        edit.commit();
+    }
+
     public static int getInt(Context context, String key) {
         SharedPreferences sharedPreferences = getDefaultSharedPreferences(context);
+        return sharedPreferences.getInt(key, 0);
+    }
+
+    public static int getInt(String key) {
+        SharedPreferences sharedPreferences = getDefaultSharedPreferences(App.sContext);
         return sharedPreferences.getInt(key, 0);
     }
 
@@ -50,8 +64,20 @@ public class SharedUtil {
         edit.commit();
     }
 
+    public static void putString(String key, String value) {
+        SharedPreferences sharedPreferences = getDefaultSharedPreferences(App.sContext);
+        Editor edit = sharedPreferences.edit();
+        edit.putString(key, value);
+        edit.commit();
+    }
+
     public static String getString(Context context, String key) {
         SharedPreferences sharedPreferences = getDefaultSharedPreferences(context);
+        return sharedPreferences.getString(key, null);
+    }
+
+    public static String getString(String key) {
+        SharedPreferences sharedPreferences = getDefaultSharedPreferences(App.sContext);
         return sharedPreferences.getString(key, null);
     }
 
@@ -62,13 +88,32 @@ public class SharedUtil {
         edit.commit();
     }
 
+    public static void putBoolean(String key, boolean value) {
+        SharedPreferences sharedPreferences = getDefaultSharedPreferences(App.sContext);
+        Editor edit = sharedPreferences.edit();
+        edit.putBoolean(key, value);
+        edit.commit();
+    }
+
     public static boolean getBoolean(Context context, String key, boolean defValue) {
         SharedPreferences sharedPreferences = getDefaultSharedPreferences(context);
         return sharedPreferences.getBoolean(key, defValue);
     }
 
+    public static boolean getBoolean(String key, boolean defValue) {
+        SharedPreferences sharedPreferences = getDefaultSharedPreferences(App.sContext);
+        return sharedPreferences.getBoolean(key, defValue);
+    }
+
     public static void remove(Context context, String key) {
         SharedPreferences sharedPreferences = getDefaultSharedPreferences(context);
+        Editor edit = sharedPreferences.edit();
+        edit.remove(key);
+        edit.commit();
+    }
+
+    public static void remove(String key) {
+        SharedPreferences sharedPreferences = getDefaultSharedPreferences(App.sContext);
         Editor edit = sharedPreferences.edit();
         edit.remove(key);
         edit.commit();

@@ -1,7 +1,7 @@
 package com.jiepier.filemanager.bean;
 
-import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.bean.entity.MultiItemEntity;
+import com.jiepier.filemanager.constant.AppConstant;
 
 /**
  * Created by panruijie on 2017/2/21.

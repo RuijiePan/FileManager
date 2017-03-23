@@ -28,26 +28,26 @@ public class MusicManager {
     private Context mContext;
     private static ArrayList<Music> mMusicList;
 
-    public static MusicManager getInstance(){
+    public static MusicManager getInstance() {
 
-        if (sInstance == null){
+        if (sInstance == null) {
             throw new IllegalStateException("You must be init MusicManager first");
         }
         return sInstance;
     }
 
-    private MusicManager(Context context){
+    private MusicManager(Context context) {
         mContext = context;
         mMusicList = new ArrayList<>();
     }
 
-    public static void init(Context context){
+    public static void init(Context context) {
 
         if (sInstance == null)
             sInstance = new MusicManager(context);
     }
 
-    public ArrayList<Music> getMusicListBySort(SortUtil.SortMethod sort){
+    public ArrayList<Music> getMusicListBySort(SortUtil.SortMethod sort) {
 
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 
@@ -57,9 +57,9 @@ public class MusicManager {
         Cursor cursor = null;
         try {
             cursor = mContext.getContentResolver().query(
-                    uri,null,null,null,sortOrder);
+                    uri, null, null, null, sortOrder);
 
-            if (cursor != null){
+            if (cursor != null) {
                 if (cursor.moveToFirst()) {
 
                     do {
@@ -72,13 +72,13 @@ public class MusicManager {
 
                         Music music = new Music(title, album, artist, url, duration, size);
                         mMusicList.add(music);
-                    }while (cursor.moveToNext());
+                    } while (cursor.moveToNext());
                 }
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             if (cursor != null)
                 cursor.close();
         }
@@ -86,9 +86,9 @@ public class MusicManager {
         return mMusicList;
     }
 
-    public Observable<ArrayList<Music>> getMusicListUsingObservable(SortUtil.SortMethod sort){
+    public Observable<ArrayList<Music>> getMusicListUsingObservable(SortUtil.SortMethod sort) {
 
-        return Observable.create(new Observable.OnSubscribe<ArrayList<Music>>(){
+        return Observable.create(new Observable.OnSubscribe<ArrayList<Music>>() {
 
             @Override
             public void call(Subscriber<? super ArrayList<Music>> subscriber) {
@@ -100,7 +100,7 @@ public class MusicManager {
 
     }
 
-    public List<Music> getMusicList(){
+    public List<Music> getMusicList() {
         return mMusicList;
     }
 }

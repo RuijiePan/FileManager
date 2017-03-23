@@ -6,9 +6,9 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.util.DisplayMetrics;
 
-import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.bean.entity.LanguageType;
+import com.jiepier.filemanager.constant.AppConstant;
 import com.jiepier.filemanager.event.LanguageEvent;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 

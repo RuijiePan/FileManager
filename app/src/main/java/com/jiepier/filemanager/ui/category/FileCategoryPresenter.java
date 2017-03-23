@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import com.jiepier.filemanager.Constant.AppConstant;
+import com.jiepier.filemanager.constant.AppConstant;
 import com.jiepier.filemanager.event.UpdateMemoryInfoEvent;
 import com.jiepier.filemanager.manager.CategoryManager;
 import com.jiepier.filemanager.ui.category.categorybottom.CategoryBottomActivity;

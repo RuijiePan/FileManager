@@ -1,18 +1,96 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/native_ad_container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:color/white">
+    android:layout_height="match_parent"
+    android:background="#fff">
 
-    <Button
-        android:id="@+id/button"
-        android:text="show"
-        android:clickable="true"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:id="@+id/main_action_bar_placeholder"
+        android:layout_alignParentTop="true"
+        android:background="#E46C62" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/layout_header"
+        android:layout_above="@+id/layout_control"
+        android:background="#E46C62"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:text="@string/app_name"
+            android:textColor="#fff"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="28dp"
+            android:layout_marginTop="40dp"
+            android:textIsSelectable="false" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView5"
+            android:text="1.0"
+            android:textColor="#fff"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_marginTop="4dp" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="241dp"
-        android:layout_below="@+id/dustbinView"
-        android:layout_centerHorizontal="true" />
+        android:background="@drawable/bg_snow"
+        android:id="@+id/main_bg_snow"
+        android:layout_above="@id/layout_control" />
 
+    <LinearLayout
+        android:id="@+id/layout_control"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+
+        <LinearLayout
+            android:id="@+id/layout_control_accessibility"
+            android:clickable="true"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:onClick="openAccessibility"
+            android:background="#ffffff"
+            android:textColor="#858585"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_above="@+id/layout_uber"
+            android:textSize="20dp"
+            android:orientation="vertical"
+            android:layout_weight="0.3"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:id="@+id/layout_control_accessibility_icon"
+                android:layout_marginBottom="6dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/ic_start" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/service_on"
+                android:id="@+id/layout_control_accessibility_text"
+                android:layout_margin="5dp"
+                android:textColor="#dfaa6a"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

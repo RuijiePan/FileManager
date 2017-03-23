@@ -3,7 +3,7 @@ package com.jiepier.filemanager.ui.category.categorybottom;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.jiepier.filemanager.Constant.AppConstant;
+import com.jiepier.filemanager.constant.AppConstant;
 import com.jiepier.filemanager.event.ActionChoiceFolderEvent;
 import com.jiepier.filemanager.event.TypeEvent;
 import com.jiepier.filemanager.manager.CategoryManager;

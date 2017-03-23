@@ -11,7 +11,6 @@ import com.jiepier.filemanager.util.SortUtil;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -32,31 +31,32 @@ public class PictureManager {
     private Context mContext;
     private ArrayList<ImageFolder> mPictureList;
 
-    private PictureManager(Context context){
+    private PictureManager(Context context) {
         this.mContext = context;
         mPictureList = new ArrayList<>();
     }
 
-    public static void init(Context context){
+    public static void init(Context context) {
 
-        if (sInstance == null)
+        if (sInstance == null) {
             sInstance = new PictureManager(context);
+        }
     }
 
-    public static PictureManager getInstance(){
+    public static PictureManager getInstance() {
 
-        if (sInstance == null){
+        if (sInstance == null) {
             throw new IllegalStateException("You must be init PictureManager first");
         }
         return sInstance;
     }
 
-    public ArrayList<ImageFolder> getPictureListBySort(SortUtil.SortMethod sort){
+    public ArrayList<ImageFolder> getPictureListBySort(SortUtil.SortMethod sort) {
 
         Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         String selection = MediaStore.Images.Media.MIME_TYPE + "=? or "
                 + MediaStore.Images.Media.MIME_TYPE + "=?";
-        String[] selectionArgs = new String[] { "image/jpeg", "image/png" };
+        String[] selectionArgs = new String[]{"image/jpeg", "image/png"};
         String sortOrder = SortUtil.buildSortOrder(sort);
 
         Cursor cursor = null;
@@ -66,7 +66,7 @@ public class PictureManager {
 
         try {
             cursor = mContext.getContentResolver().query(
-                    uri,null,selection,selectionArgs,sortOrder);
+                    uri, null, selection, selectionArgs, sortOrder);
 
             if (cursor != null) {
                 if (cursor.moveToFirst()) {
@@ -75,19 +75,21 @@ public class PictureManager {
                                 MediaStore.Images.Media.DATA));
 
                         //获取文件夹下的文件夹路径和首张图片
-                        if (firstImage == null)
+                        if (firstImage == null) {
                             firstImage = path;
+                        }
 
                         File parentFile = new File(path).getParentFile();
-                        if (parentFile == null)
+                        if (parentFile == null) {
                             continue;
+                        }
 
                         String dirPath = parentFile.getAbsolutePath();
                         ImageFolder imageFolder = null;
 
-                        if (dirPathSet.contains(dirPath)){
+                        if (dirPathSet.contains(dirPath)) {
                             continue;
-                        }else {
+                        } else {
                             dirPathSet.add(dirPath);
                             imageFolder = new ImageFolder();
                             imageFolder.setDir(dirPath);
@@ -109,19 +111,20 @@ public class PictureManager {
                     } while (cursor.moveToNext());
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if (cursor != null)
-            cursor.close();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
 
         return mPictureList;
     }
 
-    public Observable<ArrayList<ImageFolder>> getPictureListUsingObservable(SortUtil.SortMethod sort){
+    public Observable<ArrayList<ImageFolder>> getPictureListUsingObservable(SortUtil.SortMethod sort) {
 
-        return Observable.create(new Observable.OnSubscribe<ArrayList<ImageFolder>>(){
+        return Observable.create(new Observable.OnSubscribe<ArrayList<ImageFolder>>() {
 
             @Override
             public void call(Subscriber<? super ArrayList<ImageFolder>> subscriber) {
@@ -132,7 +135,7 @@ public class PictureManager {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public List<ImageFolder> getPictureList(){
+    public List<ImageFolder> getPictureList() {
         return mPictureList;
     }
 }

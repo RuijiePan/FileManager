@@ -18,12 +18,13 @@ public class AnimationUtil {
 
     /**
      * 默认从左上角往右下角开始拓展，MultipleRadius建议值为2，为什么为2呢，自己联系prj。。。
-     * @param view 展开动画的view
+     *
+     * @param view           展开动画的view
      * @param MultipleRadius 半径倍数
-     * @param Duration 动画持续时间
+     * @param Duration       动画持续时间
      * @return 动画效果
      */
-    public static Animator getCircularReveal(View view,int MultipleRadius,int Duration){
+    public static Animator getCircularReveal(View view, int MultipleRadius, int Duration) {
 
         int cx = (view.getLeft() + view.getRight()) / 2;
         int cy = (view.getTop() + view.getBottom()) / 2;
@@ -34,21 +35,21 @@ public class AnimationUtil {
 
         // Android native animator
         Animator animator =
-                ViewAnimationUtils.createCircularReveal(view, 0, 0, 0, finalRadius*MultipleRadius);
+                ViewAnimationUtils.createCircularReveal(view, 0, 0, 0, finalRadius * MultipleRadius);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.setDuration(Duration);
         return animator;
     }
 
     /**
-     * @param view 展开动画的view
-     * @param centerX 从具体某个点的X坐标开始扩散
-     * @param centerY 从具体某个点的Y坐标开始扩散
+     * @param view           展开动画的view
+     * @param centerX        从具体某个点的X坐标开始扩散
+     * @param centerY        从具体某个点的Y坐标开始扩散
      * @param MultipleRadius 半径倍数
-     * @param Duration 动画时间
+     * @param Duration       动画时间
      * @return
      */
-    public static Animator getCircularReveal(View view,int centerX,int centerY,int MultipleRadius,int Duration){
+    public static Animator getCircularReveal(View view, int centerX, int centerY, int MultipleRadius, int Duration) {
 
         int cx = (view.getLeft() + view.getRight()) / 2;
         int cy = (view.getTop() + view.getBottom()) / 2;
@@ -59,13 +60,13 @@ public class AnimationUtil {
 
         // Android native animator
         Animator animator =
-                ViewAnimationUtils.createCircularReveal(view, centerX, centerY, 0, finalRadius*MultipleRadius);
+                ViewAnimationUtils.createCircularReveal(view, centerX, centerY, 0, finalRadius * MultipleRadius);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.setDuration(Duration);
         return animator;
     }
 
-    public static void showCircularReveal(View view,int MultipleRadius,int Duration){
+    public static void showCircularReveal(View view, int MultipleRadius, int Duration) {
 
         view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
@@ -79,7 +80,7 @@ public class AnimationUtil {
 
     }
 
-    public static void showCircularReveal(View view,int centerX,int centerY,int MultipleRadius,int Duration){
+    public static void showCircularReveal(View view, int centerX, int centerY, int MultipleRadius, int Duration) {
 
         view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override

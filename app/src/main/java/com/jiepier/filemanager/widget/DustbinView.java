@@ -140,9 +140,9 @@ public class DustbinView extends View {
         } else if (!mIsThirdAnimationFinish) {
             mDy = 0;
             mAlpha = 255;
-            mMatrix.postTranslate(-mBitmapWidth / 2, -mBitmapHeight / 3);
+            mMatrix.postTranslate(-mBitmapWidth / 2, -mBitmapHeight * 2 / 3);
             mMatrix.postRotate(mThirdAnimatorProcess * mShakeDrgree);
-            mMatrix.postTranslate(mBitmapWidth / 2, mBitmapHeight / 3);
+            mMatrix.postTranslate(mBitmapWidth / 2, mBitmapHeight * 2 / 3);
         } else if (!mIsFourAnimationFinish) {
             mDy = (int) ((1.0f - mFourAnimatorProcess) * mHeight / 2);
             mAlpha = (int) (mFourAnimatorProcess * 255);
@@ -431,7 +431,6 @@ public class DustbinView extends View {
         private int direction; //0代表从左到右
         private double rotateAngle;
         private Point controlPoint;
-        private PathMeasure pathMeasure;
 
         public IconInfo(Bitmap bitmap) {
             this.bitmap = bitmap;

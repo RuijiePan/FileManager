@@ -6,9 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -29,7 +27,6 @@ import com.jiepier.filemanager.widget.CreateFolderDialog;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -150,7 +147,7 @@ public class CommonFragment extends BaseFragment implements CommonContact.View {
 
     @Override
     public void showSnackBar(String content) {
-        SnackbarUtil.show(coordinatorLayout,content,0,view -> getActivity().finish());
+        SnackbarUtil.show(coordinatorLayout, content, 0, view -> getActivity().finish());
     }
 
     @Override

@@ -29,7 +29,7 @@ import rx.Observable;
 public class OverScanTask extends AsyncTask<Void, Void, Void> {
 
     private IScanCallBack mCallBack;
-    private final int SCAN_LEVEL = 10;
+    private final int SCAN_LEVEL = 5;
     private boolean mIsOverTime = true;
     private JunkInfo mApkInfo;
     private JunkInfo mLogInfo;

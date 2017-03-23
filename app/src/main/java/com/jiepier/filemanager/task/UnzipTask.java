@@ -5,8 +5,8 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.jiepier.filemanager.Constant.AppConstant;
 import com.jiepier.filemanager.R;
+import com.jiepier.filemanager.constant.AppConstant;
 import com.jiepier.filemanager.event.TypeEvent;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.MediaStoreUtils;

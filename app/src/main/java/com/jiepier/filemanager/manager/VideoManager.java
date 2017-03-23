@@ -27,48 +27,49 @@ public class VideoManager {
     private Context mContext;
     private ArrayList<String> mVideoList;
 
-    private VideoManager(Context context){
+    private VideoManager(Context context) {
         this.mContext = context;
         mVideoList = new ArrayList<>();
     }
 
-    public static void init(Context context){
+    public static void init(Context context) {
 
-        if (sInstance == null)
+        if (sInstance == null) {
             sInstance = new VideoManager(context);
+        }
     }
 
-    public static VideoManager getInstance(){
+    public static VideoManager getInstance() {
 
-        if (sInstance == null){
+        if (sInstance == null) {
             throw new IllegalStateException("You must be init VideoManager first");
         }
         return sInstance;
     }
 
-    public List<String> getVideoListBySort(SortUtil.SortMethod sort){
+    public List<String> getVideoListBySort(SortUtil.SortMethod sort) {
 
         Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
 
         String sortOrder = SortUtil.buildSortOrder(sort);
 
         Cursor cursor = mContext.getContentResolver().query(
-            uri,null,null,null,sortOrder
+                uri, null, null, null, sortOrder
         );
 
         mVideoList.clear();
-        if (cursor != null){
+        if (cursor != null) {
 
             try {
                 cursor.moveToFirst();
 
                 mVideoList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
-                while (cursor.moveToNext()){
+                while (cursor.moveToNext()) {
                     mVideoList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 cursor.close();
             }
 
@@ -77,9 +78,9 @@ public class VideoManager {
         return mVideoList;
     }
 
-    public Observable<List<String>> getVideoListUsingObservable(SortUtil.SortMethod sort){
+    public Observable<List<String>> getVideoListUsingObservable(SortUtil.SortMethod sort) {
 
-        return Observable.create(new Observable.OnSubscribe<List<String>>(){
+        return Observable.create(new Observable.OnSubscribe<List<String>>() {
 
             @Override
             public void call(Subscriber<? super List<String>> subscriber) {
@@ -90,7 +91,7 @@ public class VideoManager {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public List<String> getVideoList(){
+    public List<String> getVideoList() {
         return mVideoList;
     }
 }

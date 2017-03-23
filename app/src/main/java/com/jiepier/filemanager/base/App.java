@@ -5,7 +5,7 @@ import android.content.Context;
 
 import com.blankj.utilcode.utils.ScreenUtils;
 import com.blankj.utilcode.utils.Utils;
-import com.jiepier.filemanager.Constant.AppConstant;
+import com.jiepier.filemanager.constant.AppConstant;
 import com.jiepier.filemanager.manager.CategoryManager;
 import com.jiepier.filemanager.manager.CleanManager;
 import com.jiepier.filemanager.manager.ScanManager;
