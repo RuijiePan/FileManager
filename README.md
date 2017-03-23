@@ -17,4 +17,4 @@ In addition,it support multipe theme and multipe language.Hoping you would like 
 ![image](http://upload.ouliu.net/i/20170312023011zawj8.jpeg)
 
 
-![image](http://upload.ouliu.net/i/20170323160612u0w9y.gif)
+![image](http://upload.ouliu.net/i/20170323162841nfcbg.gif)
