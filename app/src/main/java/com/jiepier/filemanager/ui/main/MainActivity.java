@@ -1,8 +1,6 @@
 package com.jiepier.filemanager.ui.main;
 
 import android.app.DialogFragment;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
@@ -10,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.view.ActionMode;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,7 +15,6 @@ import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseDrawerActivity;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
-import com.jiepier.filemanager.manager.CategoryManager;
 import com.jiepier.filemanager.task.PasteTaskExecutor;
 import com.jiepier.filemanager.task.UnzipTask;
 import com.jiepier.filemanager.task.ZipTask;
@@ -36,12 +32,14 @@ public class MainActivity extends BaseDrawerActivity implements
     private MainPresenter mPresenter;
     private ActionMode mActionMode;
     private ScannerReceiver mScannerReceiver;
+    private UnInstallReceiver mUninstallReceiver;
     private int mChoiceCount;
 
     @Override
     public void initUiAndListener() {
         super.initUiAndListener();
 
+        //扫描sd卡的广播
         mScannerReceiver = new ScannerReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -53,6 +51,15 @@ public class MainActivity extends BaseDrawerActivity implements
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         intent.setData(Uri.fromFile(new File(Environment.getExternalStorageDirectory().getPath())));
         sendBroadcast(intent);
+
+        //监听应用卸载的广播
+        mUninstallReceiver = new UnInstallReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        filter.addAction(Intent.ACTION_PACKAGE_REPLACED);
+        filter.addDataScheme("package");
+        registerReceiver(mUninstallReceiver, filter);
 
         mPresenter = new MainPresenter(this);
         mPresenter.attachView(this);
@@ -220,24 +227,8 @@ public class MainActivity extends BaseDrawerActivity implements
         super.onDestroy();
         mPresenter.detachView();
         unregisterReceiver(mScannerReceiver);
+        unregisterReceiver(mUninstallReceiver);
     }
 
-
-    private class ScannerReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-
-            if (action.equals(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)) {
-                Log.w(TAG, "Start scan file");
-            }
-            // handle intents related to external storage
-            else if (action.equals(Intent.ACTION_MEDIA_SCANNER_FINISHED)) {
-                CategoryManager.getInstance().update();
-                Log.w(TAG, "Sacn finish");
-            }
-        }
-    }
 }
 

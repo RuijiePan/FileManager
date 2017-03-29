@@ -10,16 +10,16 @@ public class ComparatorApp implements Comparator<AppProcessInfo> {
 
     @Override
     public int compare(AppProcessInfo app, AppProcessInfo appAnother) {
-        if (app.getUid() == appAnother.getUid()){
-            if (app.getMemory() < appAnother.getMemory()){
+        if (app.getUid() == appAnother.getUid()) {
+            if (app.getMemory() < appAnother.getMemory()) {
                 return 1;
-            }else if (app.getMemory() == appAnother.getMemory()){
+            } else if (app.getMemory() == appAnother.getMemory()) {
                 return 0;
-            }else {
+            } else {
                 return -1;
             }
-        }else {
-            return app.getUid() - appAnother.getUid() ;
+        } else {
+            return app.getUid() - appAnother.getUid();
         }
     }
 

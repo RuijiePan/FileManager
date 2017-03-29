@@ -23,7 +23,7 @@ import rx.Observable;
 /**
  * Created by panruijie on 2017/2/15.
  * Email : zquprj@gmail.com
- * 扫描类，默认扫描层级为10
+ * 扫描类，默认扫描层级为5
  */
 
 public class OverScanTask extends AsyncTask<Void, Void, Void> {

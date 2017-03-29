@@ -10,6 +10,7 @@ import com.jiepier.filemanager.manager.CategoryManager;
 import com.jiepier.filemanager.manager.CleanManager;
 import com.jiepier.filemanager.manager.ScanManager;
 import com.jiepier.filemanager.util.LanguageUtil;
+import com.jiepier.filemanager.util.Loger;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.SharedUtil;
 
@@ -40,6 +41,8 @@ public class App extends Application {
         Settings.updatePreferences(this);
         //语言工具类初始化,用于语言切换
         LanguageUtil.init(this);
+        //开启debug模式
+        Loger.DEBUG = true;
 
         /*如果是第一次加载，那么数据库里没有数据，那么直接扫描获取数据，否则在主界面通过广播
                 扫描完之后再进行数据更新*/
