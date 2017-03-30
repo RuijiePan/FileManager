@@ -1,26 +1,20 @@
 package com.jiepier.filemanager.ui.category.memory;
 
 import android.os.Bundle;
-import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseFragment;
 import com.jiepier.filemanager.bean.AppProcessInfo;
-import com.jiepier.filemanager.util.ToastUtil;
 import com.jiepier.filemanager.widget.BoomView;
+import com.jiepier.filemanager.widget.ProgressWheel;
 
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by panruijie on 17/1/9.
@@ -31,10 +25,10 @@ public class MemoryFragment extends BaseFragment implements MemoryContact.View {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.memory_Progressbar)
-    ContentLoadingProgressBar memoryProgressbar;
     @BindView(R.id.cleanView)
     BoomView cleanView;
+    @BindView(R.id.memory_Progressbar)
+    ProgressWheel memoryProgressbar;
     private MemoryAdapter mAdapter;
     private MemoryPresenter mPresenter;
 
@@ -93,12 +87,12 @@ public class MemoryFragment extends BaseFragment implements MemoryContact.View {
 
     @Override
     public void showLoadingView() {
-        memoryProgressbar.show();
+        memoryProgressbar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void dimissLoadingView() {
-        memoryProgressbar.hide();
+        memoryProgressbar.setVisibility(View.GONE);
     }
 
     @Override
@@ -120,4 +114,11 @@ public class MemoryFragment extends BaseFragment implements MemoryContact.View {
     public void setData(List<AppProcessInfo> list) {
         mAdapter.add(list);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
+    }
+
 }

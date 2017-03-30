@@ -87,7 +87,7 @@
     <!--drawer-->
     <string name="sdCard">SD卡</string>
     <string name="category">分类</string>
-    <string name="system">系统</string>
+    <string name="uninstall">卸载</string>
     <string name="setting">设置</string>
     <string name="about">关于</string>
     <string name="lightModel">夜间模式</string>

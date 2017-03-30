@@ -37,7 +37,7 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity {
     protected NavigationView mNavigation;
     public static final String SDCARD = "1";
     public static final String CATEGORY = "2";
-    public static final String SYSTEM = "3";
+    public static final String UNINSTALL = "3";
     public static final String TAG_DIALOG = "dialog";
     protected String OLDTAG = SDCARD;
     protected android.app.FragmentManager fm_v4;
@@ -109,7 +109,7 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity {
                 .add(R.id.flContentRoot, mFileCategoryFragment, CATEGORY)
                 .commit();
         fm.beginTransaction()
-                .add(R.id.flContentRoot, mAppManagerFragment, SYSTEM)
+                .add(R.id.flContentRoot, mAppManagerFragment, UNINSTALL)
                 .commit();
         fm.beginTransaction().hide(mFileCategoryFragment).commit();
         fm.beginTransaction().hide(mAppManagerFragment).commit();
@@ -124,14 +124,14 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity {
                 fm.beginTransaction().show(mSdCardFragment).commit();
             if (TAG.equals(CATEGORY))
                 fm.beginTransaction().show(mFileCategoryFragment).commit();
-            if (TAG.equals(SYSTEM))
+            if (TAG.equals(UNINSTALL))
                 fm.beginTransaction().show(mAppManagerFragment).commit();
 
             if (OLDTAG.equals(SDCARD))
                 fm.beginTransaction().hide(mSdCardFragment).commit();
             if (OLDTAG.equals(CATEGORY))
                 fm.beginTransaction().hide(mFileCategoryFragment).commit();
-            if (OLDTAG.equals(SYSTEM))
+            if (OLDTAG.equals(UNINSTALL))
                 fm.beginTransaction().hide(mAppManagerFragment).commit();
 
         }
@@ -148,8 +148,8 @@ public abstract class BaseDrawerActivity extends BaseToolbarActivity {
                 case R.id.menu_category:
                     transformFragment(CATEGORY);
                     break;
-                case R.id.menu_system:
-                    transformFragment(SYSTEM);
+                case R.id.menu_unistall:
+                    transformFragment(UNINSTALL);
                     break;
                 case R.id.menu_setting:
                     Intent intent = new Intent(this, SettingActivity.class);

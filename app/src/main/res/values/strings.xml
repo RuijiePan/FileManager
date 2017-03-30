@@ -87,7 +87,7 @@
     <!--drawer-->
     <string name="sdCard">SDCard</string>
     <string name="category">Category</string>
-    <string name="system">System</string>
+    <string name="uninstall">Uninstall</string>
     <string name="setting">Setting</string>
     <string name="about">About</string>
     <string name="lightModel">LightModel</string>

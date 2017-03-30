@@ -12,6 +12,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 /**
  * Created by panruijie on 2017/3/28.
  * Email : zquprj@gmail.com
@@ -31,6 +36,17 @@ public class AppUtil {
         }
 
         return pakList;
+    }
+
+    public static Observable<List<AppInfo>> getInstalledAppInfoUsingObservable(Context context, boolean filterSystem) {
+        return Observable.create(new Observable.OnSubscribe<List<AppInfo>>() {
+
+            @Override
+            public void call(Subscriber<? super List<AppInfo>> subscriber) {
+                subscriber.onNext(getInstalledApplicationInfo(context, filterSystem));
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     /**

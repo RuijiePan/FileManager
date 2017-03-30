@@ -13,9 +13,9 @@
             android:title="@string/category" />
 
         <item
-            android:id="@+id/menu_system"
+            android:id="@+id/menu_unistall"
             android:icon="@drawable/ic_stars_white_24dp"
-            android:title="@string/system" />
+            android:title="@string/uninstall" />
 
         <item
             android:id="@+id/menu_setting"

@@ -7,23 +7,25 @@ import android.view.View;
 
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseFragment;
-import com.jiepier.filemanager.event.PackageEvent;
-import com.jiepier.filemanager.util.AppUtil;
-import com.jiepier.filemanager.util.RxBus.RxBus;
+import com.jiepier.filemanager.bean.AppInfo;
+import com.jiepier.filemanager.widget.ProgressWheel;
+
+import java.util.List;
 
 import butterknife.BindView;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by JiePier on 16/12/7.
  */
 
-public class AppManagerFragment extends BaseFragment {
+public class AppManagerFragment extends BaseFragment implements AppManagerContact.View {
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
+    @BindView(R.id.progress)
+    ProgressWheel mProgress;
     private AppManagerAdapter mAdapter;
-    private CompositeSubscription mCompositeSubscription;
+    private AppManagerPresenter mPresenter;
 
     @Override
     protected int getLayoutId() {
@@ -32,34 +34,49 @@ public class AppManagerFragment extends BaseFragment {
 
     @Override
     protected void initViews(View self, Bundle savedInstanceState) {
-        mAdapter = new AppManagerAdapter(getContext(), AppUtil.getInstalledApplicationInfo(getContext(), true));
+        mPresenter = new AppManagerPresenter(getContext());
+        mPresenter.attachView(this);
+        mPresenter.getData();
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
     protected void initData() {
-        mCompositeSubscription = new CompositeSubscription();
+
     }
 
     @Override
     protected void initListeners() {
-        mCompositeSubscription.add(RxBus.getDefault()
-                .IoToUiObservable(PackageEvent.class)
-                .subscribe(packageEvent -> {
-                    if (packageEvent.getState().equals(PackageEvent.REMOVE)) {
-                        mAdapter.removeItem(packageEvent.getPackageName());
-                    }
-                }, Throwable::printStackTrace));
+
+    }
+
+    @Override
+    public void showDialog() {
+        mProgress.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void dismissDialog() {
+        mProgress.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void setData(List<AppInfo> data) {
+        mAdapter = new AppManagerAdapter(getContext(), data);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void removeItem(String pckName) {
+        mAdapter.removeItem(pckName);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mCompositeSubscription != null) {
-            mCompositeSubscription.unsubscribe();
-            mCompositeSubscription = null;
-        }
+        mPresenter.detachView();
     }
+
 }
