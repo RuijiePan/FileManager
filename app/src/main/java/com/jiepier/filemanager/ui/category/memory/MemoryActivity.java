@@ -2,6 +2,8 @@ package com.jiepier.filemanager.ui.category.memory;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.accessibility.AccessibilityManager;
+
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseActivity;
 
@@ -14,8 +16,9 @@ import butterknife.BindView;
 
 public class MemoryActivity extends BaseActivity {
 
+    private AccessibilityManager mAccessibilityManager;
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    Toolbar mToolbar;
 
     @Override
     public int initContentView() {
@@ -24,8 +27,8 @@ public class MemoryActivity extends BaseActivity {
 
     @Override
     protected void initToolbar(Bundle savedInstanceState) {
-        if (null != toolbar) {
-            setSupportActionBar(toolbar);
+        if (null != mToolbar) {
+            setSupportActionBar(mToolbar);
             getSupportActionBar().setDisplayShowHomeEnabled(false);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }

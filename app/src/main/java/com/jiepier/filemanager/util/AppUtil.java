@@ -10,6 +10,7 @@ import com.jiepier.filemanager.bean.AppInfo;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import rx.Observable;
@@ -87,6 +88,8 @@ public class AppUtil {
             }
         }
 
+        //排序
+        Collections.sort(pakList);
         return pakList;
     }
 
@@ -121,11 +124,11 @@ public class AppUtil {
     /**
      * 判断应用是否是系统应用
      */
-    public static boolean isSystemApp(ApplicationInfo applicationInfo) {
+    public static boolean isSystemApp(ApplicationInfo info) {
         boolean isSystemApp = false;
-        if (applicationInfo != null) {
-            isSystemApp = (applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0
-                    || (applicationInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0;
+        if (info != null) {
+            isSystemApp = (info.flags & ApplicationInfo.FLAG_SYSTEM) != 0
+                    || (info.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0;
         }
         return isSystemApp;
     }

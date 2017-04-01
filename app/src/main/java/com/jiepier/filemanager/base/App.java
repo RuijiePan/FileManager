@@ -9,6 +9,7 @@ import com.jiepier.filemanager.constant.AppConstant;
 import com.jiepier.filemanager.manager.CategoryManager;
 import com.jiepier.filemanager.manager.CleanManager;
 import com.jiepier.filemanager.manager.ScanManager;
+import com.jiepier.filemanager.ui.category.memory.accessibility.MemoryAccessibilityManager;
 import com.jiepier.filemanager.util.LanguageUtil;
 import com.jiepier.filemanager.util.Loger;
 import com.jiepier.filemanager.util.Settings;
@@ -41,6 +42,8 @@ public class App extends Application {
         Settings.updatePreferences(this);
         //语言工具类初始化,用于语言切换
         LanguageUtil.init(this);
+        //开启辅助杀功能
+        MemoryAccessibilityManager.getInstance(this);
         //开启debug模式
         Loger.DEBUG = true;
 

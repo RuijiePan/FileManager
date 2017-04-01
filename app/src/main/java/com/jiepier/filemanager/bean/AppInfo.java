@@ -2,15 +2,14 @@ package com.jiepier.filemanager.bean;
 
 import android.content.pm.PackageInfo;
 import android.graphics.drawable.Drawable;
-
-import java.util.Comparator;
+import android.support.annotation.NonNull;
 
 /**
  * Created by panruijie on 2017/3/28.
  * Email : zquprj@gmail.com
  */
 
-public class AppInfo implements Comparator<AppInfo> {
+public class AppInfo implements Comparable<AppInfo> {
 
     private PackageInfo mPackageInfo;
     private boolean mIsSystem;
@@ -98,20 +97,6 @@ public class AppInfo implements Comparator<AppInfo> {
     }
 
     @Override
-    public int compare(AppInfo o1, AppInfo o2) {
-        if ((o1.isSystem() && o2.isSystem()) ||
-                (!o1.isSystem() && !o2.isSystem())) {
-            return o1.getName().compareTo(o2.getName());
-        } else if (o1.isSystem() && !o2.isSystem()) {
-            return 1;
-        } else if (!o1.isSystem() && o2.isSystem()) {
-            return -1;
-        }
-
-        return 0;
-    }
-
-    @Override
     public String toString() {
         return "AppInfo{" +
                 "mPackageInfo=" + mPackageInfo +
@@ -122,5 +107,19 @@ public class AppInfo implements Comparator<AppInfo> {
                 ", mSize=" + mSize +
                 ", mInstallTime=" + mInstallTime +
                 '}';
+    }
+
+    @Override
+    public int compareTo(@NonNull AppInfo another) {
+        if ((this.isSystem() && another.isSystem()) ||
+                (!this.isSystem() && !another.isSystem())) {
+            return this.getName().compareTo(another.getName());
+        } else if (this.isSystem() && !another.isSystem()) {
+            return 1;
+        } else if (!this.isSystem() && another.isSystem()) {
+            return -1;
+        }
+
+        return 0;
     }
 }

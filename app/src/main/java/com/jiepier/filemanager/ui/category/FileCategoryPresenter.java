@@ -105,7 +105,7 @@ public class FileCategoryPresenter implements FileCategoryContact.Presenter {
                 FormatUtil.formatFileSize(sdCardInfo.mTotal).toString();
         float storagePercent = (sdCardInfo.mTotal - sdCardInfo.mFree) * 100 / sdCardInfo.mTotal;
 
-        mView.setMemoryText(storageInfo);
+        mView.setStorageText(storageInfo);
         mView.setStorageProgress(storagePercent);
     }
 

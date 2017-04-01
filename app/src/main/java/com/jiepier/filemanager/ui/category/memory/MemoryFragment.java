@@ -1,14 +1,18 @@
 package com.jiepier.filemanager.ui.category.memory;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.accessibility.AccessibilityManager;
 
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseFragment;
 import com.jiepier.filemanager.bean.AppProcessInfo;
+import com.jiepier.filemanager.ui.category.memory.accessibility.MemoryAccessibilityManager;
+import com.jiepier.filemanager.util.Loger;
 import com.jiepier.filemanager.widget.BoomView;
 import com.jiepier.filemanager.widget.ProgressWheel;
 
@@ -21,16 +25,18 @@ import butterknife.BindView;
  * Email : zquprj@gmail.com
  */
 
-public class MemoryFragment extends BaseFragment implements MemoryContact.View {
+public class MemoryFragment extends BaseFragment implements MemoryContact.View, AccessibilityManager.AccessibilityStateChangeListener {
 
     @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
+    RecyclerView mRecyclerView;
     @BindView(R.id.cleanView)
-    BoomView cleanView;
+    BoomView mCleanView;
     @BindView(R.id.memory_Progressbar)
     ProgressWheel memoryProgressbar;
     private MemoryAdapter mAdapter;
     private MemoryPresenter mPresenter;
+    private boolean mAccessibilityEnable;
+    private AccessibilityManager mAccessibilityManager;
 
     @Override
     protected int getLayoutId() {
@@ -41,10 +47,10 @@ public class MemoryFragment extends BaseFragment implements MemoryContact.View {
     protected void initViews(View self, Bundle savedInstanceState) {
         mAdapter = new MemoryAdapter();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(mAdapter);
 
         //cleanView.setVisibility(View.VISIBLE);
         mPresenter = new MemoryPresenter(getContext());
@@ -55,32 +61,27 @@ public class MemoryFragment extends BaseFragment implements MemoryContact.View {
     protected void initData() {
 
         mPresenter.getRunningAppInfo();
-
+        mAccessibilityManager = (AccessibilityManager) getContext().getSystemService(Context.ACCESSIBILITY_SERVICE);
+        mAccessibilityManager.addAccessibilityStateChangeListener(this);
     }
 
     @Override
     protected void initListeners() {
 
-        mAdapter.setOnCheckBoxClickListener(new MemoryAdapter.OnCheckBoxClickListener() {
-            @Override
-            public void check(int position) {
-
-            }
-
-            @Override
-            public void unCheck(int position) {
-
-            }
+        mCleanView.setViewClickListener(() -> {
+            mCleanView.startAnimation();
         });
 
-        cleanView.setViewClickListener(() -> {
-            cleanView.startAnimation();
-        });
-
-        cleanView.setAnimatorListener(new BoomView.OnAnimatorListener() {
+        mCleanView.setAnimatorListener(new BoomView.OnAnimatorListener() {
             @Override
             public void onAnimationEnd() {
-                mPresenter.killRunningAppInfo(mAdapter.getChooseSet());
+                //辅助功能不可用，则开启普通杀
+               /* if (!mAccessibilityEnable) {
+                    mPresenter.killRunningAppInfo(mAdapter.getChooseSet());
+                } else {*/
+                //开启辅助杀
+                MemoryAccessibilityManager.getInstance(getContext()).startTask(mAdapter.getChooseSet());
+                // }
             }
         });
     }
@@ -102,7 +103,7 @@ public class MemoryFragment extends BaseFragment implements MemoryContact.View {
 
     @Override
     public void showBoomView() {
-        cleanView.setVisibility(View.VISIBLE);
+        mCleanView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -119,6 +120,12 @@ public class MemoryFragment extends BaseFragment implements MemoryContact.View {
     public void onDestroy() {
         super.onDestroy();
         mPresenter.detachView();
+        mAccessibilityManager.removeAccessibilityStateChangeListener(this);
     }
 
+    @Override
+    public void onAccessibilityStateChanged(boolean enabled) {
+        mAccessibilityEnable = enabled;
+        Loger.w("ruijie", "current accessobility is " + enabled);
+    }
 }

@@ -2,7 +2,6 @@
     <string name="app_name">文件管理器</string>
     <string name="app_menu">文件管理器</string>
 
-    <string name="minus" translatable="false">-</string>
     <string name="advancedsettings">其它設置</string>
     <string name="cancel">取消</string>
     <string name="cannotbeundoneareyousureyouwanttodelete">"這個動作無法撤銷，妳確定刪除嗎!"</string>
@@ -184,12 +183,12 @@
     <string name="about_project_introduce">File Manager項目所用的基本上是Rx系列的框架 ( ReactiveX ) :\n\n\tRxJava\n\tRxAndroid\n\tButterknife\n\n以基本的MVP模式為主劃分模塊，抽出Presenter作為View代理業務層，減輕View層代碼的藕合度，然後集成了現在主流的RxJava+RxAndroid+MVP組合框架。\n</string>
     <string name="about_project_introduce_content">https://github.com/RuijiePan/FileManager\n</string>
 
-    <!--紅包插件引導語句-->
-    <string name="app_description">∠( ᐛ 」∠)_使用指南∠( ᐛ 」∠)_\n\n ○ 狠戳插件開關\n ○ 回到微信聊天\n ○ 坐等紅包進賬\n\n</string>
-    <string name="service_on">開啟插件</string>
-    <string name="service_close">關閉插件</string>
-    <string name="turn_on_toast">點擊「文件管理器」</string>
-    <string name="turn_on_error_toast">遇到壹些問題,請手動打開系統設置>無障礙服務>文件管理器(ฅ´ω`ฅ)</string>
+    <!--輔助功能-->
+    <string name="accessibility_stop">強制停止</string>
+    <string name="accessibility_ok">確定</string>
+    <string name="accessibility_clear_data">清除資料</string>
+    <string name="accessibility_clear_cache">清除快取</string>
+    <string name="accessibility_description">請打開開關開啟強力加速，我們承諾不會收集您的任何信息。</string>
 
     <string-array name="mdColorNames">
         <item>紅色</item>

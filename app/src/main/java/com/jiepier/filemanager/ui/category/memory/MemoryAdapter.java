@@ -44,11 +44,15 @@ public class MemoryAdapter extends BaseAdapter<AppProcessInfo, BaseViewHolder> {
                    if (isChecked) {
                        mCheckBoxArray.put(position, true);
                        mChooseSet.add(item.getProcessName());
-                       mListener.check(position);
+                       if (mListener != null) {
+                           mListener.check(position);
+                       }
                    } else {
                        mCheckBoxArray.put(position, false);
                        mChooseSet.remove(item.getProcessName());
-                       mListener.unCheck(position);
+                       if (mListener != null) {
+                           mListener.unCheck(position);
+                       }
                    }
                });
         }
@@ -57,12 +61,16 @@ public class MemoryAdapter extends BaseAdapter<AppProcessInfo, BaseViewHolder> {
             if (mCheckBoxArray.get(position)) {
                 mCheckBoxArray.put(position, false);
                 mChooseSet.remove(item.getProcessName());
-                mListener.unCheck(position);
+                if (mListener != null) {
+                    mListener.unCheck(position);
+                }
                 notifyItemChanged(position);
             } else {
                 mCheckBoxArray.put(position, true);
                 mChooseSet.add(item.getProcessName());
-                mListener.check(position);
+                if (mListener != null) {
+                    mListener.check(position);
+                }
                 notifyItemChanged(position);
             }
         });

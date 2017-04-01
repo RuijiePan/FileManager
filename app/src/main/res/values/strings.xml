@@ -184,12 +184,12 @@
     <string name="about_project_introduce">File Manager项目所用的基本上是Rx系列的框架 ( ReactiveX ) :\n\n\tRxJava\n\tRxAndroid\n\tButterknife\n\n以基本的MVP模式为主划分模块，抽出Presenter作为View代理业务层，减轻View层代码的耦合度，然后集成了现在主流的RxJava+RxAndroid+MVP组合框架。\n</string>
     <string name="about_project_introduce_content">https://github.com/RuijiePan/FileManager\n</string>
 
-    <!--红包插件引导语句-->
-    <string name="app_description">∠( ᐛ 」∠)_Guide∠( ᐛ 」∠)_\n\n ○ Open the checkbox\n ○ Come back to Wechat\n ○ Waiting for luckyMoney\n\n</string>
-    <string name="service_on">Open plugin</string>
-    <string name="service_close">Close plugin</string>
-    <string name="turn_on_toast">Click「File Manager」</string>
-    <string name="turn_on_error_toast">If you have some problems, please manually open the system Settings > accessibility services > File Manager(ฅ´ω`ฅ)</string>
+    <!--辅助功能-->
+    <string name="accessibility_stop">FORCE STOP</string>
+    <string name="accessibility_ok">OK</string>
+    <string name="accessibility_clear_data">Clear data</string>
+    <string name="accessibility_clear_cache">Clear cache</string>
+    <string name="accessibility_description">Please click the checkbox for process clean.We promise do not collect any information about you.</string>
 
     <string-array name="mdColorNames">
         <item>Red</item>

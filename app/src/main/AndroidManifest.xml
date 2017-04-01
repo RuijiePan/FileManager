@@ -78,9 +78,8 @@
             android:configChanges="orientation|screenSize" />
 
         <service
-            android:name=".plugin.LuckyMoneyService"
+            android:name=".ui.category.memory.accessibility.MemoryAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
-
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
