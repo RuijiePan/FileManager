@@ -57,13 +57,16 @@ public class OverScanTask extends AsyncTask<Void, Void, Void> {
 
     private void travelPath(File root , int level) {
 
-        if (root == null || !root.exists() || level > SCAN_LEVEL) {
+        if (root == null || !root.exists() || level > SCAN_LEVEL || isCancelled()) {
             return;
         }
 
         File[] files = root.listFiles();
         if (files != null) {
             for (File file : files) {
+                if (isCancelled()) {
+                    return;
+                }
                 if (file.isFile()) {
                     JunkInfo info = null;
 

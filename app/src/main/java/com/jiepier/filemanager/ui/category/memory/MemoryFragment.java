@@ -11,7 +11,7 @@ import android.view.accessibility.AccessibilityManager;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseFragment;
 import com.jiepier.filemanager.bean.AppProcessInfo;
-import com.jiepier.filemanager.ui.category.memory.accessibility.MemoryAccessibilityManager;
+import com.jiepier.filemanager.ui.category.memory.accessibility.AccessibilityGuideFloatView;
 import com.jiepier.filemanager.util.Loger;
 import com.jiepier.filemanager.widget.BoomView;
 import com.jiepier.filemanager.widget.ProgressWheel;
@@ -37,6 +37,7 @@ public class MemoryFragment extends BaseFragment implements MemoryContact.View, 
     private MemoryPresenter mPresenter;
     private boolean mAccessibilityEnable;
     private AccessibilityManager mAccessibilityManager;
+    private AccessibilityGuideFloatView mGuideFloatView;
 
     @Override
     protected int getLayoutId() {
@@ -80,8 +81,14 @@ public class MemoryFragment extends BaseFragment implements MemoryContact.View, 
                     mPresenter.killRunningAppInfo(mAdapter.getChooseSet());
                 } else {*/
                 //开启辅助杀
-                MemoryAccessibilityManager.getInstance(getContext()).startTask(mAdapter.getChooseSet());
+                //MemoryAccessibilityManager.getInstance(getContext()).startTask(mAdapter.getChooseSet());
                 // }
+                /*if (!mAccessibilityEnable) {
+                    mGuideFloatView = new AccessibilityGuideFloatView(getContext());
+                    mGuideFloatView.show();
+                    AccessibilityUtil.gotoAccessibilityPage(getContext());
+                }*/
+                mPresenter.killRunningAppInfo(mAdapter.getChooseSet());
             }
         });
     }

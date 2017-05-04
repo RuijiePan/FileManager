@@ -67,14 +67,17 @@ public class AppUtil {
 
             if (filterSystem) {
                 if (!isSystemApp(applicationInfo)) {
-                    appInfo.setPackageInfo(info)
-                            .setPackageName(info.packageName)
-                            .setName(getApplicationName(context, applicationInfo))
-                            .setDrawable(getIconByPkgname(context, info.packageName))
-                            .isSystem(false)
-                            .setSize(getAppSize(applicationInfo))
-                            .setInstallTime(getInstallTime(applicationInfo));
-                    pakList.add(appInfo);
+                    if (!isAppDisable(context, info.packageName)) {
+                        appInfo.setPackageInfo(info)
+                                .setPackageName(info.packageName)
+                                .setName(getApplicationName(context, applicationInfo))
+                                .setDrawable(getIconByPkgname(context, info.packageName))
+                                .isSystem(false)
+                                .setSize(getAppSize(applicationInfo))
+                                .setInstallTime(getInstallTime(applicationInfo));
+                        pakList.add(appInfo);
+                        //Loger.w("ruijie", appInfo.getName() + ":" + appInfo.getPackageName());
+                    }
                 }
             } else {
                 appInfo.setPackageInfo(info)
@@ -161,5 +164,19 @@ public class AppUtil {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public static boolean isAppDisable(Context context, String packageName) {
+        boolean isDisable = false;
+        try {
+            ApplicationInfo app = context.getPackageManager()
+                    .getApplicationInfo(packageName, 0);
+            isDisable = !app.enabled;
+        } catch (Exception e) {
+            isDisable = true;
+            e.printStackTrace();
+        }
+        Loger.w("ruijie", packageName + "isDisable :" + isDisable);
+        return isDisable;
     }
 }

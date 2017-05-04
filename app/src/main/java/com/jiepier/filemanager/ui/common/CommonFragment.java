@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.jiepier.filemanager.event.ActionModeTitleEvent;
 import com.jiepier.filemanager.event.CleanActionModeEvent;
 import com.jiepier.filemanager.event.CleanChoiceEvent;
 import com.jiepier.filemanager.event.MutipeChoiceEvent;
+import com.jiepier.filemanager.util.ColorUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 import com.jiepier.filemanager.util.Settings;
 import com.jiepier.filemanager.util.SnackbarUtil;
@@ -48,6 +50,8 @@ public class CommonFragment extends BaseFragment implements CommonContact.View {
     @BindView(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
     public static final String DIALOGTAG = "dialog_tag";
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     private CommonPresenter mPresenter;
     private BrowserListAdapter mAdapter;
     private String path;
@@ -109,6 +113,12 @@ public class CommonFragment extends BaseFragment implements CommonContact.View {
             public void onMultipeChoiceCancel() {
                 ToastUtil.showToast(getContext(), "退出多选模式");
             }
+        });
+
+        mSwipeRefreshLayout.setColorSchemeColors(ColorUtil.getColorPrimary(getContext()));
+        mSwipeRefreshLayout.setOnRefreshListener(() -> {
+            mAdapter.refresh();
+            mSwipeRefreshLayout.setRefreshing(false);
         });
 
         mPresenter = new CommonPresenter(getContext(), path);

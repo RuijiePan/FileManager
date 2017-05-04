@@ -189,6 +189,7 @@
     <string name="accessibility_clear_data">清除資料</string>
     <string name="accessibility_clear_cache">清除快取</string>
     <string name="accessibility_description">請打開開關開啟強力加速，我們承諾不會收集您的任何信息。</string>
+    <string name="accessibility_guide_tip">打開文件管理器的輔助功能</string>
 
     <string-array name="mdColorNames">
         <item>紅色</item>

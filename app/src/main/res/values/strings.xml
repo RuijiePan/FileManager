@@ -190,6 +190,7 @@
     <string name="accessibility_clear_data">Clear data</string>
     <string name="accessibility_clear_cache">Clear cache</string>
     <string name="accessibility_description">Please click the checkbox for process clean.We promise do not collect any information about you.</string>
+    <string name="accessibility_guide_tip">Tap FileManager in Service</string>
 
     <string-array name="mdColorNames">
         <item>Red</item>

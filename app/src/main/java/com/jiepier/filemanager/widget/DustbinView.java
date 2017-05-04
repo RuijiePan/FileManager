@@ -178,7 +178,7 @@ public class DustbinView extends View {
                     mIconMatrix.postRotate((float) info.getRotateAngle());
                     mIconMatrix.postTranslate(info.getX(), info.getY());
                     canvas.drawBitmap(info.getBitmap(), mIconMatrix, mProcessPaint[i]);
-                    //canvas.drawPath(path, mProcessPaint);
+                    //canvas.drawPath(path, mProcessPaint[i]);
                     mIconMatrix.reset();
                 }
             }

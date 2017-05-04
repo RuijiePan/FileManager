@@ -16,10 +16,12 @@ import butterknife.BindView;
  * Created by JiePier on 16/12/9.
  */
 
-public abstract class BaseToolbarActivity extends BaseActivity{
+public abstract class BaseToolbarActivity extends BaseActivity {
 
-    @BindView(R.id.toolbar) protected Toolbar mToolbar;
-    @BindView(R.id.app_bar_layout) protected AppBarLayout mAppBarLayout;
+    @BindView(R.id.toolbar)
+    protected Toolbar mToolbar;
+    @BindView(R.id.app_bar_layout)
+    protected AppBarLayout mAppBarLayout;
 
     protected ActionBarHelper mActionBarHelper;
 
@@ -29,7 +31,8 @@ public abstract class BaseToolbarActivity extends BaseActivity{
      *
      * @param savedInstanceState savedInstanceState
      */
-    @Override protected void initToolbar(Bundle savedInstanceState) {
+    @Override
+    protected void initToolbar(Bundle savedInstanceState) {
         this.initToolbarHelper();
     }
 
@@ -57,7 +60,8 @@ public abstract class BaseToolbarActivity extends BaseActivity{
      * proceed, true to consume it here.
      * @see #onCreateOptionsMenu
      */
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             this.onBackPressed();
             return true;

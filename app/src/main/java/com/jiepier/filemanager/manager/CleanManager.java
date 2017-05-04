@@ -21,7 +21,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by panruijie on 2017/2/14.
  * Email : zquprj@gmail.com
- * 系统缓存清理管理类
+ * 清理管理类
  */
 
 public class CleanManager {

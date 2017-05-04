@@ -24,24 +24,24 @@ import com.jiepier.filemanager.R;
 
 public class BaseViewHolder extends RecyclerView.ViewHolder {
 
-    private final SparseArray<View> views;
-    private View convertView;
+    private final SparseArray<View> mViews;
+    private View mConvertView;
 
     public BaseViewHolder(View itemView) {
         super(itemView);
-        this.views = new SparseArray<>();
-        convertView = itemView;
+        this.mViews = new SparseArray<>();
+        mConvertView = itemView;
     }
 
-    public View getConvertView(){
-        return convertView;
+    public View getConvertView() {
+        return mConvertView;
     }
 
     public <T extends View> T getView(int viewId) {
-        View view = views.get(viewId);
-        if (view == null){
-            view = convertView.findViewById(viewId);
-            views.put(viewId, view);
+        View view = mViews.get(viewId);
+        if (view == null) {
+            view = mConvertView.findViewById(viewId);
+            mViews.put(viewId, view);
         }
         return (T) view;
     }

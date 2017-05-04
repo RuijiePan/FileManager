@@ -18,7 +18,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by panruijie on 16/12/28.
  * Email : zquprj@gmail.com
- * 安装包管理
+ * 压缩管理
  */
 
 public class ZipManager {

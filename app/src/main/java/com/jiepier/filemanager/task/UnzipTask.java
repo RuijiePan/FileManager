@@ -34,7 +34,7 @@ public final class UnzipTask extends AsyncTask<File, Void, List<String>> {
 
         if (activity != null) {
             this.dialog = new MaterialDialog.Builder(activity)
-                    .progress(true,0)
+                    .progress(true, 0)
                     .content(activity.getString(R.string.unzipping))
                     .cancelable(true)
                     .build();

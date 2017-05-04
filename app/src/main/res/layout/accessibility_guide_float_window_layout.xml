@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.jiepier.filemanager.ui.category.memory.accessibility.AccessibilityGuideFloatViewLayout
+        android:id="@+id/guide_float_window_layout"
+        android:layout_width="244dp"
+        android:layout_height="148dp"
+        android:background="@drawable/common_round_rect_white_normal"
+        android:clipChildren="false"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:id="@+id/guide_float_window_close_image"
+            android:src="@drawable/ic_close_white_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:id="@+id/guide_float_window_tips_layout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="26dp"
+            android:layout_marginRight="26dp"
+            android:layout_marginTop="38dp"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/guide_float_window_app_image"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="10dp"
+                android:layout_centerVertical="true"
+                android:contentDescription="@null"
+                android:scaleType="centerInside"
+                android:src="@mipmap/icon_app_logo"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="11sp"
+                android:text="@string/app_name"
+                android:layout_toRightOf="@id/guide_float_window_app_image"
+                android:layout_marginLeft="6dp"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/common_authorize_guide_layout_guide_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/accessibility_guide_tip"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_below="@+id/guide_float_window_tips_layout"
+            android:layout_centerHorizontal="true" />
+    </com.jiepier.filemanager.ui.category.memory.accessibility.AccessibilityGuideFloatViewLayout>
+</RelativeLayout>

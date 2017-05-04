@@ -12,7 +12,6 @@ import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.bean.AppProcessInfo;
 import com.jiepier.filemanager.bean.ComparatorApp;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +25,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by panruijie on 16/12/28.
  * Email : zquprj@gmail.com
- * 安装包管理
+ * 进程管理
  */
 
 public class ProcessManager {
@@ -68,7 +67,7 @@ public class ProcessManager {
         ApplicationInfo appInfo = null;
         AppProcessInfo abAppProcessInfo = null;
 
-        for (ActivityManager.RunningAppProcessInfo info:AndroidProcesses.getRunningAppProcessInfo(mContext)) {
+        for (ActivityManager.RunningAppProcessInfo info : AndroidProcesses.getRunningAppProcessInfo(mContext)) {
 
             if (!info.processName.equals(AppUtils.getAppPackageName(mContext))) {
                 abAppProcessInfo = new AppProcessInfo(info.processName, info.pid, info.uid);
@@ -120,8 +119,8 @@ public class ProcessManager {
         int index = -1;
         mRunningProcessList.clear();
 
-        for (AppProcessInfo info:mTempList) {
-            if (lastUid == info.getUid()){
+        for (AppProcessInfo info : mTempList) {
+            if (lastUid == info.getUid()) {
                 AppProcessInfo nowInfo = mTempList.get(index);
                 mRunningProcessList.get(index).setMemory(nowInfo.getMemory() + info.getMemory());
             } else {
@@ -173,7 +172,7 @@ public class ProcessManager {
         mActivityManager.getMemoryInfo(mMemoryInfo);
         beforeMemory = mMemoryInfo.availMem;
 
-        for (AppProcessInfo info:getRunningProcessList()) {
+        for (AppProcessInfo info : getRunningProcessList()) {
             killBackgroundProcesses(info.getProcessName());
         }
 
@@ -215,12 +214,12 @@ public class ProcessManager {
 
             mActivityManager.killBackgroundProcesses(packageName);
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public Observable<Long>  killAllRunningAppUsingObservable() {
+    public Observable<Long> killAllRunningAppUsingObservable() {
 
         return Observable.create(new Observable.OnSubscribe<Long>() {
 
@@ -240,7 +239,7 @@ public class ProcessManager {
             public void call(Subscriber<? super Long> subscriber) {
 
                 long memory = 0L;
-                for (String string:packageNameSet){
+                for (String string : packageNameSet) {
                     memory += killRunningApp(string);
                 }
 
@@ -250,7 +249,7 @@ public class ProcessManager {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<Long>  killRunningAppUsingObservable(String packageName) {
+    public Observable<Long> killRunningAppUsingObservable(String packageName) {
 
         return Observable.create(new Observable.OnSubscribe<Long>() {
 

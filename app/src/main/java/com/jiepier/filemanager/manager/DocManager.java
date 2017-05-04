@@ -9,7 +9,6 @@ import com.jiepier.filemanager.util.SortUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 import rx.Observable;
@@ -37,26 +36,27 @@ public class DocManager {
         }
     };
 
-    private DocManager(Context context){
+    private DocManager(Context context) {
         mContext = context;
         mDocList = new ArrayList<>();
     }
 
-    public static void init(Context context){
+    public static void init(Context context) {
 
-        if (sInstance == null)
+        if (sInstance == null) {
             sInstance = new DocManager(context);
+        }
     }
 
-    public static DocManager getInstance(){
+    public static DocManager getInstance() {
 
-        if (sInstance == null){
+        if (sInstance == null) {
             throw new IllegalStateException("You must be init DocManager first");
         }
         return sInstance;
     }
 
-    public List<String> getDocListBySort(SortUtil.SortMethod sort){
+    public List<String> getDocListBySort(SortUtil.SortMethod sort) {
 
         Uri uri = MediaStore.Files.getContentUri("external");
 
@@ -72,11 +72,11 @@ public class DocManager {
         String sortOrder = SortUtil.buildSortOrder(sort);
 
         Cursor cursor = mContext.getContentResolver().query(
-                uri,columns,selection,null,sortOrder
+                uri, columns, selection, null, sortOrder
         );
 
         mDocList.clear();
-        if (cursor != null){
+        if (cursor != null) {
 
             try {
                 cursor.moveToFirst();
@@ -86,9 +86,9 @@ public class DocManager {
                     mDocList.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
                 }
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 cursor.close();
             }
         }
@@ -96,9 +96,9 @@ public class DocManager {
         return mDocList;
     }
 
-    public Observable<List<String>> getDocListUsingObservable(SortUtil.SortMethod sort){
+    public Observable<List<String>> getDocListUsingObservable(SortUtil.SortMethod sort) {
 
-        return Observable.create(new Observable.OnSubscribe<List<String>>(){
+        return Observable.create(new Observable.OnSubscribe<List<String>>() {
 
             @Override
             public void call(Subscriber<? super List<String>> subscriber) {
@@ -110,7 +110,7 @@ public class DocManager {
 
     }
 
-    public List<String> getDocList(){
+    public List<String> getDocList() {
         return mDocList;
     }
 
@@ -119,6 +119,6 @@ public class DocManager {
         for (String aMDocMimeTypesSet : mDocMimeTypesSet) {
             selection.append("(" + MediaStore.Files.FileColumns.MIME_TYPE + "=='" + aMDocMimeTypesSet + "') OR ");
         }
-        return  selection.substring(0, selection.lastIndexOf(")") + 1);
+        return selection.substring(0, selection.lastIndexOf(")") + 1);
     }
 }

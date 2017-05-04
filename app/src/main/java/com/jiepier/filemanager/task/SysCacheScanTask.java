@@ -69,7 +69,7 @@ public class SysCacheScanTask extends AsyncTask<Void, Void, Void> {
         mSysCaches = new ArrayList<>();
         mAppNames = new HashMap<>();
 
-        for (int i = 0 ; i < mTotalCount ; i++) {
+        for (int i = 0; i < mTotalCount; i++) {
             ApplicationInfo info = installedPackages.get(i);
             mAppNames.put(info.packageName, pm.getApplicationLabel(info).toString());
             getPackageInfo(info.packageName, observer);
@@ -81,10 +81,14 @@ public class SysCacheScanTask extends AsyncTask<Void, Void, Void> {
 
     private void getPackageInfo(String packageName, IPackageStatsObserver.Stub observer) {
 
+        if (isCancelled()) {
+            return;
+        }
+
         try {
             PackageManager pm = App.sContext.getPackageManager();
             Method getPackageSizeInfo = pm.getClass()
-                    .getMethod("getPackageSizeInfo", String.class , IPackageStatsObserver.class);
+                    .getMethod("getPackageSizeInfo", String.class, IPackageStatsObserver.class);
 
             getPackageSizeInfo.invoke(pm, packageName, observer);
         } catch (NoSuchMethodException e) {

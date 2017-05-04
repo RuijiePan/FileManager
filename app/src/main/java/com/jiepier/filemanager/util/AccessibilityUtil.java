@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.Settings;
-import android.util.Log;
 
 /**
  * Created by panruijie on 2017/3/31.
@@ -31,7 +30,17 @@ public class AccessibilityUtil {
         try {
             context.startActivity(intent);
         } catch (Exception e) {
-            Log.w("AccessibilityUtil", e.toString());
+            Loger.w("AccessibilityUtil", e.toString());
+        }
+    }
+
+    public static void gotoAccessibilityPage(Context context) {
+        try {
+            Intent accessibilityItent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            context.startActivity(accessibilityItent);
+        } catch (Exception e) {
+            Loger.w("AccessibilityUtil", e.toString());
+            e.printStackTrace();
         }
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.jiepier.filemanager.event.ForceStopFinishEvent;
 import com.jiepier.filemanager.util.AccessibilityUtil;
+import com.jiepier.filemanager.util.Loger;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 
 import java.util.Iterator;
@@ -37,6 +38,10 @@ public class MemoryAccessibilityManager {
         mIterator = pckNameSet.iterator();
         String pckName = (String) mIterator.next();
         AccessibilityUtil.gotoInstalledAppDetails(mContext, pckName);
+
+        for (String pckName1 : pckNameSet) {
+            Loger.w("ruijie", pckName1);
+        }
     }
 
     private MemoryAccessibilityManager(Context context) {
@@ -46,6 +51,7 @@ public class MemoryAccessibilityManager {
                 .subscribe(event -> {
                     String pckName = (String) mIterator.next();
                     if (pckName != null) {
+                        Loger.w("ruijie", pckName);
                         AccessibilityUtil.gotoInstalledAppDetails(context, pckName);
                     }
                 }, Throwable::printStackTrace);
