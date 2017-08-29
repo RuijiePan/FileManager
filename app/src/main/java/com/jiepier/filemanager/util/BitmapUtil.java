@@ -14,6 +14,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.ActivityCompat;
 
 import com.jiepier.filemanager.R;
 
@@ -60,7 +61,7 @@ public class BitmapUtil {
 
     public static Bitmap getBitmapFromRes(Context context, int ResId) {
 
-        return getBitmapFromDrawable(context.getResources().getDrawable(ResId));
+        return getBitmapFromDrawable(ActivityCompat.getDrawable(context, ResId));
     }
 
     public static Bitmap adjustOpacity(Bitmap bitmap, int opacity) {

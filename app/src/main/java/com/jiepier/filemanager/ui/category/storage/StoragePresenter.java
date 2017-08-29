@@ -267,12 +267,13 @@ public class StoragePresenter implements StorageContact.Presenter {
     private Set<String> getJunkProcessSet(MultiItemEntity entity) {
         List<JunkProcessInfo> appCacheList = ((JunkType) entity).getSubItems();
         Set<String> tempSet = new HashSet<>();
-        for (JunkProcessInfo info : appCacheList) {
-            if (info.isCheck()) {
-                tempSet.add(info.getAppProcessInfo().getProcessName());
+        if (appCacheList != null) {
+            for (JunkProcessInfo info : appCacheList) {
+                if (info.isCheck()) {
+                    tempSet.add(info.getAppProcessInfo().getProcessName());
+                }
             }
         }
-
         return tempSet;
     }
 

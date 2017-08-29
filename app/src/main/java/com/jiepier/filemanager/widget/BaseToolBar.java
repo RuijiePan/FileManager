@@ -3,6 +3,7 @@ package com.jiepier.filemanager.widget;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.TintTypedArray;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
@@ -25,6 +26,7 @@ public class BaseToolBar extends Toolbar {
     private TextView centerView;
     private TextView rightView;
     private TextView leftrightView;
+    private Context mContext;
     private final static int DEFAULT_TEXT_SIZE = 24;
 
     public BaseToolBar(Context context) {
@@ -37,6 +39,7 @@ public class BaseToolBar extends Toolbar {
 
     public BaseToolBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mContext = context;
         initViews();
         setContentInsetsRelative(0, 0);
         if (attrs != null) {
@@ -154,24 +157,24 @@ public class BaseToolBar extends Toolbar {
 
     public void setLeftIcon(int ResId) {
         if (ResId > 0) {
-            setLeftIcon(getResources().getDrawable(ResId));
+            setLeftIcon(ActivityCompat.getDrawable(mContext, ResId));
         }
     }
 
     public void setRightIcon(int ResId) {
         if (ResId > 0) {
-            setRightIcon(getResources().getDrawable(ResId));
+            setRightIcon(ActivityCompat.getDrawable(mContext, ResId));
         }
     }
 
     public void setLeftRightIcon(int ResId) {
         if (ResId > 0) {
-            setLeftRightIcon(getResources().getDrawable(ResId));
+            setLeftRightIcon(ActivityCompat.getDrawable(mContext, ResId));
         }
     }
 
     public void setCenterDrawableRight(int ResId) {
-        Drawable drawable = getResources().getDrawable(ResId);
+        Drawable drawable = ActivityCompat.getDrawable(mContext, ResId);
         //要加这句才能显示
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         centerView.setCompoundDrawables(null, null, drawable, null);
@@ -179,7 +182,7 @@ public class BaseToolBar extends Toolbar {
     }
 
     public void setRightDrawableRight(int ResId) {
-        Drawable drawable = getResources().getDrawable(ResId);
+        Drawable drawable = ActivityCompat.getDrawable(mContext, ResId);
         //要加这句才能显示
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         rightView.setCompoundDrawables(null, null, drawable, null);
@@ -187,7 +190,7 @@ public class BaseToolBar extends Toolbar {
     }
 
     public void setLeftDrawableRight(int ResId) {
-        Drawable drawable = getResources().getDrawable(ResId);
+        Drawable drawable = ActivityCompat.getDrawable(mContext, ResId);
         //要加这句才能显示
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         leftView.setCompoundDrawables(null, null, drawable, null);

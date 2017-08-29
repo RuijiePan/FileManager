@@ -103,7 +103,7 @@ andResGuard {
     mappingFile = null
     use7zip = true
     useSign = true
-    // 打开这个开关，会keep住所有资源的原始路径，只混淆资源的名字
+    // 打开这个开关，会keep住所有资源的原始路径，只混淆资源的名�?
     keepRoot = false
     whiteList = [
             // for your icon
@@ -152,7 +152,7 @@ andResGuard {
             "resources.arsc"
     ]
     sevenzip {
-        artifact = 'com.tencent.mm:SevenZip:1.1.16'
+        artifact = 'com.tencent.mm:SevenZip:1.2.3'
         //path = "/usr/local/bin/7za"
     }
 }

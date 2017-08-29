@@ -3,11 +3,14 @@ package com.jiepier.filemanager.ui.category.categorybottom;
 import android.content.Context;
 import android.util.SparseBooleanArray;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.jiepier.filemanager.R;
 import com.jiepier.filemanager.base.BaseAdapter;
 import com.jiepier.filemanager.base.BaseViewHolder;
 import com.jiepier.filemanager.preview.IconPreview;
+import com.jiepier.filemanager.preview.MimeTypes;
 import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.Settings;
 
@@ -53,7 +56,13 @@ public class CategoryBottomAdapter extends BaseAdapter<String, BaseViewHolder> {
             holder.setVisibility(R.id.dateview, View.GONE);
         }
 
-        IconPreview.getFileIcon(file, holder.getView(R.id.row_image));
+        if (!MimeTypes.isVideo(file)) {
+            IconPreview.getFileIcon(file, holder.getView(R.id.row_image));
+        } else {
+            Glide.with(mContext)
+                    .load(file)
+                    .into((ImageView) holder.getView(R.id.row_image));
+        }
         if (file.isFile()) {
             holder.setText(R.id.bottom_view, FileUtil.formatCalculatedSize(file.length()));
         } else {

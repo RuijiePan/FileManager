@@ -14,6 +14,7 @@ import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.Point;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -39,6 +40,7 @@ public class DustbinView extends View {
     private static final int DEFAULT_SHAKE_TIME = 300;
     private static final int DEFAULT_SHAKE_DEGREE = 10;
     private static final int DEFAULT_SHAKE_COUNT = 2;
+    private Context mContext;
     private int mFadeTime = DEFAULT_FADE_TIME;
     private int mRecyclerTime = DEFAULT_RECYCLER_TIME;
     private int mShakeDrgree = DEFAULT_SHAKE_DEGREE;
@@ -91,7 +93,7 @@ public class DustbinView extends View {
     }
 
     private void init(Context context) {
-
+        mContext = context;
         //获取垃圾桶参数
         mDustbinBitmap = BitmapUtil.getBitmapFromRes(context, R.drawable.icon_junk_dustbin);
         mBitmapWidth = mDustbinBitmap.getWidth();
@@ -365,7 +367,7 @@ public class DustbinView extends View {
         }
         for (int i = 0; i < mOtherDrawable.length; i++) {
             mIconInfos[i + mProcessList.size()] = new IconInfo(BitmapUtil.getBitmapFromDrawable(
-                    BitmapUtil.zoomDrawable(getResources().getDrawable(mOtherDrawable[i]), 100, 100)));
+                    BitmapUtil.zoomDrawable(ActivityCompat.getDrawable(mContext, mOtherDrawable[i]), 100, 100)));
         }
 
         mProcessPaint = new Paint[mProcessList.size() + mOtherDrawable.length];

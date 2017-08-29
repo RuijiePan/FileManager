@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutManager;
@@ -21,7 +22,7 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
     private Drawable mDivider;
 
     public DividerGridItemDecoration(Context context) {
-        mDivider = context.getResources().getDrawable(R.drawable.divider_bg);
+        mDivider = ActivityCompat.getDrawable(context, R.drawable.divider_bg);
     }
 
     @Override
