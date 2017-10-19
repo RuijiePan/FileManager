@@ -170,7 +170,7 @@ public class IconPreview {
                         : o.outHeight;
                 o.inSampleSize = originalSize / mWidth;
             }
-
+ 
             mBitmap = BitmapFactory.decodeFile(path, o);
 
             addBitmapToMemoryCache(path, mBitmap);

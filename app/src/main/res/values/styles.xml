@@ -43,6 +43,7 @@
         <item name="action_bookmark">@drawable/holo_dark_ic_bookmark</item>
         <item name="action_delete">@drawable/holo_dark_action_delete</item>
         <item name="action_share">@drawable/holo_dark_action_share</item>
+        <item name="action_open">@drawable/icon_open_file</item>
     </style>
 
     <style name="toolbar_text_style">

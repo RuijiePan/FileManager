@@ -68,6 +68,7 @@
     <string name="sha1_key">SHA-1:</string>
     <string name="share">Share</string>
     <string name="shortcut">Create shortcut</string>
+    <string name="openmode">Open Mode</string>
     <string name="shortcutcreated">Shortcut created.</string>
     <string name="showpreview">Thumbnails</string>
     <string name="simple">Simple</string>

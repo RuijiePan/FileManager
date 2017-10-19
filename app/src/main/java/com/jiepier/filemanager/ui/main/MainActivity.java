@@ -103,6 +103,7 @@ public class MainActivity extends BaseDrawerActivity implements
         getMenuInflater().inflate(R.menu.actionmode, menu);
         if (mChoiceCount > 1) {
             menu.removeItem(R.id.actionrename);
+            menu.removeItem(R.id.actionopen);
         }
 
         return true;
@@ -132,6 +133,9 @@ public class MainActivity extends BaseDrawerActivity implements
                 return true;
             case R.id.actionrename:
                 mPresenter.clickRename(mSdCardFragment.getCurrentPath());
+                return true;
+            case R.id.actionopen:
+                mPresenter.clickOpenMode();
                 return true;
             case R.id.actionall:
                 mPresenter.clickSelectAll(mSdCardFragment.getCurrentPath());

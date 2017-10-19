@@ -20,6 +20,7 @@
   <attr name="action_search" format="reference" />
   <attr name="action_share" format="reference" />
   <attr name="action_zip" format="reference" />
+  <attr name="action_open" format="reference"/>
   <attr name="action_multi" format="reference" />
 
   <!-- PageIndicator style -->

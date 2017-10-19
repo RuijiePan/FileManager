@@ -329,6 +329,42 @@ public class FileUtil {
         }
     }
 
+    public static void openFileByCustom(final Context context, final File target) {
+        final String mime = MimeTypes.getMimeType(target);
+
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri contentUri = FileProvider.getUriForFile(context, "com.jiepier.filemanager" + ".fileprovider", target);
+            intent.setDataAndType(contentUri, mime);
+
+            if (mime != null) {
+                intent.setDataAndType(contentUri, mime);
+            } else {
+                intent.setDataAndType(contentUri, "*/*");
+            }
+        } else {
+            if (mime != null) {
+                intent.setDataAndType(Uri.fromFile(target), mime);
+            } else {
+                intent.setDataAndType(Uri.fromFile(target), "*/*");
+            }
+        }
+
+        if (context.getPackageManager().queryIntentActivities(intent, 0).isEmpty()) {
+            Toast.makeText(context, R.string.cantopenfile, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            context.startActivity(Intent.createChooser(intent, mime));
+        } catch (Exception e) {
+            Toast.makeText(context, context.getString(R.string.cantopenfile) + e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
     // get MD5 or SHA1 checksum from a file
     public static String getChecksum(File file, String algorithm) {
         InputStream fis = null;

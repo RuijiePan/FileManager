@@ -61,6 +61,8 @@ public interface MainContact {
 
         void clickShortCut();
 
+        void clickOpenMode();
+
         void clickZip(String currentPath);
 
         void clickRename(String currentPath);

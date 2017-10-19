@@ -18,6 +18,7 @@ import com.jiepier.filemanager.event.LanguageEvent;
 import com.jiepier.filemanager.event.MutipeChoiceEvent;
 import com.jiepier.filemanager.event.RefreshEvent;
 import com.jiepier.filemanager.util.ClipBoard;
+import com.jiepier.filemanager.util.FileUtil;
 import com.jiepier.filemanager.util.RxBus.RxBus;
 import com.jiepier.filemanager.util.UUIDUtil;
 import com.jiepier.filemanager.widget.DeleteFilesDialog;
@@ -42,9 +43,11 @@ public class MainPresenter implements MainContact.Presenter {
     private List<String> mList;
     public static final String ZIP = "zip";
     public static final String UNZIP = "unzip";
+    private Context mContext;
     private String unZipPath = "";
 
     public MainPresenter(Context context){
+        mContext = context;
         this.mCompositeSubscription = new CompositeSubscription();
 
         mCompositeSubscription.add(RxBus.getDefault()
@@ -161,10 +164,19 @@ public class MainPresenter implements MainContact.Presenter {
             }
         }
         Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND_MULTIPLE);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.setType("*/*");
-        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+        //多分享
+        if (mFiles.length > 1) {
+            intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setType("*/*");
+            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+        } else {
+            //单分享
+            intent.setAction(Intent.ACTION_SEND);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setType("*/*");
+            intent.putExtra(Intent.EXTRA_STREAM, uris.get(0));
+        }
         mView.startShareActivity(intent);
         RxBus.getDefault().post(new CleanActionModeEvent());
     }
@@ -172,6 +184,12 @@ public class MainPresenter implements MainContact.Presenter {
     @Override
     public void clickShortCut() {
         mView.createShortCut(mFiles);
+        RxBus.getDefault().post(new CleanActionModeEvent());
+    }
+
+    @Override
+    public void clickOpenMode() {
+        FileUtil.openFileByCustom(mContext, new File(mFiles[0]));
         RxBus.getDefault().post(new CleanActionModeEvent());
     }
 

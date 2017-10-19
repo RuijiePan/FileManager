@@ -39,6 +39,10 @@
         app:showAsAction="never"
         android:title="@string/shortcut" />
     <item
+        android:id="@+id/actionopen"
+        app:showAsAction="never"
+        android:title="@string/openmode" />
+    <item
         android:id="@+id/actionall"
         app:showAsAction="never"
         android:title="@string/selectall" />

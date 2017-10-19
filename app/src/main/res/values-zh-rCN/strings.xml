@@ -67,6 +67,7 @@
     <string name="sha1_key">SHA-1:</string>
     <string name="share">分享</string>
     <string name="shortcut">创建快捷方式</string>
+    <string name="openmode">打开方式</string>
     <string name="shortcutcreated">快捷方式已被创建</string>
     <string name="showpreview">缩略图</string>
     <string name="simple">简单</string>

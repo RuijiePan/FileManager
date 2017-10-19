@@ -35,6 +35,11 @@
         app:showAsAction="ifRoom"
         android:title="@string/multizip" />
     <item
+        android:id="@+id/actionopen"
+        android:icon="?attr/action_open"
+        app:showAsAction="ifRoom"
+        android:title="@string/openmode" />
+    <item
         android:id="@+id/actionall"
         app:showAsAction="never"
         android:title="@string/selectall" />
