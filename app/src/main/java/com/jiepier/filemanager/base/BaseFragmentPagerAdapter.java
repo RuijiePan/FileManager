@@ -42,6 +42,11 @@ public class BaseFragmentPagerAdapter extends FragmentStatePagerAdapter {
         return fragmentsList.get(arg0);
     }
 
+/*    @Override
+    public int getItemPosition(Object object) {
+        return PagerAdapter.POSITION_NONE;
+    }*/
+
     @Override
     public CharSequence getPageTitle(int position) {
         return titleList.get(position);
