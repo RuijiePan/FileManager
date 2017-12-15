@@ -49,13 +49,13 @@ android {
     }
 
     signingConfigs {
-        debug {
+        /*debug {
             storeFile keyfile
             storePassword keystorePSW
             keyAlias keystoreAlias
             keyPassword keystoreAliasPSW
             println("====== signingConfigs.debug ======")
-        }
+        }*/
         release {
             storeFile keyfile
             storePassword keystorePSW
@@ -66,10 +66,10 @@ android {
     }
 
     buildTypes {
-        debug {
+        /*debug {
             println("====== buildTypes.debug ======")
             signingConfig signingConfigs.debug
-        }
+        }*/
         release {
             //是否混淆
             minifyEnabled false
@@ -82,6 +82,7 @@ android {
                 println("WITH -> buildTypes -> release: using jks key")
                 signingConfig signingConfigs.release
             } else {
+                //signingConfig signingConfigs.debug
                 println("WITH -> buildTypes -> release: using default key")
             }
             /*applicationVariants.all { variant ->
@@ -103,7 +104,7 @@ andResGuard {
     mappingFile = null
     use7zip = true
     useSign = true
-    // 打开这个开关，会keep住所有资源的原始路径，只混淆资源的名�?
+    // 打开这个开关，会keep住所有资源的原始路径，只混淆资源的名�?
     keepRoot = false
     whiteList = [
             // for your icon
